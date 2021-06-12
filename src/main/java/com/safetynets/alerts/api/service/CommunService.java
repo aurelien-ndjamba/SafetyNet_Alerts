@@ -49,9 +49,18 @@ public class CommunService {
 		return null;
 	}
 
-	public Iterable<String> getPersonInfoWhenNameGiven(String firstName, String lastName) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> getPersonInfo(String firstName, String lastName) {
+		List<Long> listIdsEntitiesPerson = personsService.getlistIdsEntitiesPerson();
+		List<String> listCommunityEmail = new ArrayList<String> ();
+		
+		for (Long i : listIdsEntitiesPerson) {
+			person = personsRepository.getById(i);
+			if(person.getCity().equals(city)) {
+				listCommunityEmail.add(person.getEmail());	
+			}
+		}
+		
+		return PersonInfo;
 	}
 
 	public List<String> getCommunityEmail(String city) {

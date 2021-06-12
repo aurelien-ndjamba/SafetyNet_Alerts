@@ -12,10 +12,10 @@ import com.safetynets.alerts.api.repository.MedicalrecordsRepository;
 @Service
 public class MedicalRecordsService {
 
-	@Autowired(required = false)
-	MedicalRecordsModel medicalRecords;
 	@Autowired
-	MedicalrecordsRepository medicalRecordsRepository;
+	private MedicalRecordsModel medicalRecords;
+	@Autowired
+	private MedicalrecordsRepository medicalRecordsRepository;
 
 	// ----------------------------------------------------------------------------------------
 	// CREATE "listIdsEntitiesFireStation" FROM MedicalrecordsRepository
@@ -35,7 +35,7 @@ public class MedicalRecordsService {
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// GET
+	// GET AllMedicalRecords
 	// ----------------------------------------------------------------------------------------
 	public List<MedicalRecordsModel> getAllMedicalRecords() {
 		return medicalRecordsRepository.findAll();
@@ -54,7 +54,7 @@ public class MedicalRecordsService {
 	// ----------------------------------------------------------------------------------------
 
 	public boolean updateMedicalRecords(MedicalRecordsModel updateMedicalRecords) throws IllegalArgumentException {
-		
+
 		boolean result = false;
 		List<Long> listIdsEntitiesMedicalRecords = new ArrayList<Long>();
 		listIdsEntitiesMedicalRecords = getlistIdsEntitiesMedicalRecords();

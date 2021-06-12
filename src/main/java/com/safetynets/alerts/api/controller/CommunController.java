@@ -17,6 +17,13 @@ public class CommunController {
 	@Autowired
 	CommunService communService;
 
+	
+	@GetMapping("/")
+	@ResponseBody
+	public String home() {
+		return "<h1> SAFETYNETS ALERTS vous souhaite la bienvenue! </h1>";
+	}
+	
 	/**
 	 * Read - Get all employees
 	 * 
@@ -93,9 +100,9 @@ public class CommunController {
 	 * 
 	 * @return - An Iterable object of Employee full filled
 	 */
-	@GetMapping("/personInfo?firstName=<firstName>&lastName=<lastName>")
-	public Iterable<String> getPersonInfo(String firstName, String lastName) {
-		return communService.getPersonInfoWhenNameGiven(firstName, lastName);
+	@GetMapping("/personInfo")
+	public List<String> getPersonInfo(@RequestParam String firstName, @RequestParam String lastName) {
+		return communService.getPersonInfo(firstName, lastName);
 	}
 
 	/**
@@ -107,12 +114,6 @@ public class CommunController {
 	@GetMapping("/communityEmail")
 	public List<String> getCommunityEmail(@RequestParam String city) {
 		return communService.getCommunityEmail(city);
-	}
-
-	@GetMapping("/")
-	@ResponseBody
-	public String home() {
-		return "<h1> SAFETYNETS ALERTS vous souhaite la bienvenue! </h1>";
 	}
 
 }
