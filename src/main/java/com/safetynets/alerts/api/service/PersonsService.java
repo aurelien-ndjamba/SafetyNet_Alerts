@@ -12,13 +12,11 @@ import com.safetynets.alerts.api.repository.PersonsRepository;
 @Service
 public class PersonsService {
 
-	@Autowired
-	PersonsModel person;
-	@Autowired
-	PersonsRepository personsRepository;
+	@Autowired PersonsModel person;
+	@Autowired PersonsRepository personsRepository;
 
 	// ----------------------------------------------------------------------------------------
-	// CREATE "listIdsEntitiesPerson" FROM PersonRepository
+	// CREATE "listIdsEntitiesPerson" FROM PersonsRepository
 	// ----------------------------------------------------------------------------------------
 
 	public List<Long> getlistIdsEntitiesPerson() {
@@ -51,7 +49,7 @@ public class PersonsService {
 	// POST
 	// ----------------------------------------------------------------------------------------
 	public PersonsModel createPersons(PersonsModel personsModel) {
-		System.out.println("Nouveau personne enregistrée dans la base de donnée avec succès !");
+		System.out.println("Nouvelle personne enregistrée dans la base de donnée avec succès !");
 		return personsRepository.save(personsModel);
 	}
 
@@ -61,8 +59,8 @@ public class PersonsService {
 	public boolean updatePersonInfo(PersonsModel newPerson) throws IllegalArgumentException {
 		
 		boolean result = false;
-		List<Long> listIdsEntitiesPerson = new ArrayList<Long>();
-		listIdsEntitiesPerson = getlistIdsEntitiesPerson();
+//		List<Long> listIdsEntitiesPerson = new ArrayList<Long>();
+		List<Long> listIdsEntitiesPerson = getlistIdsEntitiesPerson();
 		
 		for (long i : listIdsEntitiesPerson) {
 			person = personsRepository.getById(i);
@@ -89,8 +87,7 @@ public class PersonsService {
 	public boolean deletePersonById(String firstname, String lastname) throws IllegalArgumentException {
 
 		boolean result = false;
-		List<Long> listIdsEntitiesPerson = new ArrayList<Long>();
-		listIdsEntitiesPerson = getlistIdsEntitiesPerson();
+		List<Long> listIdsEntitiesPerson = getlistIdsEntitiesPerson();
 
 		// Suppression d'une personne identifiée dans la BDD par le nom et le prénom
 		for (Long i : listIdsEntitiesPerson) {

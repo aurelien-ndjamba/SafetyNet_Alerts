@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,7 +15,7 @@ import com.safetynets.alerts.api.service.CommunService;
 public class CommunController {
 
 	@Autowired
-	CommunService businessFunctionalityService;
+	CommunService communService;
 
 	/**
 	 * Read - Get all employees
@@ -29,7 +30,7 @@ public class CommunController {
 	 */
 	@GetMapping("/firestation?stationNumber=<station_number>")
 	public Iterable<String> getFirestation(int station_number) {
-		return businessFunctionalityService.getFireStationWhenStationNumberGiven(station_number);
+		return communService.getFireStationWhenStationNumberGiven(station_number);
 	}
 
 	/**
@@ -42,7 +43,7 @@ public class CommunController {
 	 */
 	@GetMapping("/childAlert?address=<address>")
 	public Iterable<String> getChildAlert(String address) {
-		return businessFunctionalityService.getChildrenListWithAddressGiven(address);
+		return communService.getChildrenListWithAddressGiven(address);
 	}
 
 	/**
@@ -54,7 +55,7 @@ public class CommunController {
 	 */
 	@GetMapping("/phoneAlert?firestation=<firestation_number>")
 	public Iterable<String> getPhoneAlert(int station_number) {
-		return businessFunctionalityService.getPhoneListWhenStationNumberGiven(station_number);
+		return communService.getPhoneListWhenStationNumberGiven(station_number);
 	}
 
 	/**
@@ -67,7 +68,7 @@ public class CommunController {
 	 */
 	@GetMapping("/fire?address=<address>")
 	public Iterable<String> getFire(String address) {
-		return businessFunctionalityService.getPeopleListAndFirestationWhenAddressGiven(address);
+		return communService.getPeopleListAndFirestationWhenAddressGiven(address);
 	}
 
 	/**
@@ -81,7 +82,7 @@ public class CommunController {
 	 */
 	@GetMapping("/flood/stations?stations=<a list of station_numbers>")
 	public Iterable<String> getFlood(int station_number) {
-		return businessFunctionalityService.getResidentListAndStationNumberWhenAddressGiven(station_number);
+		return communService.getResidentListAndStationNumberWhenAddressGiven(station_number);
 	}
 
 	/**
@@ -94,7 +95,7 @@ public class CommunController {
 	 */
 	@GetMapping("/personInfo?firstName=<firstName>&lastName=<lastName>")
 	public Iterable<String> getPersonInfo(String firstName, String lastName) {
-		return businessFunctionalityService.getPersonInfoWhenNameGiven(firstName, lastName);
+		return communService.getPersonInfoWhenNameGiven(firstName, lastName);
 	}
 
 	/**
@@ -103,10 +104,9 @@ public class CommunController {
 	 * 
 	 * @return - An Iterable object of Employee full filled
 	 */
-	@GetMapping("/communityEmail?city=<city>")
-	@ResponseBody
-	public List<String> getCommunityEmail(String city) {
-		return businessFunctionalityService.getCommunityEmailWhenCityGiven(city);
+	@GetMapping("/communityEmail")
+	public List<String> getCommunityEmail(@RequestParam String city) {
+		return communService.getCommunityEmail(city);
 	}
 
 	@GetMapping("/")

@@ -18,7 +18,7 @@ public class FireStationsService {
 	FirestationsRepository firestationsRepository;
 
 	// ----------------------------------------------------------------------------------------
-	// CREATE "listIdsEntitiesFireStation" FROM FireStationRepository
+	// CREATE "listIdsEntitiesFireStation" FROM FirestationsRepository
 	// ----------------------------------------------------------------------------------------
 	public List<Long> getlistIdsEntitiesFireStation() {
 		

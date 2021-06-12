@@ -18,7 +18,7 @@ public class MedicalRecordsService {
 	MedicalrecordsRepository medicalRecordsRepository;
 
 	// ----------------------------------------------------------------------------------------
-	// CREATE "listIdsEntitiesFireStation" FROM FireStationRepository
+	// CREATE "listIdsEntitiesFireStation" FROM MedicalrecordsRepository
 	// ----------------------------------------------------------------------------------------
 	public List<Long> getlistIdsEntitiesMedicalRecords() {
 
