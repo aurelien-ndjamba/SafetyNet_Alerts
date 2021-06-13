@@ -1,5 +1,6 @@
 package com.safetynets.alerts.api.service;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,7 +70,7 @@ public class CommunService {
 	// http://localhost:8080/personInfo?firstName=<firstName>&lastName=<lastName>
 	// ----------------------------------------------------------------------------------------
 
-	public PersonInfoModel getPersonInfo(String firstName, String lastName) {
+	public PersonInfoModel getPersonInfo(String firstName, String lastName) throws ParseException {
 
 		ArrayList<ArrayList<String>> listMedicationsHistory = new ArrayList<ArrayList<String>>();
 		ArrayList<ArrayList<String>> listAllergiesHistory = new ArrayList<ArrayList<String>>();

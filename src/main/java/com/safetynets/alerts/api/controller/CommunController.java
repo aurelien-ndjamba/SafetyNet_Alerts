@@ -1,5 +1,6 @@
 package com.safetynets.alerts.api.controller;
 
+import java.text.ParseException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,9 +101,10 @@ public class CommunController {
 	 * apparaître.
 	 * 
 	 * @return - An Iterable object of Employee full filled
+	 * @throws ParseException 
 	 */
 	@GetMapping("/personInfo")
-	public PersonInfoModel getPersonInfo(@RequestParam String firstName, @RequestParam String lastName) {
+	public PersonInfoModel getPersonInfo(@RequestParam String firstName, @RequestParam String lastName) throws ParseException {
 		return communService.getPersonInfo(firstName, lastName);
 	}
 
