@@ -1,6 +1,7 @@
 package com.safetynets.alerts.api.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,21 +20,26 @@ public class MedicationsHistoryBylastNameService {
 	@Autowired
 	private MedicalrecordsRepository medicalRecordsRepository;
 
-	public ArrayList<ArrayList<String>> getMedicalHistory(String lastName) {
+	public HashSet<String> getMedicalHistory(String lastName) {
 
-		ArrayList<ArrayList<String>> listMedicationsHistory = new ArrayList<ArrayList<String>>();
+		HashSet<String> listMedicationsHistory = new HashSet<String>();
 		ArrayList<String> medications = new ArrayList<String>();
 
 		List<Long> listIdsEntitiesMedicalRecords = new ArrayList<Long>();
 		listIdsEntitiesMedicalRecords = medicalRecordsService.getlistIdsEntitiesMedicalRecords();
 
 		for (Long i : listIdsEntitiesMedicalRecords) {
-			
+
 			medicalRecords = medicalRecordsRepository.getById(i);
-			
+
 			if (medicalRecords.getLastName().equals(lastName)) {
-				medications = medicalRecords.getMedications(); //
-				listMedicationsHistory.add(medications);
+
+				medications = medicalRecords.getMedications();
+				int medicationsNumber = medications.size();
+
+				for (int j = 0; j < medicationsNumber; j++) {
+					listMedicationsHistory.add(medications.get(j));
+				}
 			}
 		}
 		return listMedicationsHistory;

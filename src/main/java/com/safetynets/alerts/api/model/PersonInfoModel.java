@@ -1,6 +1,6 @@
 package com.safetynets.alerts.api.model;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.springframework.stereotype.Component;
 
@@ -15,6 +15,6 @@ public class PersonInfoModel {
 	private String address;
 	private int age;
 	private String email;
-	private ArrayList<ArrayList<String>> medications;
-	private ArrayList<ArrayList<String>> allergies;
+	private HashSet<String> medications;
+	private HashSet<String> allergies;
 }

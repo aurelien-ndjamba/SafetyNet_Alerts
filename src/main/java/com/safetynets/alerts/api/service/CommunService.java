@@ -2,6 +2,7 @@ package com.safetynets.alerts.api.service;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,8 +73,8 @@ public class CommunService {
 
 	public PersonInfoModel getPersonInfo(String firstName, String lastName) throws ParseException {
 
-		ArrayList<ArrayList<String>> listMedicationsHistory = new ArrayList<ArrayList<String>>();
-		ArrayList<ArrayList<String>> listAllergiesHistory = new ArrayList<ArrayList<String>>();
+		HashSet<String> listMedicationsHistory = new HashSet<String>();
+		HashSet<String> listAllergiesHistory = new HashSet<String>();
 		List<Long> listIdsEntitiesPerson = personsService.getlistIdsEntitiesPerson();
 
 		for (Long i : listIdsEntitiesPerson) {
