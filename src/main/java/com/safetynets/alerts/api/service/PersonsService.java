@@ -59,7 +59,6 @@ public class PersonsService {
 	public boolean updatePersonInfo(PersonsModel newPerson) throws IllegalArgumentException {
 		
 		boolean result = false;
-//		List<Long> listIdsEntitiesPerson = new ArrayList<Long>();
 		List<Long> listIdsEntitiesPerson = getlistIdsEntitiesPerson();
 		
 		for (long i : listIdsEntitiesPerson) {

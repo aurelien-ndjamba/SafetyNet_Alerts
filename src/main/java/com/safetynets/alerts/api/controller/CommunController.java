@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.safetynets.alerts.api.model.PersonInfoModel;
 import com.safetynets.alerts.api.service.CommunService;
 
 
@@ -101,7 +102,7 @@ public class CommunController {
 	 * @return - An Iterable object of Employee full filled
 	 */
 	@GetMapping("/personInfo")
-	public List<String> getPersonInfo(@RequestParam String firstName, @RequestParam String lastName) {
+	public PersonInfoModel getPersonInfo(@RequestParam String firstName, @RequestParam String lastName) {
 		return communService.getPersonInfo(firstName, lastName);
 	}
 
