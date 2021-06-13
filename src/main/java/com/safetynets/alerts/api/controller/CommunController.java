@@ -1,6 +1,7 @@
 package com.safetynets.alerts.api.controller;
 
 import java.text.ParseException;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,9 +63,9 @@ public class CommunController {
 	 * 
 	 * @return - An Iterable object of Employee full filled
 	 */
-	@GetMapping("/phoneAlert?firestation=<firestation_number>")
-	public Iterable<String> getPhoneAlert(int station_number) {
-		return communService.getPhoneListWhenStationNumberGiven(station_number);
+	@GetMapping("/phoneAlert")
+	public HashSet<String> phoneAlert(@RequestParam Long firestation) {
+		return communService.phoneAlert(firestation);
 	}
 
 	/**
