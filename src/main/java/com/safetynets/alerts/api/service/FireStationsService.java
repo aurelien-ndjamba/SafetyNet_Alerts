@@ -12,7 +12,7 @@ import com.safetynets.alerts.api.repository.FirestationsRepository;
 @Service
 public class FireStationsService {
 
-	@Autowired(required = false)
+	@Autowired
 	FireStationsModel firestation;
 	@Autowired
 	FirestationsRepository firestationsRepository;

@@ -5,13 +5,13 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.safetynets.alerts.api.model.MedicalRecordsModel;
 import com.safetynets.alerts.api.repository.MedicalrecordsRepository;
 
-@Component
-public class MedicationsHistoryBylastNameService {
+@Service
+public class MedicationsHistoryService {
 
 	@Autowired
 	private MedicalRecordsModel medicalRecords;
@@ -20,7 +20,7 @@ public class MedicationsHistoryBylastNameService {
 	@Autowired
 	private MedicalrecordsRepository medicalRecordsRepository;
 
-	public HashSet<String> getMedicalHistory(String lastName) {
+	public HashSet<String> getByLastName(String lastName) {
 
 		HashSet<String> listMedicationsHistory = new HashSet<String>();
 		ArrayList<String> medications = new ArrayList<String>();
@@ -44,4 +44,30 @@ public class MedicationsHistoryBylastNameService {
 		}
 		return listMedicationsHistory;
 	}
+	
+	public HashSet<String> getByFisrtNameAndLastName(String firstName, String lastName) {
+
+		HashSet<String> listMedicationsHistory = new HashSet<String>();
+		ArrayList<String> medications = new ArrayList<String>();
+
+		List<Long> listIdsEntitiesMedicalRecords = new ArrayList<Long>();
+		listIdsEntitiesMedicalRecords = medicalRecordsService.getlistIdsEntitiesMedicalRecords();
+
+		for (Long i : listIdsEntitiesMedicalRecords) {
+
+			medicalRecords = medicalRecordsRepository.getById(i);
+
+			if (medicalRecords.getFirstName().equals(firstName) && medicalRecords.getLastName().equals(lastName)) {
+
+				medications = medicalRecords.getMedications();
+				int medicationsNumber = medications.size();
+
+				for (int j = 0; j < medicationsNumber; j++) {
+					listMedicationsHistory.add(medications.get(j));
+				}
+			}
+		}
+		return listMedicationsHistory;
+	}
+	
 }

@@ -12,7 +12,7 @@ import com.safetynets.alerts.api.repository.MedicalrecordsRepository;
 @Service
 public class MedicalRecordsService {
 
-	@Autowired(required=true)
+	@Autowired
 	private MedicalRecordsModel medicalRecords;
 	@Autowired
 	private MedicalrecordsRepository medicalRecordsRepository;

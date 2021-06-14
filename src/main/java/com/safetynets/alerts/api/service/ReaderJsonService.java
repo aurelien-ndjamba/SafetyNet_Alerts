@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -22,7 +22,7 @@ import com.safetynets.alerts.api.repository.PersonsRepository;
 import lombok.Data;
 
 @Data
-@Component
+@Service
 public class ReaderJsonService {
 
 	public static List<PersonsModel> getListPersons(String link)

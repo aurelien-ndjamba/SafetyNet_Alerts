@@ -1,6 +1,7 @@
 package com.safetynets.alerts.api.controller;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -10,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.safetynets.alerts.api.model.ChildInfoModel;
 import com.safetynets.alerts.api.model.PersonInfoModel;
+import com.safetynets.alerts.api.model.ResidentModel;
 import com.safetynets.alerts.api.service.CommunService;
 
 
@@ -19,7 +22,6 @@ public class CommunController {
 
 	@Autowired
 	CommunService communService;
-
 	
 	@GetMapping("/")
 	@ResponseBody
@@ -38,10 +40,10 @@ public class CommunController {
 	 *         un décompte du nombre d'adultes et du nombre d'enfants (tout individu
 	 *         âgé de 18 ans ou moins) dans la zone desservie
 	 */
-	@GetMapping("/firestation?stationNumber=<station_number>")
-	public Iterable<String> getFirestation(int station_number) {
-		return communService.getFireStationWhenStationNumberGiven(station_number);
-	}
+//	@GetMapping("/firestation")
+//	public Iterable<String> getFirestation(int station_number) {
+//		return communService.getFireStationWhenStationNumberGiven(station_number);
+//	}
 
 	/**
 	 * Read - Cette url doit retourner une liste d'enfants (tout individu âgé de 18
@@ -50,10 +52,11 @@ public class CommunController {
 	 * du foyer. S'il n'y a pas d'enfant, cette url peut renvoyer une chaîne vide
 	 * 
 	 * @return - An Iterable object of Employee full filled
+	 * @throws ParseException 
 	 */
-	@GetMapping("/childAlert?address=<address>")
-	public Iterable<String> getChildAlert(String address) {
-		return communService.getChildrenListWithAddressGiven(address);
+	@GetMapping("/childAlert")
+	public ArrayList<ChildInfoModel> getChildInfo(@RequestParam String address) throws ParseException {
+		return communService.getChildInfo(address);
 	}
 
 	/**
@@ -75,10 +78,11 @@ public class CommunController {
 	 * médicaux (médicaments, posologie et allergies) de chaque personne
 	 * 
 	 * @return - An Iterable object of Employee full filled
+	 * @throws ParseException 
 	 */
-	@GetMapping("/fire?address=<address>")
-	public Iterable<String> getFire(String address) {
-		return communService.getPeopleListAndFirestationWhenAddressGiven(address);
+	@GetMapping("/fire")
+	public ArrayList<ResidentModel> getResidentListAndFirestationWhenAddressGiven(@RequestParam String address) throws ParseException {
+		return communService.getResidentListAndFirestationWhenAddressGiven(address);
 	}
 
 	/**
@@ -90,7 +94,7 @@ public class CommunController {
 	 * 
 	 * @return - An Iterable object of Employee full filled
 	 */
-	@GetMapping("/flood/stations?stations=<a list of station_numbers>")
+	@GetMapping("/flood/stations")
 	public Iterable<String> getFlood(int station_number) {
 		return communService.getResidentListAndStationNumberWhenAddressGiven(station_number);
 	}

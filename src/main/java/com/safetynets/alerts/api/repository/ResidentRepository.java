@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.safetynets.alerts.api.model.PersonsModel;
 
 @Repository
-public interface CommunRepository extends JpaRepository<PersonsModel, Long>{
+public interface ResidentRepository extends JpaRepository<PersonsModel, Long>{
 
 }

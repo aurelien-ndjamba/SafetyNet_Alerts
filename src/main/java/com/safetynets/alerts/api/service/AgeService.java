@@ -7,12 +7,12 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.safetynets.alerts.api.model.MedicalRecordsModel;
 import com.safetynets.alerts.api.repository.MedicalrecordsRepository;
 
-@Component
+@Service
 public class AgeService {
 
 	@Autowired

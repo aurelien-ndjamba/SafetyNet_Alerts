@@ -8,10 +8,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.safetynets.alerts.api.model.ChildInfoModel;
 import com.safetynets.alerts.api.model.FireStationsModel;
 import com.safetynets.alerts.api.model.MedicalRecordsModel;
 import com.safetynets.alerts.api.model.PersonInfoModel;
 import com.safetynets.alerts.api.model.PersonsModel;
+import com.safetynets.alerts.api.model.ResidentModel;
 import com.safetynets.alerts.api.repository.FirestationsRepository;
 import com.safetynets.alerts.api.repository.MedicalrecordsRepository;
 import com.safetynets.alerts.api.repository.PersonsRepository;
@@ -43,24 +45,58 @@ public class CommunService {
 	@Autowired
 	private PersonInfoModel personInfo;
 	@Autowired
+	StationNumberResidentService stationNumberResident;
+	@Autowired
 	private AgeService ageService;
 	@Autowired
-	private MedicationsHistoryBylastNameService medicalHistoryMedicationsService;
+	private MedicationsHistoryService medicationHistory;
 	@Autowired
-	private AllergiesHistoryBylastNameService allergiesHistoryBylastNameService;
+	private AllergiesHistoryService allergiesHistory;
+	@Autowired
+	FamilyRelationshipService familyRelationshipService;
 
+	// ----------------------------------------------------------------------------------------
+	// http://localhost:8080/firestation?stationNumber=<station_number>
+	// ----------------------------------------------------------------------------------------
 	public Iterable<String> getFireStationWhenStationNumberGiven(int station_number) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Iterable<String> getChildrenListWithAddressGiven(String address) {
-		// TODO Auto-generated method stub
-		return null;
+	// ----------------------------------------------------------------------------------------
+	// http://localhost:8080/childAlert?address=<address> OK
+	// ----------------------------------------------------------------------------------------
+
+	public ArrayList<ChildInfoModel> getChildInfo(String address) throws ParseException {
+
+		List<Long> listIdsEntitiesPerson = personsService.getlistIdsEntitiesPerson();
+		ArrayList<ChildInfoModel> listChildInfo = new ArrayList<ChildInfoModel>(listIdsEntitiesPerson.size());
+		int ageOfMajority = 18;
+		int age;
+
+		for (Long i : listIdsEntitiesPerson) {
+
+			person = personsRepository.getById(i);
+			age = ageService.getAge(person.getFirstName(), person.getLastName());
+
+			if (person.getAddress().equals(address) && age <= ageOfMajority) {
+
+				ChildInfoModel childInfo = new ChildInfoModel();
+
+				childInfo.setId(person.getId());
+				childInfo.setFirstName(person.getFirstName());
+				childInfo.setLastName(person.getLastName());
+				childInfo.setAge(age);
+				childInfo.setFamilyRelationship(familyRelationshipService.getBySameAddressAndName(address,person.getFirstName(),person.getLastName()));
+
+				listChildInfo.add(childInfo);
+			}
+		}
+		return listChildInfo;
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// http://localhost:8080/phoneAlert?firestation=<firestation_number>  OK
+	// http://localhost:8080/phoneAlert?firestation=<firestation_number> OK
 	// ----------------------------------------------------------------------------------------
 	public HashSet<String> phoneAlert(Long firestation) {
 
@@ -85,11 +121,38 @@ public class CommunService {
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// http://localhost:8080/fire?address=<address>
+	// http://localhost:8080/fire?address=<address> OK
 	// ----------------------------------------------------------------------------------------
-	public Iterable<String> getPeopleListAndFirestationWhenAddressGiven(String address) {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<ResidentModel> getResidentListAndFirestationWhenAddressGiven(String address)
+			throws ParseException {
+
+		List<Long> listIdsEntitiesPerson = personsService.getlistIdsEntitiesPerson();
+		ArrayList<ResidentModel> listResident = new ArrayList<ResidentModel>(listIdsEntitiesPerson.size());
+
+		for (Long i : listIdsEntitiesPerson) {
+
+			person = personsRepository.getById(i);
+			if (person.getAddress().equals(address)) {
+
+				ResidentModel resident = new ResidentModel();
+
+				resident.setId(person.getId());
+				resident.setFirstName(person.getFirstName());
+				resident.setLastName(person.getLastName());
+				resident.setAddress(person.getAddress());
+				resident.setStationNumber(stationNumberResident.getStationNumber(address));
+				resident.setAge(ageService.getAge(person.getFirstName(), person.getLastName()));
+				resident.setPhone(person.getPhone());
+				resident.setMedications(
+						medicationHistory.getByFisrtNameAndLastName(person.getFirstName(), person.getLastName()));
+				resident.setAllergies(
+						allergiesHistory.getByFisrtNameAndLastName(person.getFirstName(), person.getLastName()));
+				listResident.add(resident);
+
+			}
+		}
+
+		return listResident;
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -123,10 +186,11 @@ public class CommunService {
 				int age = ageService.getAge(firstName, lastName);
 				personInfo.setAge(age);
 				personInfo.setEmail(person.getEmail());
-				listMedicationsHistory = medicalHistoryMedicationsService.getMedicalHistory(lastName);
+				listMedicationsHistory = medicationHistory.getByLastName(lastName);
 				personInfo.setMedications(listMedicationsHistory);
-				listAllergiesHistory = allergiesHistoryBylastNameService.getMedicalHistory(lastName);
+				listAllergiesHistory = allergiesHistory.getMedicalHistory(lastName);
 				personInfo.setAllergies(listAllergiesHistory);
+
 			}
 		}
 
