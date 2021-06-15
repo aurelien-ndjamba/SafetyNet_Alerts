@@ -31,7 +31,7 @@ public class PersonController {
 	// POST
 	@PostMapping("/person")
 	@ResponseStatus(HttpStatus.CREATED) // CHECK
-	public PersonModel createPersons(@RequestBody PersonModel newPersons) {
+	public PersonModel createPerson(@RequestBody PersonModel newPersons) {
 		return personsService.createPersons(newPersons);
 	}
 

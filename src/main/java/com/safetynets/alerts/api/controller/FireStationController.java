@@ -19,12 +19,6 @@ public class FireStationController {
 	@Autowired
 	FireStationService fireStationService;
 
-	// GET
-//	@GetMapping("/firestation")
-//	public List<FireStationsModel> getAllFireStation() {
-//		return fireStationService.getAllFireStation();
-//	}
-
 	// POST
 	@PostMapping("/firestation")
 	@ResponseStatus(HttpStatus.CREATED) // Vérifier qu'il n'effectue pas de mise à jour
@@ -43,4 +37,5 @@ public class FireStationController {
 	public boolean deleteFireStation(@RequestParam String addressToDelete) throws IllegalArgumentException {
 		return fireStationService.deleteFireStation(addressToDelete);
 	}
+	
 }

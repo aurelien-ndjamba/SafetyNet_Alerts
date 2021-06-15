@@ -2,7 +2,7 @@ package com.safetynets.alerts.api.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+//import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,9 +45,9 @@ public class FireStationService {
 		return fireStationRepository.findAll();
 	}
 	
-	public Optional<FireStationModel> getFireStationById(Long id) {
-		return fireStationRepository.findById(id);
-	}
+//	public Optional<FireStationModel> getFireStationById(Long id) {
+//		return fireStationRepository.findById(id);
+//	}
 
 	// ----------------------------------------------------------------------------------------
 	// POST OK Vérifier qu'il n'effectue pas de mise à jour

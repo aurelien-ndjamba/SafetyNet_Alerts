@@ -9,16 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.json.JsonParseException;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
-
-import com.safetynets.alerts.api.repository.PersonRepository;
-import com.safetynets.alerts.api.service.MedicalRecordService;
-import com.safetynets.alerts.api.service.PersonService;
+import com.safetynets.alerts.api.model.ConfigModel;
 import com.safetynets.alerts.api.service.ReaderJsonService;
-import com.safetynets.alerts.api.controller.PersonController;
-import com.safetynets.alerts.api.model.PersonModel;
-//import com.safetynets.alerts.api.controller.Controller;//  Ajout pour test
-import com.safetynets.alerts.api.repository.FireStationRepository;
-import com.safetynets.alerts.api.repository.MedicalRecordRepository;
 
 import lombok.Data;
 
@@ -26,16 +18,8 @@ import lombok.Data;
 @SpringBootApplication
 public class ApiApplication implements CommandLineRunner {
 
-	@Autowired PersonService personsService;
-	@Autowired PersonRepository personsRepository;
-	@Autowired PersonController personsController;
-	@Autowired PersonModel personsModel;
-	@Autowired MedicalRecordService fireStationsService;
-	@Autowired FireStationRepository fireStationsRepository;
-	@Autowired MedicalRecordRepository medicalrecordsRepository;
 	@Autowired ReaderJsonService readerJsonService;
-	
-//	@Autowired Controller controller;// Ajout pour test
+	@Autowired ConfigModel configModel;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(ApiApplication.class, args);
@@ -44,7 +28,7 @@ public class ApiApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws JsonParseException, JsonMappingException, IOException, Exception {
 
-		String path = "src/main/resources/data.json";
+		String path = configModel.getDataJson();
 		readerJsonService.SavingJsonInDataBase(path);
 		}
 	}
