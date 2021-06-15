@@ -7,20 +7,20 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.safetynets.alerts.api.model.MedicalRecordsModel;
-import com.safetynets.alerts.api.repository.MedicalrecordsRepository;
+import com.safetynets.alerts.api.model.MedicalRecordModel;
+import com.safetynets.alerts.api.repository.MedicalRecordRepository;
 
 @Service
 public class MedicationsHistoryService {
 
 	@Autowired
-	private MedicalRecordsModel medicalRecords;
+	private MedicalRecordModel medicalRecords;
 	@Autowired
-	private MedicalRecordsService medicalRecordsService;
+	private MedicalRecordService medicalRecordsService;
 	@Autowired
-	private MedicalrecordsRepository medicalRecordsRepository;
+	private MedicalRecordRepository medicalRecordsRepository;
 
-	public HashSet<String> getByLastName(String lastName) {
+	public HashSet<String> getMedicationsHistory(String lastName) {
 
 		HashSet<String> listMedicationsHistory = new HashSet<String>();
 		ArrayList<String> medications = new ArrayList<String>();
@@ -45,7 +45,7 @@ public class MedicationsHistoryService {
 		return listMedicationsHistory;
 	}
 	
-	public HashSet<String> getByFisrtNameAndLastName(String firstName, String lastName) {
+	public HashSet<String> getMedicationsHistory(String firstName, String lastName) {
 
 		HashSet<String> listMedicationsHistory = new HashSet<String>();
 		ArrayList<String> medications = new ArrayList<String>();

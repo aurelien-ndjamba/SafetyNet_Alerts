@@ -13,31 +13,31 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.safetynets.alerts.api.model.MedicalRecordsModel;
-import com.safetynets.alerts.api.service.MedicalRecordsService;
+import com.safetynets.alerts.api.model.MedicalRecordModel;
+import com.safetynets.alerts.api.service.MedicalRecordService;
 
 @RestController
-public class MedicalRecordsController {
+public class MedicalRecordController {
 
 	@Autowired
-	MedicalRecordsService medicalRecordsService;
+	MedicalRecordService medicalRecordsService;
 
 	// GET
 	@GetMapping("/medicalRecord")
-	public List<MedicalRecordsModel> getAllMedicalRecords() {
+	public List<MedicalRecordModel> getAllMedicalRecords() {
 		return medicalRecordsService.getAllMedicalRecords();
 	}
 
 	// POST
 	@PostMapping("/medicalRecord")
 	@ResponseStatus(HttpStatus.CREATED) // Vérifier qu'il n'effectue pas de mise à jour
-	public MedicalRecordsModel createMedicalRecords(@RequestBody MedicalRecordsModel newMedicalRecords) {
+	public MedicalRecordModel createMedicalRecords(@RequestBody MedicalRecordModel newMedicalRecords) {
 		return medicalRecordsService.createMedicalRecords(newMedicalRecords);
 	}
 
 	// PUT
 	@PutMapping("/medicalRecord")
-	public boolean updateMedicalRecords(@RequestBody MedicalRecordsModel updateMedicalRecords) {
+	public boolean updateMedicalRecords(@RequestBody MedicalRecordModel updateMedicalRecords) {
 		return medicalRecordsService.updateMedicalRecords(updateMedicalRecords);
 	}
 

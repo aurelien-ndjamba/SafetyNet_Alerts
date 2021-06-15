@@ -7,25 +7,23 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.safetynets.alerts.api.model.PersonsModel;
-import com.safetynets.alerts.api.repository.PersonsRepository;
+import com.safetynets.alerts.api.model.PersonModel;
+import com.safetynets.alerts.api.repository.PersonRepository;
 
 @Component
 public class FamilyRelationshipService {
 	
 	@Autowired
-	private PersonsModel person;
+	private PersonModel person;
 	@Autowired
 	private PersonsService personsService;
 	@Autowired
-	private PersonsRepository personsRepository;
-	@Autowired
-	StationNumberResidentService stationNumberResident;
+	private PersonRepository personsRepository;
 
-	public HashSet<PersonsModel> getBySameAddressAndName(String address,String firstName, String lastName) throws ParseException {
+	public HashSet<PersonModel> getBySameAddressAndName(String address,String firstName, String lastName) throws ParseException {
 	
 		List<Long> listIdsEntitiesPerson = personsService.getlistIdsEntitiesPerson();
-		HashSet<PersonsModel> listFamilyRelationship = new HashSet<PersonsModel>(listIdsEntitiesPerson.size());
+		HashSet<PersonModel> listFamilyRelationship = new HashSet<PersonModel>(listIdsEntitiesPerson.size());
 
 		for (Long i : listIdsEntitiesPerson) {
 

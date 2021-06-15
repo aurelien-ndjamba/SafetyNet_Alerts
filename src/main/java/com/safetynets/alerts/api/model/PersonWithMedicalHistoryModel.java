@@ -5,7 +5,7 @@ import java.util.HashSet;
 import lombok.Data;
 
 @Data
-public class ResidentModel {
+public class PersonWithMedicalHistoryModel {
 	
     private Long id;
 	private String firstName;

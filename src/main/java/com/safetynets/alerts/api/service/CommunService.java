@@ -9,14 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.safetynets.alerts.api.model.ChildInfoModel;
-import com.safetynets.alerts.api.model.FireStationsModel;
-import com.safetynets.alerts.api.model.MedicalRecordsModel;
+import com.safetynets.alerts.api.model.FireStationModel;
+import com.safetynets.alerts.api.model.MedicalRecordModel;
+import com.safetynets.alerts.api.model.PersonImpactedByStationNumberModel;
 import com.safetynets.alerts.api.model.PersonInfoModel;
-import com.safetynets.alerts.api.model.PersonsModel;
-import com.safetynets.alerts.api.model.ResidentModel;
-import com.safetynets.alerts.api.repository.FirestationsRepository;
-import com.safetynets.alerts.api.repository.MedicalrecordsRepository;
-import com.safetynets.alerts.api.repository.PersonsRepository;
+import com.safetynets.alerts.api.model.PersonModel;
+import com.safetynets.alerts.api.model.PersonWithMedicalHistoryModel;
+import com.safetynets.alerts.api.repository.FireStationRepository;
+import com.safetynets.alerts.api.repository.MedicalRecordRepository;
+import com.safetynets.alerts.api.repository.PersonRepository;
 
 import lombok.Data;
 
@@ -25,48 +26,80 @@ import lombok.Data;
 public class CommunService {
 
 	@Autowired
-	private PersonsModel person;
+	private PersonModel person;
 	@Autowired
 	private PersonsService personsService;
 	@Autowired
-	private PersonsRepository personsRepository;
+	private PersonRepository personsRepository;
 	@Autowired
-	private FireStationsModel fireStation;
+	private FireStationModel fireStation;
 	@Autowired
 	private FireStationsService fireStationsService;
 	@Autowired
-	private FirestationsRepository firestationsRepository;
+	private FireStationRepository firestationsRepository;
 	@Autowired
-	private MedicalRecordsModel medicalRecord;
+	private MedicalRecordModel medicalRecord; //NO USE
 	@Autowired
-	private MedicalRecordsService medicalRecordsService;
+	private MedicalRecordService medicalRecordsService; //NO USE
 	@Autowired
-	private MedicalrecordsRepository medicalrecordsRepository;
+	private MedicalRecordRepository medicalrecordsRepository; //NO USE
 	@Autowired
 	private PersonInfoModel personInfo;
 	@Autowired
 	StationNumberResidentService stationNumberResident;
-	@Autowired
-	private AgeService ageService;
 	@Autowired
 	private MedicationsHistoryService medicationHistory;
 	@Autowired
 	private AllergiesHistoryService allergiesHistory;
 	@Autowired
 	FamilyRelationshipService familyRelationshipService;
+	@Autowired
+	CountService countService;
+	@Autowired
+	PersonImpactedByStationNumberModel personImpacted;
 
 	// ----------------------------------------------------------------------------------------
 	// http://localhost:8080/firestation?stationNumber=<station_number>
 	// ----------------------------------------------------------------------------------------
-	public Iterable<String> getFireStationWhenStationNumberGiven(int station_number) {
-		// TODO Auto-generated method stub
-		return null;
+	/**
+	 * Read - Get all CommunityEmail
+	 * 
+	 * @return - This url should return a list of people covered by the
+	 *         corresponding fire station. So if the station number = 1, it should
+	 *         return the inhabitants covered by station number 1. The list should
+	 *         include the following specific information: first name, last name,
+	 *         address, phone number. In addition, it must provide a count of the
+	 *         number of adults and the number of children (any individual aged 18
+	 *         or under) in the service area.
+	 *         
+	 * @throws ParseException
+	 */
+	public PersonImpactedByStationNumberModel getSpecificInfoPersonsImpacted(long stationNumber) throws ParseException {
+		
+		personImpacted.setStationNumber(stationNumber);
+		personImpacted.setListSpecificInfoPersons(personsService.getListSpecificPersonImpacted(stationNumber));
+		personImpacted.setCountAdult(countService.getCountAdult(stationNumber));
+		personImpacted.setCountChildren(countService.getCountChildren(stationNumber));
+		
+		return personImpacted;
 	}
 
 	// ----------------------------------------------------------------------------------------
 	// http://localhost:8080/childAlert?address=<address> OK
 	// ----------------------------------------------------------------------------------------
-
+	/**
+	 * Read - Get all CommunityEmail
+	 * 
+	 * @return - This url should return a list of people covered by the
+	 *         corresponding fire station. So if the station number = 1, it should
+	 *         return the inhabitants covered by station number 1. The list should
+	 *         include the following specific information: first name, last name,
+	 *         address, phone number. In addition, it must provide a count of the
+	 *         number of adults and the number of children (any individual aged 18
+	 *         or under) in the service area.
+	 *         
+	 * @throws ParseException
+	 */
 	public ArrayList<ChildInfoModel> getChildInfo(String address) throws ParseException {
 
 		List<Long> listIdsEntitiesPerson = personsService.getlistIdsEntitiesPerson();
@@ -77,7 +110,7 @@ public class CommunService {
 		for (Long i : listIdsEntitiesPerson) {
 
 			person = personsRepository.getById(i);
-			age = ageService.getAge(person.getFirstName(), person.getLastName());
+			age = countService.getAge(person.getFirstName(), person.getLastName());
 
 			if (person.getAddress().equals(address) && age <= ageOfMajority) {
 
@@ -87,7 +120,8 @@ public class CommunService {
 				childInfo.setFirstName(person.getFirstName());
 				childInfo.setLastName(person.getLastName());
 				childInfo.setAge(age);
-				childInfo.setFamilyRelationship(familyRelationshipService.getBySameAddressAndName(address,person.getFirstName(),person.getLastName()));
+				childInfo.setFamilyRelationShip(familyRelationshipService.getBySameAddressAndName(address,
+						person.getFirstName(), person.getLastName()));
 
 				listChildInfo.add(childInfo);
 			}
@@ -98,6 +132,19 @@ public class CommunService {
 	// ----------------------------------------------------------------------------------------
 	// http://localhost:8080/phoneAlert?firestation=<firestation_number> OK
 	// ----------------------------------------------------------------------------------------
+	/**
+	 * Read - Get all CommunityEmail
+	 * 
+	 * @return - This url should return a list of people covered by the
+	 *         corresponding fire station. So if the station number = 1, it should
+	 *         return the inhabitants covered by station number 1. The list should
+	 *         include the following specific information: first name, last name,
+	 *         address, phone number. In addition, it must provide a count of the
+	 *         number of adults and the number of children (any individual aged 18
+	 *         or under) in the service area.
+	 *         
+	 * @throws ParseException
+	 */
 	public HashSet<String> phoneAlert(Long firestation) {
 
 		List<Long> listIdsEntitiesPerson = personsService.getlistIdsEntitiesPerson();
@@ -123,30 +170,43 @@ public class CommunService {
 	// ----------------------------------------------------------------------------------------
 	// http://localhost:8080/fire?address=<address> OK
 	// ----------------------------------------------------------------------------------------
-	public ArrayList<ResidentModel> getResidentListAndFirestationWhenAddressGiven(String address)
+	/**
+	 * Read - Get all CommunityEmail
+	 * 
+	 * @return - This url should return a list of people covered by the
+	 *         corresponding fire station. So if the station number = 1, it should
+	 *         return the inhabitants covered by station number 1. The list should
+	 *         include the following specific information: first name, last name,
+	 *         address, phone number. In addition, it must provide a count of the
+	 *         number of adults and the number of children (any individual aged 18
+	 *         or under) in the service area.
+	 *         
+	 * @throws ParseException
+	 */
+	public ArrayList<PersonWithMedicalHistoryModel> getResidentListAndFirestationWhenAddressGiven(String address)
 			throws ParseException {
 
 		List<Long> listIdsEntitiesPerson = personsService.getlistIdsEntitiesPerson();
-		ArrayList<ResidentModel> listResident = new ArrayList<ResidentModel>(listIdsEntitiesPerson.size());
+		ArrayList<PersonWithMedicalHistoryModel> listResident = new ArrayList<PersonWithMedicalHistoryModel>(listIdsEntitiesPerson.size());
 
 		for (Long i : listIdsEntitiesPerson) {
 
 			person = personsRepository.getById(i);
 			if (person.getAddress().equals(address)) {
 
-				ResidentModel resident = new ResidentModel();
+				PersonWithMedicalHistoryModel resident = new PersonWithMedicalHistoryModel();
 
 				resident.setId(person.getId());
 				resident.setFirstName(person.getFirstName());
 				resident.setLastName(person.getLastName());
 				resident.setAddress(person.getAddress());
 				resident.setStationNumber(stationNumberResident.getStationNumber(address));
-				resident.setAge(ageService.getAge(person.getFirstName(), person.getLastName()));
+				resident.setAge(countService.getAge(person.getFirstName(), person.getLastName()));
 				resident.setPhone(person.getPhone());
 				resident.setMedications(
-						medicationHistory.getByFisrtNameAndLastName(person.getFirstName(), person.getLastName()));
+						medicationHistory.getMedicationsHistory(person.getFirstName(), person.getLastName()));
 				resident.setAllergies(
-						allergiesHistory.getByFisrtNameAndLastName(person.getFirstName(), person.getLastName()));
+						allergiesHistory.getAllergiesHistory(person.getFirstName(), person.getLastName()));
 				listResident.add(resident);
 
 			}
@@ -166,7 +226,19 @@ public class CommunService {
 	// ----------------------------------------------------------------------------------------
 	// http://localhost:8080/personInfo?firstName=<firstName>&lastName=<lastName> OK
 	// ----------------------------------------------------------------------------------------
-
+	/**
+	 * Read - Get all CommunityEmail
+	 * 
+	 * @return - This url should return a list of people covered by the
+	 *         corresponding fire station. So if the station number = 1, it should
+	 *         return the inhabitants covered by station number 1. The list should
+	 *         include the following specific information: first name, last name,
+	 *         address, phone number. In addition, it must provide a count of the
+	 *         number of adults and the number of children (any individual aged 18
+	 *         or under) in the service area.
+	 *         
+	 * @throws ParseException
+	 */
 	public PersonInfoModel getPersonInfo(String firstName, String lastName) throws ParseException {
 
 		HashSet<String> listMedicationsHistory = new HashSet<String>();
@@ -183,12 +255,12 @@ public class CommunService {
 				personInfo.setFirstName(firstName);
 				personInfo.setLastName(lastName);
 				personInfo.setAddress(person.getAddress());
-				int age = ageService.getAge(firstName, lastName);
+				int age = countService.getAge(firstName, lastName);
 				personInfo.setAge(age);
 				personInfo.setEmail(person.getEmail());
-				listMedicationsHistory = medicationHistory.getByLastName(lastName);
+				listMedicationsHistory = medicationHistory.getMedicationsHistory(lastName);
 				personInfo.setMedications(listMedicationsHistory);
-				listAllergiesHistory = allergiesHistory.getMedicalHistory(lastName);
+				listAllergiesHistory = allergiesHistory.getAllergiesHistory(lastName);
 				personInfo.setAllergies(listAllergiesHistory);
 
 			}
@@ -200,7 +272,19 @@ public class CommunService {
 	// ----------------------------------------------------------------------------------------
 	// http://localhost:8080/communityEmail?city=<city> OK
 	// ----------------------------------------------------------------------------------------
-
+	/**
+	 * Read - Get all CommunityEmail
+	 * 
+	 * @return - This url should return a list of people covered by the
+	 *         corresponding fire station. So if the station number = 1, it should
+	 *         return the inhabitants covered by station number 1. The list should
+	 *         include the following specific information: first name, last name,
+	 *         address, phone number. In addition, it must provide a count of the
+	 *         number of adults and the number of children (any individual aged 18
+	 *         or under) in the service area.
+	 *         
+	 * @throws ParseException
+	 */
 	public List<String> getCommunityEmail(String city) {
 
 		List<Long> listIdsEntitiesPerson = personsService.getlistIdsEntitiesPerson();

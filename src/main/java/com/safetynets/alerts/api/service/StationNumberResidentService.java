@@ -5,19 +5,19 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.safetynets.alerts.api.model.FireStationsModel;
-import com.safetynets.alerts.api.repository.FirestationsRepository;
+import com.safetynets.alerts.api.model.FireStationModel;
+import com.safetynets.alerts.api.repository.FireStationRepository;
 
 
 @Service
 public class StationNumberResidentService {
 	
 	@Autowired
-	private FireStationsModel fireStation;
+	private FireStationModel fireStation;
 	@Autowired
 	private FireStationsService fireStationsService;
 	@Autowired
-	private FirestationsRepository firestationsRepository;
+	private FireStationRepository firestationsRepository;
 
 	public Long getStationNumber(String address) {
 		

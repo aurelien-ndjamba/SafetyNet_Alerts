@@ -6,23 +6,23 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.safetynets.alerts.api.model.MedicalRecordsModel;
-import com.safetynets.alerts.api.repository.MedicalrecordsRepository;
+import com.safetynets.alerts.api.model.MedicalRecordModel;
+import com.safetynets.alerts.api.repository.MedicalRecordRepository;
 
 @Service
-public class MedicalRecordsService {
+public class MedicalRecordService {
 
 	@Autowired
-	private MedicalRecordsModel medicalRecords;
+	private MedicalRecordModel medicalRecords;
 	@Autowired
-	private MedicalrecordsRepository medicalRecordsRepository;
+	private MedicalRecordRepository medicalRecordsRepository;
 
 	// ----------------------------------------------------------------------------------------
 	// CREATE "listIdsEntitiesFireStation" FROM MedicalrecordsRepository
 	// ----------------------------------------------------------------------------------------
 	public List<Long> getlistIdsEntitiesMedicalRecords() {
 
-		List<MedicalRecordsModel> listEntitiesMedicalRecords = medicalRecordsRepository.findAll();
+		List<MedicalRecordModel> listEntitiesMedicalRecords = medicalRecordsRepository.findAll();
 		long CountIds = medicalRecordsRepository.count();
 		int id = 0;
 		List<Long> listIdsEntitiesMedicalRecords = new ArrayList<Long>();
@@ -37,14 +37,14 @@ public class MedicalRecordsService {
 	// ----------------------------------------------------------------------------------------
 	// GET AllMedicalRecords
 	// ----------------------------------------------------------------------------------------
-	public List<MedicalRecordsModel> getAllMedicalRecords() {
+	public List<MedicalRecordModel> getAllMedicalRecords() {
 		return medicalRecordsRepository.findAll();
 	}
 
 	// ----------------------------------------------------------------------------------------
 	// POST OK Vérifier qu'il n'effectue pas de mise à jour
 	// ----------------------------------------------------------------------------------------
-	public MedicalRecordsModel createMedicalRecords(MedicalRecordsModel newMedicalRecords) {
+	public MedicalRecordModel createMedicalRecords(MedicalRecordModel newMedicalRecords) {
 		System.out.println("Nouveau dossier medical enregistrée dans la base de donnée avec succès !");
 		return medicalRecordsRepository.save(newMedicalRecords);
 	}
@@ -53,7 +53,7 @@ public class MedicalRecordsService {
 	// PUT
 	// ----------------------------------------------------------------------------------------
 
-	public boolean updateMedicalRecords(MedicalRecordsModel updateMedicalRecords) throws IllegalArgumentException {
+	public boolean updateMedicalRecords(MedicalRecordModel updateMedicalRecords) throws IllegalArgumentException {
 
 		boolean result = false;
 		List<Long> listIdsEntitiesMedicalRecords = new ArrayList<Long>();

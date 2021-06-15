@@ -12,47 +12,49 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.safetynets.alerts.api.model.ChildInfoModel;
+import com.safetynets.alerts.api.model.PersonImpactedByStationNumberModel;
 import com.safetynets.alerts.api.model.PersonInfoModel;
-import com.safetynets.alerts.api.model.ResidentModel;
+import com.safetynets.alerts.api.model.PersonWithMedicalHistoryModel;
 import com.safetynets.alerts.api.service.CommunService;
-
 
 @RestController
 public class CommunController {
 
 	@Autowired
 	CommunService communService;
-	
+
 	@GetMapping("/")
 	@ResponseBody
 	public String home() {
 		return "<h1> SAFETYNETS ALERTS vous souhaite la bienvenue! </h1>";
 	}
-	
+
 	/**
 	 * Read - Get all employees
 	 * 
-	 * @return - Cette url doit retourner une liste des personnes couvertes par la
-	 *         caserne de pompiers correspondante. Donc, si le numéro de station =
-	 *         1, elle doit renvoyer les habitants couverts par la station numéro 1.
-	 *         La liste doit inclure les informations spécifiques suivantes :
-	 *         prénom, nom, adresse, numéro de téléphone. De plus, elle doit fournir
-	 *         un décompte du nombre d'adultes et du nombre d'enfants (tout individu
-	 *         âgé de 18 ans ou moins) dans la zone desservie
+	 * @return - This url should return a list of people covered by the
+	 *         corresponding fire station. So if the station number = 1, it should
+	 *         return the inhabitants covered by station number 1. The list should
+	 *         include the following specific information: first name, last name,
+	 *         address, phone number. In addition, it must provide a count of the
+	 *         number of adults and the number of children (any individual aged 18
+	 *         or under) in the service area.
+	 *         
+	 * @throws ParseException
 	 */
-//	@GetMapping("/firestation")
-//	public Iterable<String> getFirestation(int station_number) {
-//		return communService.getFireStationWhenStationNumberGiven(station_number);
-//	}
+	@GetMapping("/firestation")
+	public PersonImpactedByStationNumberModel getSpecificInfoPersonsImpacted(long stationNumber) throws ParseException {
+		return communService.getSpecificInfoPersonsImpacted(stationNumber);
+	}
 
 	/**
-	 * Read - Cette url doit retourner une liste d'enfants (tout individu âgé de 18
-	 * ans ou moins) habitant à cette adresse. La liste doit comprendre le prénom et
-	 * le nom de famille de chaque enfant, son âge et une liste des autres membres
-	 * du foyer. S'il n'y a pas d'enfant, cette url peut renvoyer une chaîne vide
+	 * Read - This url should return a list of children (anyone aged 18 or under)
+	 * living at this address. The list should include each child's first and last
+	 * name, age, and a list of other household members. If there is no child, this
+	 * url may return an empty string
 	 * 
 	 * @return - An Iterable object of Employee full filled
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
 	@GetMapping("/childAlert")
 	public ArrayList<ChildInfoModel> getChildInfo(@RequestParam String address) throws ParseException {
@@ -60,9 +62,9 @@ public class CommunController {
 	}
 
 	/**
-	 * Read - Cette url doit retourner une liste des numéros de téléphone des
-	 * résidents desservis par la caserne de pompiers. Nous l'utiliserons pour
-	 * envoyer des messages texte d'urgence à des foyers spécifiques.
+	 * Read - This url should return a list of the telephone numbers of the
+	 * residents served by the fire station. We will use it to send emergency text
+	 * messages to specific households.
 	 * 
 	 * @return - An Iterable object of Employee full filled
 	 */
@@ -72,25 +74,25 @@ public class CommunController {
 	}
 
 	/**
-	 * Read - Cette url doit retourner la liste des habitants vivant à l’adresse
-	 * donnée ainsi que le numéro de la caserne de pompiers la desservant. La liste
-	 * doit inclure le nom, le numéro de téléphone, l'âge et les antécédents
-	 * médicaux (médicaments, posologie et allergies) de chaque personne
+	 * Read - This url must return the list of inhabitants living at the given
+	 * address as well as the number of the fire station serving it. The list should
+	 * include the name, phone number, age, and medical history (medications,
+	 * dosage, and allergies) of each person
 	 * 
 	 * @return - An Iterable object of Employee full filled
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
 	@GetMapping("/fire")
-	public ArrayList<ResidentModel> getResidentListAndFirestationWhenAddressGiven(@RequestParam String address) throws ParseException {
+	public ArrayList<PersonWithMedicalHistoryModel> getResidentListAndFirestationWhenAddressGiven(@RequestParam String address)
+			throws ParseException {
 		return communService.getResidentListAndFirestationWhenAddressGiven(address);
 	}
 
 	/**
-	 * Read - Cette url doit retourner une liste de tous les foyers desservis par la
-	 * caserne. Cette liste doit regrouper les personnes par adresse. Elle doit
-	 * aussi inclure le nom, le numéro de téléphone et l'âge des habitants, et faire
-	 * figurer leurs antécédents médicaux (médicaments, posologie et allergies) à
-	 * côté de chaque nom.
+	 * Read - This url should return a list of all homes served by the barracks.
+	 * This list should group people by address. It should also include the name,
+	 * phone number and age of residents, and include their medical history
+	 * (medications, dosage, and allergies) next to each name.
 	 * 
 	 * @return - An Iterable object of Employee full filled
 	 */
@@ -100,22 +102,21 @@ public class CommunController {
 	}
 
 	/**
-	 * Read - Cette url doit retourner le nom, l'adresse, l'âge, l'adresse mail et
-	 * les antécédents médicaux (médicaments, posologie, allergies) de chaque
-	 * habitant. Si plusieurs personnes portent le même nom, elles doivent toutes
-	 * apparaître.
+	 * Read - This url must return the name, address, age, email address and medical
+	 * history (drugs, dosage, allergies) of each inhabitant. If more than one
+	 * person has the same name, they should all appear.
 	 * 
 	 * @return - An Iterable object of Employee full filled
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
 	@GetMapping("/personInfo")
-	public PersonInfoModel getPersonInfo(@RequestParam String firstName, @RequestParam String lastName) throws ParseException {
+	public PersonInfoModel getPersonInfo(@RequestParam String firstName, @RequestParam String lastName)
+			throws ParseException {
 		return communService.getPersonInfo(firstName, lastName);
 	}
 
 	/**
-	 * Read - Cette url doit retourner les adresses mail de tous les habitants de la
-	 * ville
+	 * Read - This url must return the email addresses of all the inhabitants of the city
 	 * 
 	 * @return - An Iterable object of Employee full filled
 	 */

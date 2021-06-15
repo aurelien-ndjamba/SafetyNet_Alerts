@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @Component
 public class DataSourceModel {
 
-	ArrayList<PersonsModel> persons;
-	ArrayList<FireStationsModel> fireStations;
-	ArrayList<MedicalRecordsModel> medicalRecords;
+	ArrayList<PersonModel> persons;
+	ArrayList<FireStationModel> fireStations;
+	ArrayList<MedicalRecordModel> medicalRecords;
 	
 }

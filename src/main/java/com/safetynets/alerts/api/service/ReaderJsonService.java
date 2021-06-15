@@ -11,13 +11,13 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.safetynets.alerts.api.model.FireStationsModel;
+import com.safetynets.alerts.api.model.FireStationModel;
 import com.safetynets.alerts.api.model.DataSourceModel;
-import com.safetynets.alerts.api.model.MedicalRecordsModel;
-import com.safetynets.alerts.api.model.PersonsModel;
-import com.safetynets.alerts.api.repository.FirestationsRepository;
-import com.safetynets.alerts.api.repository.MedicalrecordsRepository;
-import com.safetynets.alerts.api.repository.PersonsRepository;
+import com.safetynets.alerts.api.model.MedicalRecordModel;
+import com.safetynets.alerts.api.model.PersonModel;
+import com.safetynets.alerts.api.repository.FireStationRepository;
+import com.safetynets.alerts.api.repository.MedicalRecordRepository;
+import com.safetynets.alerts.api.repository.PersonRepository;
 
 import lombok.Data;
 
@@ -25,21 +25,21 @@ import lombok.Data;
 @Service
 public class ReaderJsonService {
 
-	public static List<PersonsModel> getListPersons(String link)
+	public static List<PersonModel> getListPersons(String link)
 			throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		DataSourceModel dataSource = objectMapper.readValue(new File(link), DataSourceModel.class);
 		return dataSource.getPersons();
 	}
 
-	public static List<FireStationsModel> getListFireStations(String link)
+	public static List<FireStationModel> getListFireStations(String link)
 			throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		DataSourceModel dataSource = objectMapper.readValue(new File(link), DataSourceModel.class);
 		return dataSource.getFireStations();
 	}
 
-	public static List<MedicalRecordsModel> getListMedicalRecords(String link)
+	public static List<MedicalRecordModel> getListMedicalRecords(String link)
 			throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		DataSourceModel dataSource = objectMapper.readValue(new File(link), DataSourceModel.class);
@@ -47,11 +47,11 @@ public class ReaderJsonService {
 	}
 
 	@Autowired
-	public PersonsRepository personsRepository;
+	public PersonRepository personsRepository;
 	@Autowired
-	public FirestationsRepository firestationsRepository;
+	public FireStationRepository firestationsRepository;
 	@Autowired
-	public MedicalrecordsRepository medicalrecordsRepository;
+	public MedicalRecordRepository medicalrecordsRepository;
 
 	public void SavingJsonInDataBase(String path) throws JsonParseException, JsonMappingException, IOException {
 
@@ -60,20 +60,16 @@ public class ReaderJsonService {
 		DataSourceModel dataSource = objectMapper.readValue(new File(path), DataSourceModel.class);
 		
 		// Sauvegarde dans la base de données des entités "Persons"
-		List<PersonsModel> listPersons = dataSource.getPersons();
+		List<PersonModel> listPersons = dataSource.getPersons();
 		personsRepository.saveAll(listPersons);
 
 		// Sauvegarde dans la base de données des entités "FireStations"
-		List<FireStationsModel> listFireStations = dataSource.getFireStations();
+		List<FireStationModel> listFireStations = dataSource.getFireStations();
 		firestationsRepository.saveAll(listFireStations);
 
 		// Sauvegarde dans la base de données des entités "MedicalRecords"
-		List<MedicalRecordsModel> listMedicalrecords = dataSource.getMedicalRecords();
+		List<MedicalRecordModel> listMedicalrecords = dataSource.getMedicalRecords();
 		medicalrecordsRepository.saveAll(listMedicalrecords);
-
-		System.out.println(listPersons);
-		System.out.println(listFireStations);
-		System.out.println(listMedicalrecords);
 
 	}
 

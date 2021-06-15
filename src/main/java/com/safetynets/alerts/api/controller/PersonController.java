@@ -16,25 +16,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.safetynets.alerts.api.model.PersonsModel;
+import com.safetynets.alerts.api.model.PersonModel;
 import com.safetynets.alerts.api.service.PersonsService;
 
 @RestController
-public class PersonsController {
+public class PersonController {
 
-	@Autowired
-	PersonsModel persons;
 	@Autowired
 	PersonsService personsService;
 
 	// GET
 	@GetMapping("/person")
-	public List<PersonsModel> getAllPersons() {
+	public List<PersonModel> getAllPersons() {
 		return personsService.getAllPersons();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/person/{id}")
-	public PersonsModel getPersonsById(@PathVariable Long id) {
+	public PersonModel getPersonsById(@PathVariable Long id) {
 //	@GetMapping("/person")
 //	public PersonsModel getPersonsById(@RequestParam Long id) {
 		return personsService.getPersonById(id);
@@ -43,7 +41,7 @@ public class PersonsController {
 	// POST
 	@PostMapping("/person")
 	@ResponseStatus(HttpStatus.CREATED) // CHECK
-	public PersonsModel createPersons(@RequestBody PersonsModel newPersons) {
+	public PersonModel createPersons(@RequestBody PersonModel newPersons) {
 		return personsService.createPersons(newPersons);
 	}
 
@@ -51,7 +49,7 @@ public class PersonsController {
 //	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 //	public PersonsModel updatePersonInfo(@PathVariable Long id, @RequestBody PersonsModel updatePersons) {
 	@PutMapping("/person")
-	public boolean updatePersonInfo(@RequestBody PersonsModel newPerson) {
+	public boolean updatePersonInfo(@RequestBody PersonModel newPerson) {
 		return personsService.updatePersonInfo(newPerson);
 	}
 
