@@ -11,7 +11,7 @@ import com.safetynets.alerts.api.model.MedicalRecordModel;
 import com.safetynets.alerts.api.repository.MedicalRecordRepository;
 
 @Service
-public class MedicationsHistoryService {
+public class MedicalHistoryService {
 
 	@Autowired
 	private MedicalRecordModel medicalRecords;
@@ -20,6 +20,56 @@ public class MedicationsHistoryService {
 	@Autowired
 	private MedicalRecordRepository medicalRecordsRepository;
 
+	public HashSet<String> getAllergiesHistory(String lastName) {
+
+		HashSet<String> listAllergiesHistory = new HashSet<String>();
+		ArrayList<String> allergies = new ArrayList<String>();
+
+		List<Long> listIdsEntitiesMedicalRecords = new ArrayList<Long>();
+		listIdsEntitiesMedicalRecords = medicalRecordsService.getlistIdsEntitiesMedicalRecords();
+
+		for (Long i : listIdsEntitiesMedicalRecords) {
+
+			medicalRecords = medicalRecordsRepository.getById(i);
+
+			if (medicalRecords.getLastName().equals(lastName)) {
+
+				allergies = medicalRecords.getAllergies();
+				int allergiesNumber = allergies.size();
+
+				for (int j = 0; j < allergiesNumber; j++) {
+					listAllergiesHistory.add(allergies.get(j));
+				}
+			}
+		}
+		return listAllergiesHistory;
+	}
+	
+	public HashSet<String>getAllergiesHistory(String firstName, String lastName) {
+
+		HashSet<String> listAllergiesHistory = new HashSet<String>();
+		ArrayList<String> allergies = new ArrayList<String>();
+
+		List<Long> listIdsEntitiesMedicalRecords = new ArrayList<Long>();
+		listIdsEntitiesMedicalRecords = medicalRecordsService.getlistIdsEntitiesMedicalRecords();
+
+		for (Long i : listIdsEntitiesMedicalRecords) {
+
+			medicalRecords = medicalRecordsRepository.getById(i);
+
+			if (medicalRecords.getFirstName().equals(firstName) && medicalRecords.getLastName().equals(lastName)) {
+
+				allergies = medicalRecords.getAllergies();
+				int allergiesNumber = allergies.size();
+
+				for (int j = 0; j < allergiesNumber; j++) {
+					listAllergiesHistory.add(allergies.get(j));
+				}
+			}
+		}
+		return listAllergiesHistory;
+	}
+	
 	public HashSet<String> getMedicationsHistory(String lastName) {
 
 		HashSet<String> listMedicationsHistory = new HashSet<String>();

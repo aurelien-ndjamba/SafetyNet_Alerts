@@ -97,8 +97,8 @@ public class CommunController {
 	 * @return - An Iterable object of Employee full filled
 	 */
 	@GetMapping("/flood/stations")
-	public Iterable<String> getFlood(int station_number) {
-		return communService.getResidentListAndStationNumberWhenAddressGiven(station_number);
+	public ArrayList<String> getPersonsByStationNumber(@RequestParam long stations) {
+		return communService.getPersonsByStationNumber(stations);
 	}
 
 	/**

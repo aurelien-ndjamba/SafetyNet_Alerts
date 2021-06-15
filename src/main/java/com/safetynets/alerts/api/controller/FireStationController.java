@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.safetynets.alerts.api.model.FireStationModel;
-import com.safetynets.alerts.api.service.FireStationsService;
+import com.safetynets.alerts.api.service.FireStationService;
 
 @RestController
 public class FireStationController {
 
 	@Autowired
-	FireStationsService fireStationService;
+	FireStationService fireStationService;
 
 	// GET
 //	@GetMapping("/firestation")

@@ -24,6 +24,13 @@ import lombok.Data;
 @Data
 @Service
 public class ReaderJsonService {
+	
+	@Autowired
+	private PersonRepository personsRepository;
+	@Autowired
+	private FireStationRepository firestationsRepository;
+	@Autowired
+	private MedicalRecordRepository medicalrecordsRepository;
 
 	public static List<PersonModel> getListPersons(String link)
 			throws JsonParseException, JsonMappingException, IOException {
@@ -45,13 +52,6 @@ public class ReaderJsonService {
 		DataSourceModel dataSource = objectMapper.readValue(new File(link), DataSourceModel.class);
 		return dataSource.getMedicalRecords();
 	}
-
-	@Autowired
-	public PersonRepository personsRepository;
-	@Autowired
-	public FireStationRepository firestationsRepository;
-	@Autowired
-	public MedicalRecordRepository medicalrecordsRepository;
 
 	public void SavingJsonInDataBase(String path) throws JsonParseException, JsonMappingException, IOException {
 

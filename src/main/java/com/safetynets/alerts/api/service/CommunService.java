@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.safetynets.alerts.api.model.ChildInfoModel;
 import com.safetynets.alerts.api.model.FireStationModel;
+import com.safetynets.alerts.api.model.HomeByFireStationModel;
 import com.safetynets.alerts.api.model.MedicalRecordModel;
 import com.safetynets.alerts.api.model.PersonImpactedByStationNumberModel;
 import com.safetynets.alerts.api.model.PersonInfoModel;
@@ -34,32 +35,28 @@ public class CommunService {
 	@Autowired
 	private FireStationModel fireStation;
 	@Autowired
-	private FireStationsService fireStationsService;
+	private FireStationService fireStationService;
 	@Autowired
-	private FireStationRepository firestationsRepository;
+	private FireStationRepository firestationRepository;
 	@Autowired
-	private MedicalRecordModel medicalRecord; //NO USE
+	private MedicalRecordModel medicalRecord; // NO USE
 	@Autowired
-	private MedicalRecordService medicalRecordsService; //NO USE
+	private MedicalRecordService medicalRecordService; // NO USE
 	@Autowired
-	private MedicalRecordRepository medicalrecordsRepository; //NO USE
+	private MedicalRecordRepository medicalRecordRepository; // NO USE
 	@Autowired
 	private PersonInfoModel personInfo;
 	@Autowired
-	StationNumberResidentService stationNumberResident;
+	private MedicalHistoryService medicalHistory;
 	@Autowired
-	private MedicationsHistoryService medicationHistory;
+	private FamilyRelationshipService familyRelationshipService;
 	@Autowired
-	private AllergiesHistoryService allergiesHistory;
+	private CountService countService;
 	@Autowired
-	FamilyRelationshipService familyRelationshipService;
-	@Autowired
-	CountService countService;
-	@Autowired
-	PersonImpactedByStationNumberModel personImpacted;
+	private PersonImpactedByStationNumberModel personImpacted;
 
 	// ----------------------------------------------------------------------------------------
-	// http://localhost:8080/firestation?stationNumber=<station_number>
+	// http://localhost:8080/firestation?stationNumber=<station_number> OK
 	// ----------------------------------------------------------------------------------------
 	/**
 	 * Read - Get all CommunityEmail
@@ -71,16 +68,16 @@ public class CommunService {
 	 *         address, phone number. In addition, it must provide a count of the
 	 *         number of adults and the number of children (any individual aged 18
 	 *         or under) in the service area.
-	 *         
+	 * 
 	 * @throws ParseException
 	 */
 	public PersonImpactedByStationNumberModel getSpecificInfoPersonsImpacted(long stationNumber) throws ParseException {
-		
+
 		personImpacted.setStationNumber(stationNumber);
 		personImpacted.setListSpecificInfoPersons(personsService.getListSpecificPersonImpacted(stationNumber));
 		personImpacted.setCountAdult(countService.getCountAdult(stationNumber));
 		personImpacted.setCountChildren(countService.getCountChildren(stationNumber));
-		
+
 		return personImpacted;
 	}
 
@@ -97,7 +94,7 @@ public class CommunService {
 	 *         address, phone number. In addition, it must provide a count of the
 	 *         number of adults and the number of children (any individual aged 18
 	 *         or under) in the service area.
-	 *         
+	 * 
 	 * @throws ParseException
 	 */
 	public ArrayList<ChildInfoModel> getChildInfo(String address) throws ParseException {
@@ -142,18 +139,18 @@ public class CommunService {
 	 *         address, phone number. In addition, it must provide a count of the
 	 *         number of adults and the number of children (any individual aged 18
 	 *         or under) in the service area.
-	 *         
+	 * 
 	 * @throws ParseException
 	 */
 	public HashSet<String> phoneAlert(Long firestation) {
 
 		List<Long> listIdsEntitiesPerson = personsService.getlistIdsEntitiesPerson();
-		List<Long> listIdsEntitiesFireStations = fireStationsService.getlistIdsEntitiesFireStation();
+		List<Long> listIdsEntitiesFireStations = fireStationService.getlistIdsEntitiesFireStation();
 		List<String> listAddressPhoneAlert = new ArrayList<String>();
 		HashSet<String> listPhoneAlert = new HashSet<String>();
 
 		for (Long i : listIdsEntitiesFireStations) {
-			fireStation = firestationsRepository.getById(i);
+			fireStation = firestationRepository.getById(i);
 			if (fireStation.getStation() == firestation) {
 				listAddressPhoneAlert.add(fireStation.getAddress());
 			}
@@ -180,14 +177,15 @@ public class CommunService {
 	 *         address, phone number. In addition, it must provide a count of the
 	 *         number of adults and the number of children (any individual aged 18
 	 *         or under) in the service area.
-	 *         
+	 * 
 	 * @throws ParseException
 	 */
 	public ArrayList<PersonWithMedicalHistoryModel> getResidentListAndFirestationWhenAddressGiven(String address)
 			throws ParseException {
 
 		List<Long> listIdsEntitiesPerson = personsService.getlistIdsEntitiesPerson();
-		ArrayList<PersonWithMedicalHistoryModel> listResident = new ArrayList<PersonWithMedicalHistoryModel>(listIdsEntitiesPerson.size());
+		ArrayList<PersonWithMedicalHistoryModel> listResident = new ArrayList<PersonWithMedicalHistoryModel>(
+				listIdsEntitiesPerson.size());
 
 		for (Long i : listIdsEntitiesPerson) {
 
@@ -200,13 +198,12 @@ public class CommunService {
 				resident.setFirstName(person.getFirstName());
 				resident.setLastName(person.getLastName());
 				resident.setAddress(person.getAddress());
-				resident.setStationNumber(stationNumberResident.getStationNumber(address));
+				resident.setStationNumber(fireStationService.getStationNumber(address));
 				resident.setAge(countService.getAge(person.getFirstName(), person.getLastName()));
 				resident.setPhone(person.getPhone());
 				resident.setMedications(
-						medicationHistory.getMedicationsHistory(person.getFirstName(), person.getLastName()));
-				resident.setAllergies(
-						allergiesHistory.getAllergiesHistory(person.getFirstName(), person.getLastName()));
+						medicalHistory.getMedicationsHistory(person.getFirstName(), person.getLastName()));
+				resident.setAllergies(medicalHistory.getAllergiesHistory(person.getFirstName(), person.getLastName()));
 				listResident.add(resident);
 
 			}
@@ -218,8 +215,26 @@ public class CommunService {
 	// ----------------------------------------------------------------------------------------
 	// http://localhost:8080/flood/stations?stations=<a list of station_numbers>
 	// ----------------------------------------------------------------------------------------
-	public Iterable<String> getResidentListAndStationNumberWhenAddressGiven(int station_number) {
-		// TODO Auto-generated method stub
+	public HomeByFireStationModel getPersonsByStation(List<Long> stations) {
+		
+		int NumberOfStations = stations.size();
+		ArrayList<FireStation> listFireStation; 
+		ArrayList<String> listAddress = new ArrayList<String>();
+		
+		for (int i = 0 ; i < NumberOfStations; i++) {
+			for (int j = 0 ; j < sizeListFireStation; j++) {
+			if ( listFireStation.get(j).getStation() = stations.get(i) ) {
+				
+			}
+			}
+			listFireStation
+			
+		}
+		
+		
+		
+		
+		
 		return null;
 	}
 
@@ -236,7 +251,7 @@ public class CommunService {
 	 *         address, phone number. In addition, it must provide a count of the
 	 *         number of adults and the number of children (any individual aged 18
 	 *         or under) in the service area.
-	 *         
+	 * 
 	 * @throws ParseException
 	 */
 	public PersonInfoModel getPersonInfo(String firstName, String lastName) throws ParseException {
@@ -258,9 +273,9 @@ public class CommunService {
 				int age = countService.getAge(firstName, lastName);
 				personInfo.setAge(age);
 				personInfo.setEmail(person.getEmail());
-				listMedicationsHistory = medicationHistory.getMedicationsHistory(lastName);
+				listMedicationsHistory = medicalHistory.getMedicationsHistory(lastName);
 				personInfo.setMedications(listMedicationsHistory);
-				listAllergiesHistory = allergiesHistory.getAllergiesHistory(lastName);
+				listAllergiesHistory = medicalHistory.getAllergiesHistory(lastName);
 				personInfo.setAllergies(listAllergiesHistory);
 
 			}
@@ -282,7 +297,7 @@ public class CommunService {
 	 *         address, phone number. In addition, it must provide a count of the
 	 *         number of adults and the number of children (any individual aged 18
 	 *         or under) in the service area.
-	 *         
+	 * 
 	 * @throws ParseException
 	 */
 	public List<String> getCommunityEmail(String city) {

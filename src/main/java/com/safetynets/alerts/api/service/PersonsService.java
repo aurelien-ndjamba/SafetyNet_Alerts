@@ -14,13 +14,13 @@ import com.safetynets.alerts.api.repository.PersonRepository;
 public class PersonsService {
 
 	@Autowired
-	PersonModel person;
+	private PersonModel person;
 	@Autowired
 	private PersonsService personsService;
 	@Autowired
 	PersonRepository personsRepository;
 	@Autowired
-	private FireStationsService fireStationsService;
+	private FireStationService fireStationsService;
 
 	// ----------------------------------------------------------------------------------------
 	// CREATE "listIdsEntitiesPerson" FROM PersonsRepository

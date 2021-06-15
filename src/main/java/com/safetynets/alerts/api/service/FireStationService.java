@@ -10,18 +10,20 @@ import com.safetynets.alerts.api.model.FireStationModel;
 import com.safetynets.alerts.api.repository.FireStationRepository;
 
 @Service
-public class FireStationsService {
+public class FireStationService {
 
 	@Autowired
-	FireStationModel fireStation;
+	private FireStationModel fireStation;
 	@Autowired
-	FireStationRepository fireStationRepository;
+	private FireStationService fireStationsService;
+	@Autowired
+	private FireStationRepository fireStationRepository;
 
 	// ----------------------------------------------------------------------------------------
 	// CREATE "listIdsEntitiesFireStation" FROM FirestationsRepository
 	// ----------------------------------------------------------------------------------------
 	public List<Long> getlistIdsEntitiesFireStation() {
-		
+
 		List<FireStationModel> listEntitiesFireStation = fireStationRepository.findAll();
 		long CountIds = fireStationRepository.count();
 		int id = 0;
@@ -53,11 +55,11 @@ public class FireStationsService {
 	// ----------------------------------------------------------------------------------------
 	public boolean updateStationNumber(FireStationModel firestationToUpdateStationNumber)
 			throws IllegalArgumentException {
-		
+
 		boolean result = false;
 		List<Long> listIdsEntitiesFireStation = new ArrayList<Long>();
 		listIdsEntitiesFireStation = getlistIdsEntitiesFireStation();
-		
+
 		// Mise à jour du numéro de station en fonction de l'adresse de la caserne
 		for (Long i : listIdsEntitiesFireStation) {
 			fireStation = fireStationRepository.getById(i);
@@ -81,7 +83,7 @@ public class FireStationsService {
 	// ----------------------------------------------------------------------------------------
 
 	public boolean deleteFireStation(String addressToDelete) throws IllegalArgumentException {
-		
+
 		boolean result = false;
 		List<Long> listIdsEntitiesFireStation = new ArrayList<Long>();
 		listIdsEntitiesFireStation = getlistIdsEntitiesFireStation();
@@ -102,7 +104,8 @@ public class FireStationsService {
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// Methode pour obtenir la liste des adresses concernées par un numéro de caserne donné
+	// Methode pour obtenir la liste des adresses concernées par un numéro de
+	// caserne donné
 	// ----------------------------------------------------------------------------------------
 	public ArrayList<String> getListAdressImpactedByStationNumber(long stationNumber) {
 
@@ -113,11 +116,33 @@ public class FireStationsService {
 		// Suppression caserne(s) identifiée(s) par numéro dans la BDD
 		for (Long i : listIdsEntitiesFireStation) {
 			fireStation = fireStationRepository.getById(i);
-			if (fireStation.getStation() == stationNumber) {		
+			if (fireStation.getStation() == stationNumber) {
 				listAdressImpacted.add(fireStation.getAddress());
 			}
 		}
-		
+
 		return listAdressImpacted;
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// Methode pour obtenir la liste des adresses concernées par un numéro de
+	// caserne donné
+	// ----------------------------------------------------------------------------------------
+	public Long getStationNumber(String address) {
+
+		List<Long> listIdsEntitiesFireStations = fireStationsService.getlistIdsEntitiesFireStation();
+		Long stationNumberFromAdresse = null;
+
+		for (Long i : listIdsEntitiesFireStations) {
+
+			fireStation = fireStationRepository.getById(i);
+
+			if (fireStation.getAddress().equals(address)) {
+				stationNumberFromAdresse = fireStation.getStation();
+				break;
+			}
+		}
+
+		return stationNumberFromAdresse;
 	}
 }
