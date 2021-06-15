@@ -16,7 +16,7 @@ public class FamilyRelationshipService {
 	@Autowired
 	private PersonModel person;
 	@Autowired
-	private PersonsService personsService;
+	private PersonService personsService;
 	@Autowired
 	private PersonRepository personsRepository;
 

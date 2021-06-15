@@ -1,26 +1,35 @@
 package com.safetynets.alerts.api.service;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.safetynets.alerts.api.model.PersonForStationModel;
 import com.safetynets.alerts.api.model.PersonModel;
 import com.safetynets.alerts.api.model.SpecificInfoPersonsModel;
+import com.safetynets.alerts.api.repository.FireStationRepository;
 import com.safetynets.alerts.api.repository.PersonRepository;
 
 @Service
-public class PersonsService {
+public class PersonService {
 
 	@Autowired
 	private PersonModel person;
 	@Autowired
-	private PersonsService personsService;
+	private PersonService personsService;
 	@Autowired
 	PersonRepository personsRepository;
 	@Autowired
 	private FireStationService fireStationsService;
+	@Autowired
+	private CountService countService;
+	@Autowired
+	MedicalHistoryService medicalHistoryService;
+	@Autowired
+	FireStationRepository fireStationRepository;
 
 	// ----------------------------------------------------------------------------------------
 	// CREATE "listIdsEntitiesPerson" FROM PersonsRepository
@@ -45,10 +54,6 @@ public class PersonsService {
 	// ----------------------------------------------------------------------------------------
 	public List<PersonModel> getAllPersons() {
 		return personsRepository.findAll();
-	}
-
-	public PersonModel getPersonById(Long id) {
-		return personsRepository.getById(id);
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -138,5 +143,35 @@ public class PersonsService {
 			}
 		}
 		return listSpecificPersonImpacted;
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// methode pour obtenir liste des personnes couverte par une adresse donnée
+	// donnée
+	// ----------------------------------------------------------------------------------------
+	public ArrayList<PersonForStationModel> getListPersonImpacted(String address) throws ParseException {
+
+		ArrayList<PersonForStationModel> listPersonImpacted = new ArrayList<PersonForStationModel>();
+		List<Long> listIdsEntitiesPerson = personsService.getlistIdsEntitiesPerson();
+
+		for (Long i : listIdsEntitiesPerson) {
+			person = personsRepository.getById(i);
+				if (person.getAddress().equals(address)) {
+					
+			
+					PersonForStationModel personForStation = new PersonForStationModel();
+					
+					personForStation.setId(person.getId());
+					personForStation.setFirstName(person.getFirstName());
+					personForStation.setLastName(person.getLastName());
+					personForStation.setPhone(person.getPhone());
+					personForStation.setAge(countService.getAge(person.getFirstName(), person.getLastName()));
+					personForStation.setMedications(medicalHistoryService.getMedicationsHistory(person.getFirstName(), person.getLastName()));
+					personForStation.setAllergies(medicalHistoryService.getAllergiesHistory(person.getFirstName(), person.getLastName()));
+					
+					listPersonImpacted.add(personForStation);
+				}
+		}
+		return listPersonImpacted;
 	}
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.safetynets.alerts.api.model.ChildInfoModel;
+import com.safetynets.alerts.api.model.HomeByFireStationModel;
 import com.safetynets.alerts.api.model.PersonImpactedByStationNumberModel;
 import com.safetynets.alerts.api.model.PersonInfoModel;
 import com.safetynets.alerts.api.model.PersonWithMedicalHistoryModel;
@@ -95,10 +96,11 @@ public class CommunController {
 	 * (medications, dosage, and allergies) next to each name.
 	 * 
 	 * @return - An Iterable object of Employee full filled
+	 * @throws ParseException 
 	 */
 	@GetMapping("/flood/stations")
-	public ArrayList<String> getPersonsByStationNumber(@RequestParam long stations) {
-		return communService.getPersonsByStationNumber(stations);
+	public List<HomeByFireStationModel> getPersonsByStation(@RequestParam List<Long> stations) throws ParseException {
+		return communService.getPersonsByStation(stations);
 	}
 
 	/**

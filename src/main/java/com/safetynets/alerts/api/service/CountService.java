@@ -18,7 +18,7 @@ import com.safetynets.alerts.api.repository.MedicalRecordRepository;
 public class CountService {
 
 	@Autowired
-	private PersonsService personsService;
+	private PersonService personsService;
 	@Autowired
 	private MedicalRecordModel medicalRecord;
 	@Autowired

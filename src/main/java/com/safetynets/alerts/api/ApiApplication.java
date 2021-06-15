@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import com.safetynets.alerts.api.repository.PersonRepository;
 import com.safetynets.alerts.api.service.MedicalRecordService;
-import com.safetynets.alerts.api.service.PersonsService;
+import com.safetynets.alerts.api.service.PersonService;
 import com.safetynets.alerts.api.service.ReaderJsonService;
 import com.safetynets.alerts.api.controller.PersonController;
 import com.safetynets.alerts.api.model.PersonModel;
@@ -26,7 +26,7 @@ import lombok.Data;
 @SpringBootApplication
 public class ApiApplication implements CommandLineRunner {
 
-	@Autowired PersonsService personsService;
+	@Autowired PersonService personsService;
 	@Autowired PersonRepository personsRepository;
 	@Autowired PersonController personsController;
 	@Autowired PersonModel personsModel;
