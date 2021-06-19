@@ -27,7 +27,7 @@ public class PersonService {
 	@Autowired
 	private CountService countService;
 	@Autowired
-	MedicalHistoryService medicalHistoryService;
+	MedicalRecordService medicalRecordService;
 	@Autowired
 	FireStationRepository fireStationRepository;
 
@@ -165,9 +165,9 @@ public class PersonService {
 				personForStation.setPhone(person.getPhone());
 				personForStation.setAge(countService.getAge(person.getFirstName(), person.getLastName()));
 				personForStation.setMedications(
-						medicalHistoryService.getMedicationsHistory(person.getFirstName(), person.getLastName()));
+						medicalRecordService.getMedicationsHistory(person.getFirstName(), person.getLastName()));
 				personForStation.setAllergies(
-						medicalHistoryService.getAllergiesHistory(person.getFirstName(), person.getLastName()));
+						medicalRecordService.getAllergiesHistory(person.getFirstName(), person.getLastName()));
 
 				listPersonImpacted.add(personForStation);
 			}

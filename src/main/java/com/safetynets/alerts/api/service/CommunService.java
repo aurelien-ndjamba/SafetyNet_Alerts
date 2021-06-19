@@ -35,7 +35,7 @@ public class CommunService {
 	@Autowired
 	private PersonInfoModel personInfo;
 	@Autowired
-	private MedicalHistoryService medicalHistory;
+	private MedicalRecordService medicalRecordService;
 	@Autowired
 	private FamilyRelationshipService familyRelationshipService;
 	@Autowired
@@ -123,8 +123,8 @@ public class CommunService {
 				resident.setAge(countService.getAge(person.getFirstName(), person.getLastName()));
 				resident.setPhone(person.getPhone());
 				resident.setMedications(
-						medicalHistory.getMedicationsHistory(person.getFirstName(), person.getLastName()));
-				resident.setAllergies(medicalHistory.getAllergiesHistory(person.getFirstName(), person.getLastName()));
+						medicalRecordService.getMedicationsHistory(person.getFirstName(), person.getLastName()));
+				resident.setAllergies(medicalRecordService.getAllergiesHistory(person.getFirstName(), person.getLastName()));
 				listResident.add(resident);
 
 			}
@@ -183,9 +183,9 @@ public class CommunService {
 				int age = countService.getAge(firstName, lastName);
 				personInfo.setAge(age);
 				personInfo.setEmail(person.getEmail());
-				listMedicationsHistory = medicalHistory.getMedicationsHistory(lastName);
+				listMedicationsHistory = medicalRecordService.getMedicationsHistory(lastName);
 				personInfo.setMedications(listMedicationsHistory);
-				listAllergiesHistory = medicalHistory.getAllergiesHistory(lastName);
+				listAllergiesHistory = medicalRecordService.getAllergiesHistory(lastName);
 				personInfo.setAllergies(listAllergiesHistory);
 
 			}

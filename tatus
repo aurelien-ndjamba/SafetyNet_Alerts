@@ -1,0 +1,89 @@
+[33mcommit 563f5acaad472d3eded80608df9a67d56ba8be5d[m[33m ([m[1;36mHEAD -> [m[1;32mRetournintialapiok[m[33m)[m
+Author: andjamba <aurelien.ndjamba@gmail.com>
+Date:   Sat Jun 19 20:33:55 2021 +0200
+
+    Tous les Endpoints fonctionnels
+
+[33mcommit 1468cec0286f6190ef3bab65a1f7f61395fe68a9[m
+Author: andjamba <aurelien.ndjamba@gmail.com>
+Date:   Tue Jun 15 18:47:23 2021 +0200
+
+    Implémentation des tests unitaires avec "WebMvcTest" sur la couche controller
+
+[33mcommit fcf0e7209a851b48a8903d99f55377c905053edf[m
+Author: andjamba <aurelien.ndjamba@gmail.com>
+Date:   Tue Jun 15 11:55:45 2021 +0200
+
+    Refactoring et implémentation reussi de l'Rndpoitn suivant:
+    http://localhost:8080/flood/stations?stations=<a list of station_numbers>
+
+[33mcommit 1218ae2d66977da589b26971aceefbe85d026a4f[m
+Author: andjamba <aurelien.ndjamba@gmail.com>
+Date:   Tue Jun 15 05:17:23 2021 +0200
+
+    Refactoring et début d'implémentation du dernier endpoint:
+    http://localhost:8080/flood/stations?stations=<a list of station_numbers>
+
+[33mcommit 4b27c8cc9245f4b6cc3b94643da30cb2ed3b5234[m
+Author: andjamba <aurelien.ndjamba@gmail.com>
+Date:   Tue Jun 15 03:54:23 2021 +0200
+
+    Refactoring et implementation reussi de l'endpoint suivant:
+    http://localhost:8080/firestation?stationNumber=<station_number>
+
+[33mcommit 2df3988327dfd6423992116fcdaa411f4f8d3f39[m
+Author: andjamba <aurelien.ndjamba@gmail.com>
+Date:   Mon Jun 14 15:19:08 2021 +0200
+
+    Implémentation reussi du End-point suivant:
+    http://localhost:8080/childAlert?address=<address>
+
+[33mcommit f06b999268e017c8f0f654cd689cdb6ac773dcee[m
+Author: andjamba <aurelien.ndjamba@gmail.com>
+Date:   Sun Jun 13 19:44:47 2021 +0200
+
+     Implémentation du reussi du End-point suivant:
+    http://localhost:8080/phoneAlert?firestation=<firestation_number>
+
+[33mcommit 46a4930418711b0274c866a62b579ce3b4b9f0e0[m
+Author: andjamba <aurelien.ndjamba@gmail.com>
+Date:   Sun Jun 13 15:25:23 2021 +0200
+
+    Implémentation du reussi du End-point suivant:
+    http://localhost:8080/personInfo?firstName=<firstName>&lastName=<lastName>
+
+[33mcommit d06141b2f39f19ed152eb69e1579dd52715e746a[m
+Author: andjamba <aurelien.ndjamba@gmail.com>
+Date:   Sun Jun 13 14:44:09 2021 +0200
+
+    Fontionnalité de calcul d'age OK -> AgeService
+
+[33mcommit 1233af6f31b3bfa6cbd668fc6ddf09ca343fa57a[m
+Author: andjamba <aurelien.ndjamba@gmail.com>
+Date:   Sun Jun 13 02:45:22 2021 +0200
+
+    En train d'implenter le endpoint suivant:
+    http://localhost:8080/personInfo?firstName=<firstName>&lastName=<lastName>
+    -> Tous semnble Ok sauf la fonctionnalité de calcule d'age (getAge) dans AgeService
+
+[33mcommit d61f29b528211426d0427bef6acb789398da22f8[m
+Author: andjamba <aurelien.ndjamba@gmail.com>
+Date:   Sun Jun 13 00:13:33 2021 +0200
+
+    Implémentation de:
+    - MedicalHistoryModel
+    - MedicalHistoryService
+
+[33mcommit b5c57aab7273f99f3bd938436aef80f3347201ed[m
+Author: andjamba <aurelien.ndjamba@gmail.com>
+Date:   Sat Jun 12 22:31:58 2021 +0200
+
+    Implémentation du Endpoint suivant:
+    http://localhost:8080/communityEmail?city=<city>
+    -> Cette url doit retourner les adresses mail de tous les habitants de la ville
+
+[33mcommit b472abc6b1780e4fb609f3737e4185307b4bae05[m
+Author: andjamba <aurelien.ndjamba@gmail.com>
+Date:   Sat Jun 12 21:36:38 2021 +0200
+
+    Implementation des endPoints sur Person, Firestation et MedicalRecord effectuées avec succès
