@@ -1,5 +1,6 @@
 package com.safetynets.alerts.api.service;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 //import java.util.Optional;
@@ -8,19 +9,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.safetynets.alerts.api.model.FireStationModel;
+import com.safetynets.alerts.api.model.PersonImpactedByStationNumberModel;
 import com.safetynets.alerts.api.repository.FireStationRepository;
 
 @Service
 public class FireStationService {
 
 	@Autowired
+	private PersonService personService;
+	@Autowired
 	private FireStationModel fireStation;
 	@Autowired
 	private FireStationService fireStationsService;
 	@Autowired
 	private FireStationRepository fireStationRepository;
+	@Autowired
+	private PersonImpactedByStationNumberModel personImpacted;
+	@Autowired
+	private CountService countService;
 
-	
 	// ----------------------------------------------------------------------------------------
 	// CREATE "listIdsEntitiesFireStation" FROM FirestationsRepository
 	// ----------------------------------------------------------------------------------------
@@ -44,10 +51,16 @@ public class FireStationService {
 	public List<FireStationModel> getAllFireStation() {
 		return fireStationRepository.findAll();
 	}
-	
-//	public Optional<FireStationModel> getFireStationById(Long id) {
-//		return fireStationRepository.findById(id);
-//	}
+
+	public PersonImpactedByStationNumberModel getSpecificInfoPersonsImpacted(long stationNumber) throws ParseException {
+
+		personImpacted.setStationNumber(stationNumber);
+		personImpacted.setListSpecificInfoPersons(personService.getListSpecificPersonImpacted(stationNumber));
+		personImpacted.setCountAdult(countService.getCountAdult(stationNumber));
+		personImpacted.setCountChildren(countService.getCountChildren(stationNumber));
+
+		return personImpacted;
+	}
 
 	// ----------------------------------------------------------------------------------------
 	// POST OK Vérifier qu'il n'effectue pas de mise à jour
@@ -87,19 +100,18 @@ public class FireStationService {
 	// ----------------------------------------------------------------------------------------
 	// DELETE
 	// ----------------------------------------------------------------------------------------
-
-	public boolean deleteFireStation(String addressToDelete) throws IllegalArgumentException {
+	public boolean deleteFireStationByAddress(String address) throws IllegalArgumentException {
 
 		boolean result = false;
 		List<Long> listIdsEntitiesFireStation = new ArrayList<Long>();
 		listIdsEntitiesFireStation = getlistIdsEntitiesFireStation();
 
-		// Suppression caserne(s) identifiée(s) par numéro dans la BDD
+		// Suppression caserne(s) identifiée(s) par 'addressToDelete'dans la BDD
 		for (Long i : listIdsEntitiesFireStation) {
 			fireStation = fireStationRepository.getById(i);
-			if (fireStation.getAddress().equals(addressToDelete)) {
-				fireStationRepository.delete(fireStation);
-				System.out.println("La caserne ayant pour adresse '" + addressToDelete
+			if (fireStation.getAddress().equals(address)) {
+				fireStationRepository.deleteById(i);
+				System.out.println("La caserne ayant pour adresse '" + address
 						+ "' a été supprimée de la base de donnée avec succès !");
 				result = true;
 				listIdsEntitiesFireStation.remove(i);
@@ -108,7 +120,7 @@ public class FireStationService {
 		}
 		return result;
 	}
-
+	
 	// ----------------------------------------------------------------------------------------
 	// Methode pour obtenir la liste des adresses concernées par un numéro de
 	// caserne donné
@@ -151,4 +163,5 @@ public class FireStationService {
 
 		return stationNumberFromAdresse;
 	}
+
 }

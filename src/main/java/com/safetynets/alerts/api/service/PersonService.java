@@ -59,9 +59,9 @@ public class PersonService {
 	// ----------------------------------------------------------------------------------------
 	// POST
 	// ----------------------------------------------------------------------------------------
-	public PersonModel createPersons(PersonModel personsModel) {
+	public PersonModel createPersons(PersonModel newPerson) {
 		System.out.println("Nouvelle personne enregistrée dans la base de donnée avec succès !");
-		return personsRepository.save(personsModel);
+		return personsRepository.save(newPerson);
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -95,16 +95,16 @@ public class PersonService {
 	// ----------------------------------------------------------------------------------------
 	// DELETE
 	// ----------------------------------------------------------------------------------------
-	public boolean deletePersonById(String firstname, String lastname) throws IllegalArgumentException {
+	public boolean deletePersonById(String id) throws IllegalArgumentException {
 
+		//id combinaison de firstName et lastName sans séparateur.
 		boolean result = false;
 		List<Long> listIdsEntitiesPerson = getlistIdsEntitiesPerson();
 
-		// Suppression d'une personne identifiée dans la BDD par le nom et le prénom
 		for (Long i : listIdsEntitiesPerson) {
 			person = personsRepository.getById(i);
 
-			if (person.getLastName().equals(lastname) && person.getFirstName().equals(firstname)) {
+			if (id.contains(person.getLastName()) && id.contains(person.getFirstName())) {
 				personsRepository.delete(person);
 				listIdsEntitiesPerson.remove(i);
 				result = true;
@@ -116,8 +116,7 @@ public class PersonService {
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// methode pour obtenir la liste des personnes impactée quand numéro station
-	// donnée
+	// methode pour obtenir la liste des personnes impactée par numéro station
 	// ----------------------------------------------------------------------------------------
 	public ArrayList<SpecificInfoPersonsModel> getListSpecificPersonImpacted(long stationNumber) {
 
@@ -156,21 +155,22 @@ public class PersonService {
 
 		for (Long i : listIdsEntitiesPerson) {
 			person = personsRepository.getById(i);
-				if (person.getAddress().equals(address)) {
-					
-			
-					PersonForStationModel personForStation = new PersonForStationModel();
-					
-					personForStation.setId(person.getId());
-					personForStation.setFirstName(person.getFirstName());
-					personForStation.setLastName(person.getLastName());
-					personForStation.setPhone(person.getPhone());
-					personForStation.setAge(countService.getAge(person.getFirstName(), person.getLastName()));
-					personForStation.setMedications(medicalHistoryService.getMedicationsHistory(person.getFirstName(), person.getLastName()));
-					personForStation.setAllergies(medicalHistoryService.getAllergiesHistory(person.getFirstName(), person.getLastName()));
-					
-					listPersonImpacted.add(personForStation);
-				}
+			if (person.getAddress().equals(address)) {
+
+				PersonForStationModel personForStation = new PersonForStationModel();
+
+				personForStation.setId(person.getId());
+				personForStation.setFirstName(person.getFirstName());
+				personForStation.setLastName(person.getLastName());
+				personForStation.setPhone(person.getPhone());
+				personForStation.setAge(countService.getAge(person.getFirstName(), person.getLastName()));
+				personForStation.setMedications(
+						medicalHistoryService.getMedicationsHistory(person.getFirstName(), person.getLastName()));
+				personForStation.setAllergies(
+						medicalHistoryService.getAllergiesHistory(person.getFirstName(), person.getLastName()));
+
+				listPersonImpacted.add(personForStation);
+			}
 		}
 		return listPersonImpacted;
 	}

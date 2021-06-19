@@ -20,32 +20,39 @@ import com.safetynets.alerts.api.service.PersonService;
 public class PersonController {
 
 	@Autowired
-	PersonService personsService;
+	PersonService personService;
 
+	// ----------------------------------------------------------------------------------------
 	// GET
+	// ----------------------------------------------------------------------------------------
 	@GetMapping("/person")
 	public List<PersonModel> getAllPersons() {
-		return personsService.getAllPersons();
+		return personService.getAllPersons();
 	}
 
+	// ----------------------------------------------------------------------------------------
 	// POST
+	// ----------------------------------------------------------------------------------------
 	@PostMapping("/person")
 	@ResponseStatus(HttpStatus.CREATED) // CHECK
-	public PersonModel createPerson(@RequestBody PersonModel newPersons) {
-		return personsService.createPersons(newPersons);
+	public PersonModel createPerson(@RequestBody PersonModel newPerson) {
+		return personService.createPersons(newPerson);
 	}
 
-	// PUT @PutMapping("/person")
-//	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
-//	public PersonsModel updatePersonInfo(@PathVariable Long id, @RequestBody PersonsModel updatePersons) {
+	// ----------------------------------------------------------------------------------------
+	// PUT
+	// ----------------------------------------------------------------------------------------
 	@PutMapping("/person")
-	public boolean updatePersonInfo(@RequestBody PersonModel newPerson) {
-		return personsService.updatePersonInfo(newPerson);
+	public boolean updatePersonInfo(@RequestBody PersonModel updatePerson) {
+		return personService.updatePersonInfo(updatePerson);
 	}
 
+	// ----------------------------------------------------------------------------------------
 	// DELETE
+	// ----------------------------------------------------------------------------------------
 	@DeleteMapping("/person")
-	public boolean deletePersonById(@RequestParam String firstName, @RequestParam String lastName) throws IllegalArgumentException {
-		return personsService.deletePersonById(firstName, lastName);
+	public boolean deletePersonById(@RequestParam String id) throws IllegalArgumentException {
+		//id combinaison de firstName et lastName sans séparateur.
+		return personService.deletePersonById(id);
 	}
 }

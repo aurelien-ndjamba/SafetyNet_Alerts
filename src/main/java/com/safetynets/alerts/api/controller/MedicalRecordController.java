@@ -22,28 +22,36 @@ public class MedicalRecordController {
 	@Autowired
 	MedicalRecordService medicalRecordsService;
 
-	// GET
+	// ----------------------------------------------------------------------------------------
+	// GET http://localhost:8080/medicalRecord
+	// ----------------------------------------------------------------------------------------
 	@GetMapping("/medicalRecord")
 	public List<MedicalRecordModel> getAllMedicalRecords() {
 		return medicalRecordsService.getAllMedicalRecords();
 	}
 
-	// POST
+	// ----------------------------------------------------------------------------------------
+	// POST http://localhost:8080/medicalRecord
+	// ----------------------------------------------------------------------------------------
 	@PostMapping("/medicalRecord")
-	@ResponseStatus(HttpStatus.CREATED) // Vérifier qu'il n'effectue pas de mise à jour
+	@ResponseStatus(HttpStatus.CREATED)
 	public MedicalRecordModel createMedicalRecords(@RequestBody MedicalRecordModel newMedicalRecords) {
 		return medicalRecordsService.createMedicalRecords(newMedicalRecords);
 	}
 
-	// PUT
+	// ----------------------------------------------------------------------------------------
+	// PUT http://localhost:8080/medicalRecord
+	// ----------------------------------------------------------------------------------------
 	@PutMapping("/medicalRecord")
 	public boolean updateMedicalRecords(@RequestBody MedicalRecordModel updateMedicalRecords) {
 		return medicalRecordsService.updateMedicalRecords(updateMedicalRecords);
 	}
 
-	// DELETE 
+	// ----------------------------------------------------------------------------------------
+	// DELETE http://localhost:8080/medicalRecord
+	// ---------------------------------------------------------------------------------------- 
 	@DeleteMapping("/medicalRecord")
-	public boolean deleteMedicalRecords(@RequestParam String firstName, @RequestParam String lastName) throws IllegalArgumentException {
-		return medicalRecordsService.deleteMedicalRecords(firstName, lastName);
+	public boolean deleteMedicalRecords(@RequestParam String firstNamelastName) throws IllegalArgumentException {
+		return medicalRecordsService.deleteMedicalRecords(firstNamelastName);
 	}
 }
