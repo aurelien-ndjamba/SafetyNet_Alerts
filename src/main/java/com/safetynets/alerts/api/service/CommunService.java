@@ -37,8 +37,6 @@ public class CommunService {
 	@Autowired
 	private MedicalRecordService medicalRecordService;
 	@Autowired
-	private FamilyRelationshipService familyRelationshipService;
-	@Autowired
 	private CountService countService;
 
 	// ----------------------------------------------------------------------------------------
@@ -64,7 +62,7 @@ public class CommunService {
 				childInfo.setFirstName(person.getFirstName());
 				childInfo.setLastName(person.getLastName());
 				childInfo.setAge(age);
-				childInfo.setFamilyRelationShip(familyRelationshipService.getBySameAddressAndName(address,
+				childInfo.setFamilyRelationShip(personService.getBySameAddressAndName(address,
 						person.getFirstName(), person.getLastName()));
 
 				listChildInfo.add(childInfo);

@@ -2,6 +2,7 @@ package com.safetynets.alerts.api.service;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,7 +98,7 @@ public class PersonService {
 	// ----------------------------------------------------------------------------------------
 	public boolean deletePersonById(String id) throws IllegalArgumentException {
 
-		//id combinaison de firstName et lastName sans séparateur.
+		// id combinaison de firstName et lastName sans séparateur.
 		boolean result = false;
 		List<Long> listIdsEntitiesPerson = getlistIdsEntitiesPerson();
 
@@ -173,5 +174,26 @@ public class PersonService {
 			}
 		}
 		return listPersonImpacted;
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// methode pour obtenir les parentés en fonction du nom
+	// ----------------------------------------------------------------------------------------
+	public HashSet<PersonModel> getBySameAddressAndName(String address, String firstName, String lastName)
+			throws ParseException {
+
+		List<Long> listIdsEntitiesPerson = personsService.getlistIdsEntitiesPerson();
+		HashSet<PersonModel> listFamilyRelationship = new HashSet<PersonModel>(listIdsEntitiesPerson.size());
+
+		for (Long i : listIdsEntitiesPerson) {
+
+			person = personsRepository.getById(i);
+
+			if (person.getAddress().equals(address) && !person.getFirstName().equals(firstName)
+					&& person.getLastName().equals(lastName)) {
+				listFamilyRelationship.add(person);
+			}
+		}
+		return listFamilyRelationship;
 	}
 }
