@@ -7,5 +7,6 @@ import com.safetynets.alerts.api.model.MedicalRecordModel;
 
 @Repository
 public interface MedicalRecordRepository extends JpaRepository<MedicalRecordModel, Long> {
+//	public interface MedicalRecordRepository extends JpaRepository<MedicalRecordModel, Long> {
 
 }

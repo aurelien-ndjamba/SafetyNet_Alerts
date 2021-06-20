@@ -1,27 +1,35 @@
 package com.safetynets.alerts.api.controller;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.safetynets.alerts.api.service.FireStationService;
+
+//@WebMvcTest(controllers = FireStationController.class)
 
 @SpringBootTest
-@WebMvcTest(controllers = FireStationController.class)
+@AutoConfigureMockMvc
 public class FireStationControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
-	@MockBean
-	private FireStationService fireStationsService;
+
+	@Test // OK
+	public void getAllFireStationTest() throws Exception {
+		long result = 2;
+		mockMvc.perform(get("/firestation")).andExpect(status().isOk())
+				.andExpect(jsonPath("$[12].station", is(result)));
+	}
 
 	@Test
 	public void createFireStationTest() throws Exception {
@@ -35,7 +43,9 @@ public class FireStationControllerTest {
 
 	@Test
 	public void deleteFireStationTest() throws Exception {
-		mockMvc.perform(delete("/firestation")).andExpect(status().isOk());
+//		int result;
+		mockMvc.perform(delete("/firestation?address=951 LoneTree Rd&station=2"));
+		mockMvc.perform(get("/firestation/")).andExpect(status().isOk()).andExpect(jsonPath("$[12].station", is(null)));
 	}
 
 }

@@ -26,11 +26,11 @@ import lombok.Data;
 public class ReaderJsonService {
 	
 	@Autowired
-	private PersonRepository personsRepository;
+	private PersonRepository personRepository;
 	@Autowired
-	private FireStationRepository firestationsRepository;
+	private FireStationRepository firestationRepository;
 	@Autowired
-	private MedicalRecordRepository medicalrecordsRepository;
+	private MedicalRecordRepository medicalrecordRepository;
 
 	public static List<PersonModel> getListPersons(String link)
 			throws JsonParseException, JsonMappingException, IOException {
@@ -61,15 +61,15 @@ public class ReaderJsonService {
 		
 		// Sauvegarde dans la base de données des entités "Persons"
 		List<PersonModel> listPersons = dataSource.getPersons();
-		personsRepository.saveAll(listPersons);
+		personRepository.saveAll(listPersons);
 
 		// Sauvegarde dans la base de données des entités "FireStations"
 		List<FireStationModel> listFireStations = dataSource.getFireStations();
-		firestationsRepository.saveAll(listFireStations);
+		firestationRepository.saveAll(listFireStations);
 
 		// Sauvegarde dans la base de données des entités "MedicalRecords"
 		List<MedicalRecordModel> listMedicalrecords = dataSource.getMedicalRecords();
-		medicalrecordsRepository.saveAll(listMedicalrecords);
+		medicalrecordRepository.saveAll(listMedicalrecords);
 
 	}
 

@@ -16,15 +16,15 @@ public class MedicalRecordService {
 	@Autowired
 	private MedicalRecordModel medicalRecords;
 	@Autowired
-	private MedicalRecordRepository medicalRecordsRepository;
+	private MedicalRecordRepository medicalRecordRepository;
 
 	// ----------------------------------------------------------------------------------------
 	// CREATE "listIdsEntitiesFireStation" FROM MedicalrecordsRepository
 	// ----------------------------------------------------------------------------------------
 	public List<Long> getlistIdsEntitiesMedicalRecords() {
 
-		List<MedicalRecordModel> listEntitiesMedicalRecords = medicalRecordsRepository.findAll();
-		long CountIds = medicalRecordsRepository.count();
+		List<MedicalRecordModel> listEntitiesMedicalRecords = getAllMedicalRecords();
+		long CountIds = medicalRecordRepository.count();
 		int id = 0;
 		List<Long> listIdsEntitiesMedicalRecords = new ArrayList<Long>();
 		while (id != CountIds) {
@@ -39,7 +39,7 @@ public class MedicalRecordService {
 	// GET AllMedicalRecords
 	// ----------------------------------------------------------------------------------------
 	public List<MedicalRecordModel> getAllMedicalRecords() {
-		return medicalRecordsRepository.findAll();
+		return medicalRecordRepository.findAll();
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -47,7 +47,7 @@ public class MedicalRecordService {
 	// ----------------------------------------------------------------------------------------
 	public MedicalRecordModel createMedicalRecords(MedicalRecordModel newMedicalRecords) {
 		System.out.println("Nouveau dossier medical enregistrée dans la base de donnée avec succès !");
-		return medicalRecordsRepository.save(newMedicalRecords);
+		return medicalRecordRepository.save(newMedicalRecords);
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -62,7 +62,7 @@ public class MedicalRecordService {
 
 		// Mise à jour un dossier medical existant
 		for (long i : listIdsEntitiesMedicalRecords) {
-			medicalRecords = medicalRecordsRepository.getById(i);
+			medicalRecords = medicalRecordRepository.getById(i);
 			if (medicalRecords.getFirstName().equals(updateMedicalRecords.getFirstName())
 					&& medicalRecords.getLastName().equals(updateMedicalRecords.getLastName())) {
 
@@ -70,7 +70,7 @@ public class MedicalRecordService {
 				medicalRecords.setMedications(updateMedicalRecords.getMedications());
 				medicalRecords.setAllergies(updateMedicalRecords.getAllergies());
 
-				medicalRecordsRepository.saveAndFlush(medicalRecords);
+				medicalRecordRepository.saveAndFlush(medicalRecords);
 				System.out.println("Mise à jour effectuée dans la base de donnée avec succès !");
 				result = true;
 				break;
@@ -91,11 +91,11 @@ public class MedicalRecordService {
 
 		// Suppression d'un dossier medical identifié dans la BDD par le nom et prénom
 		for (Long i : listIdsEntitiesMedicalRecords) {
-			medicalRecords = medicalRecordsRepository.getById(i);
+			medicalRecords = medicalRecordRepository.getById(i);
 
 			if (firstNamelastName.contains(medicalRecords.getFirstName())
 					&& firstNamelastName.contains(medicalRecords.getLastName())) {
-				medicalRecordsRepository.delete(medicalRecords);
+				medicalRecordRepository.delete(medicalRecords);
 				listIdsEntitiesMedicalRecords.remove(i);
 				result = true;
 				System.out.println("l'ID du dossier medical supprimé est le suivant: " + i);
@@ -118,7 +118,7 @@ public class MedicalRecordService {
 
 		for (Long i : listIdsEntitiesMedicalRecords) {
 
-			medicalRecords = medicalRecordsRepository.getById(i);
+			medicalRecords = medicalRecordRepository.getById(i);
 
 			if (medicalRecords.getLastName().equals(lastName)) {
 
@@ -143,7 +143,7 @@ public class MedicalRecordService {
 
 		for (Long i : listIdsEntitiesMedicalRecords) {
 
-			medicalRecords = medicalRecordsRepository.getById(i);
+			medicalRecords = medicalRecordRepository.getById(i);
 
 			if (medicalRecords.getFirstName().equals(firstName) && medicalRecords.getLastName().equals(lastName)) {
 
@@ -171,7 +171,7 @@ public class MedicalRecordService {
 
 		for (Long i : listIdsEntitiesMedicalRecords) {
 
-			medicalRecords = medicalRecordsRepository.getById(i);
+			medicalRecords = medicalRecordRepository.getById(i);
 
 			if (medicalRecords.getLastName().equals(lastName)) {
 
@@ -196,7 +196,7 @@ public class MedicalRecordService {
 
 		for (Long i : listIdsEntitiesMedicalRecords) {
 
-			medicalRecords = medicalRecordsRepository.getById(i);
+			medicalRecords = medicalRecordRepository.getById(i);
 
 			if (medicalRecords.getFirstName().equals(firstName) && medicalRecords.getLastName().equals(lastName)) {
 

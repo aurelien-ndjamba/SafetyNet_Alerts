@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.safetynets.alerts.api.model.PersonForStationModel;
+import com.safetynets.alerts.api.model.PersonImpactedByStationNumberModel;
 import com.safetynets.alerts.api.model.PersonModel;
 import com.safetynets.alerts.api.model.SpecificInfoPersonsModel;
-import com.safetynets.alerts.api.repository.FireStationRepository;
 import com.safetynets.alerts.api.repository.PersonRepository;
 
 @Service
@@ -24,13 +24,13 @@ public class PersonService {
 	@Autowired
 	PersonRepository personsRepository;
 	@Autowired
+	private PersonImpactedByStationNumberModel personImpacted;
+	@Autowired
 	private FireStationService fireStationsService;
 	@Autowired
 	private CountService countService;
 	@Autowired
 	MedicalRecordService medicalRecordService;
-	@Autowired
-	FireStationRepository fireStationRepository;
 
 	// ----------------------------------------------------------------------------------------
 	// CREATE "listIdsEntitiesPerson" FROM PersonsRepository
@@ -195,5 +195,16 @@ public class PersonService {
 			}
 		}
 		return listFamilyRelationship;
+	}
+	
+	
+	public PersonImpactedByStationNumberModel getSpecificInfoPersonsImpacted(long stationNumber) throws ParseException {
+
+		personImpacted.setStationNumber(stationNumber);
+		personImpacted.setListSpecificInfoPersons(getListSpecificPersonImpacted(stationNumber));
+		personImpacted.setCountAdult(countService.getCountAdult(stationNumber));
+		personImpacted.setCountChildren(countService.getCountChildren(stationNumber));
+
+		return personImpacted;
 	}
 }

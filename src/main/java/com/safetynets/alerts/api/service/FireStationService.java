@@ -1,38 +1,39 @@
 package com.safetynets.alerts.api.service;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 //import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Service;
 
 import com.safetynets.alerts.api.model.FireStationModel;
-import com.safetynets.alerts.api.model.PersonImpactedByStationNumberModel;
 import com.safetynets.alerts.api.repository.FireStationRepository;
 
+
+@Configuration
+@EnableJpaRepositories("com.safetynets.alerts.api.repository")
 @Service
 public class FireStationService {
 
 	@Autowired
-	private PersonService personService;
-	@Autowired
 	private FireStationModel fireStation;
 	@Autowired
-	private FireStationService fireStationsService;
-	@Autowired
 	private FireStationRepository fireStationRepository;
-	@Autowired
-	private PersonImpactedByStationNumberModel personImpacted;
-	@Autowired
-	private CountService countService;
 
+	// ----------------------------------------------------------------------------------------
+	// GET
+	// ----------------------------------------------------------------------------------------
+	public List<FireStationModel> getAllFireStation() {
+		return fireStationRepository.findAll();
+	}
+	
 	// ----------------------------------------------------------------------------------------
 	// CREATE "listIdsEntitiesFireStation" FROM FirestationsRepository
 	// ----------------------------------------------------------------------------------------
 	public List<Long> getlistIdsEntitiesFireStation() {
-
 		List<FireStationModel> listEntitiesFireStation = fireStationRepository.findAll();
 		long CountIds = fireStationRepository.count();
 		int id = 0;
@@ -43,23 +44,6 @@ public class FireStationService {
 			++id;
 		}
 		return listIdsEntitiesFireStation;
-	}
-
-	// ----------------------------------------------------------------------------------------
-	// GET
-	// ----------------------------------------------------------------------------------------
-	public List<FireStationModel> getAllFireStation() {
-		return fireStationRepository.findAll();
-	}
-
-	public PersonImpactedByStationNumberModel getSpecificInfoPersonsImpacted(long stationNumber) throws ParseException {
-
-		personImpacted.setStationNumber(stationNumber);
-		personImpacted.setListSpecificInfoPersons(personService.getListSpecificPersonImpacted(stationNumber));
-		personImpacted.setCountAdult(countService.getCountAdult(stationNumber));
-		personImpacted.setCountChildren(countService.getCountChildren(stationNumber));
-
-		return personImpacted;
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -148,7 +132,7 @@ public class FireStationService {
 	// ----------------------------------------------------------------------------------------
 	public Long getStationNumber(String address) {
 
-		List<Long> listIdsEntitiesFireStations = fireStationsService.getlistIdsEntitiesFireStation();
+		List<Long> listIdsEntitiesFireStations = getlistIdsEntitiesFireStation();
 		Long stationNumberFromAdresse = null;
 
 		for (Long i : listIdsEntitiesFireStations) {

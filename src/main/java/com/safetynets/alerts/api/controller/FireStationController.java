@@ -17,26 +17,31 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.safetynets.alerts.api.model.FireStationModel;
 import com.safetynets.alerts.api.model.PersonImpactedByStationNumberModel;
+import com.safetynets.alerts.api.repository.FireStationRepository;
 import com.safetynets.alerts.api.service.FireStationService;
+import com.safetynets.alerts.api.service.PersonService;
 
 @RestController
 public class FireStationController {
 
 	@Autowired
 	FireStationService fireStationService;
+	@Autowired PersonService personService;
+	@Autowired FireStationRepository fireStationRepository; //ajout à chck
 
 	// ----------------------------------------------------------------------------------------
 	// GET http://localhost:8080/firestation
 	// ----------------------------------------------------------------------------------------
 	@GetMapping("/firestation")
 	public List<FireStationModel> getAllFireStation() {
-		return fireStationService.getAllFireStation();
+//		return fireStationService.getAllFireStation();
+		return fireStationRepository.findAll();
 	}
 	
 	@RequestMapping(value = "/firestation", method = RequestMethod.GET, params = { "stationNumber" })
 	public PersonImpactedByStationNumberModel getSpecificInfoPersonsImpacted(
 			@RequestParam("stationNumber") long stationNumber) throws ParseException {
-		return fireStationService.getSpecificInfoPersonsImpacted(stationNumber);
+		return personService.getSpecificInfoPersonsImpacted(stationNumber);
 	}
 
 	// ----------------------------------------------------------------------------------------
