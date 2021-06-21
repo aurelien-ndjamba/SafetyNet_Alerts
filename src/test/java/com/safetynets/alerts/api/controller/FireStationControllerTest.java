@@ -28,7 +28,13 @@ public class FireStationControllerTest {
 	public FireStationModel fireStation;
 
 	@Test
-	public void testUpdateAndGetMethod() throws Exception {
+	public void testGetMethodWithParam() throws Exception {
+		mockMvc.perform(get("/firestation?stationNumber=1")).andExpect(status().isOk())
+		.andExpect(jsonPath("countAdult", is(5)));
+	}
+	
+	@Test
+	public void testUpdateAndGetMethodWithOutParam() throws Exception {
 		// GIVEN
 		fireStation.setAddress("1509 Culver St");
 		fireStation.setStation((long) 99);
