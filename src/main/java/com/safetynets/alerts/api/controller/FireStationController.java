@@ -30,7 +30,7 @@ public class FireStationController {
 	@Autowired FireStationRepository fireStationRepository; //ajout à chck
 
 	// ----------------------------------------------------------------------------------------
-	// GET http://localhost:8080/firestation
+	// GET	http://localhost:8080/firestation
 	// ----------------------------------------------------------------------------------------
 	@GetMapping("/firestation")
 	public List<FireStationModel> getAllFireStation() {
@@ -45,7 +45,7 @@ public class FireStationController {
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// POST
+	// POST	http://localhost:8080/firestation
 	// ----------------------------------------------------------------------------------------
 	@PostMapping("/firestation")
 	@ResponseStatus(HttpStatus.CREATED)
@@ -54,7 +54,7 @@ public class FireStationController {
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// PUT
+	// PUT	http://localhost:8080/firestation 
 	// ----------------------------------------------------------------------------------------
 	@PutMapping("/firestation")
 	public boolean updateStationNumber(@RequestBody FireStationModel updateFireStation) {
@@ -62,7 +62,7 @@ public class FireStationController {
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// DELETE
+	// DELETE	http://localhost:8080/firestation?address=951 LoneTree Rd
 	// ----------------------------------------------------------------------------------------
 	@RequestMapping(value = "/firestation", method = RequestMethod.DELETE, params = { "address" })
 	public boolean deleteFireStationByAddress(

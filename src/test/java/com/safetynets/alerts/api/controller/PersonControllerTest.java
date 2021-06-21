@@ -1,9 +1,11 @@
 package com.safetynets.alerts.api.controller;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Test;
@@ -24,7 +26,8 @@ public class PersonControllerTest {
 
 	@Test
 	public void getAllPersonsTest() throws Exception {
-		mockMvc.perform(get("/person")).andExpect(status().isOk());
+		String zip = "97451";
+		mockMvc.perform(get("/person")).andExpect(status().isOk()).andExpect(jsonPath("$[22].zip", is(zip)));
 	}
 	
 	@Test
