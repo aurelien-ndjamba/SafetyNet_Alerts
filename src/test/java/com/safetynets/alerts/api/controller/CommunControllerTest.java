@@ -1,57 +1,58 @@
-//package com.safetynets.alerts.api.controller;
-//
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-//
-//import org.junit.Test;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-//import org.springframework.boot.test.mock.mockito.MockBean;
-//import org.springframework.test.web.servlet.MockMvc;
-//
-//import com.safetynets.alerts.api.service.CommunService;
-//
-//@WebMvcTest(controllers = CommunController.class)
-//public class CommunControllerTest {
-//
-//	@Autowired
-//	private MockMvc mockMvc;
-//	@MockBean
-//	private CommunService communService;
-//
-//	@Test
-//	public void getSpecificInfoPersonsImpactedTest() throws Exception {
-//		mockMvc.perform(get("/firestation")).andExpect(status().isOk());
-//	}
-//
-//	@Test
-//	public void getChildInfoTest() throws Exception {
-//		mockMvc.perform(get("/childAlert")).andExpect(status().isOk());
-//	}
-//
-//	@Test
-//	public void phoneAlertTest() throws Exception {
-//		mockMvc.perform(get("/phoneAlert")).andExpect(status().isOk());
-//	}
-//
-//	@Test
-//	public void getResidentListAndFirestationWhenAddressGivenTest() throws Exception {
-//		mockMvc.perform(get("/fire")).andExpect(status().isOk());
-//	}
-//
-//	@Test
-//	public void getPersonsByStationTest() throws Exception {
-//		mockMvc.perform(get("/flood/stations")).andExpect(status().isOk());
-//	}
-//
-//	@Test
-//	public void getPersonInfoTest() throws Exception {
-//		mockMvc.perform(get("/personInfo")).andExpect(status().isOk());
-//	}
-//
-//	@Test
-//	public void getCommunityEmailTest() throws Exception {
-//		mockMvc.perform(get("/communityEmail")).andExpect(status().isOk());
-//	}
-//
-//}
+package com.safetynets.alerts.api.controller;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.MockMvc;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+public class CommunControllerTest {
+
+	@Autowired
+	public MockMvc mockMvc;
+
+	@Test
+	public void testGetChildInfo() throws Exception {
+		mockMvc.perform(get("/childAlert?address=1509 Culver St")).andExpect(status().isOk())
+				.andExpect(jsonPath("$[1].age", is(4)));
+	}
+	
+	@Test
+	public void testPhoneAlert() throws Exception {
+		mockMvc.perform(get("/phoneAlert?firestation=2")).andExpect(status().isOk())
+				.andExpect(jsonPath("$[3]", is("841-874-7458")));
+	}
+
+	@Test
+	public void testGetResidentListAndFirestationWhenAddressGiven() throws Exception {
+		mockMvc.perform(get("/fire?address=1509 Culver St")).andExpect(status().isOk())
+				.andExpect(jsonPath("$[3].phone", is("841-874-6512")));
+	}
+	
+	@Test
+	public void testGetPersonsByStation() throws Exception {
+		mockMvc.perform(get("/flood/stations?stations=1,2,3")).andExpect(status().isOk())
+				.andExpect(jsonPath("$[0].address", is("1509 Culver St")));
+	}
+	
+	@Test
+	public void testGetPersonInfo() throws Exception {
+		mockMvc.perform(get("/personInfo?firstName=Jacob&lastName=Boyd")).andExpect(status().isOk())
+				.andExpect(jsonPath("age", is(32)));
+	}
+	
+	@Test
+	public void testGetCommunityEmail() throws Exception {
+		mockMvc.perform(get("/communityEmail?city=Culver")).andExpect(status().isOk())
+				.andExpect(jsonPath("$[0]", is("jaboyd@email.com")));
+	}
+	
+
+}
