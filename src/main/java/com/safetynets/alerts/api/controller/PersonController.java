@@ -23,7 +23,7 @@ public class PersonController {
 	PersonService personService;
 
 	// ----------------------------------------------------------------------------------------
-	// GET
+	// GET http://localhost:8080/person
 	// ----------------------------------------------------------------------------------------
 	@GetMapping("/person")
 	public List<PersonModel> getAllPersons() {
@@ -31,7 +31,7 @@ public class PersonController {
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// POST
+	// POST	http://localhost:8080/person
 	// ----------------------------------------------------------------------------------------
 	@PostMapping("/person")
 	@ResponseStatus(HttpStatus.CREATED) // CHECK
@@ -40,7 +40,7 @@ public class PersonController {
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// PUT
+	// PUT	http://localhost:8080/person
 	// ----------------------------------------------------------------------------------------
 	@PutMapping("/person")
 	public boolean updatePersonInfo(@RequestBody PersonModel updatePerson) {
@@ -48,7 +48,7 @@ public class PersonController {
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// DELETE
+	// DELETE http://localhost:8080/person?firstNamelastName=CliveFerguson
 	// ----------------------------------------------------------------------------------------
 	@DeleteMapping("/person")
 	public boolean deletePersonById(@RequestParam String id) throws IllegalArgumentException {

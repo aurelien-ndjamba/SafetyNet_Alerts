@@ -32,9 +32,11 @@ public class FireStationControllerTest {
 		// GIVEN
 		fireStation.setAddress("1509 Culver St");
 		fireStation.setStation((long) 99);
+		
 		// WHEN
 		ObjectMapper objectMapper = new ObjectMapper();
 		String newFireStationInJson = objectMapper.writeValueAsString(fireStation);
+		
 		// THEN
 		mockMvc.perform(put("/firestation").contentType(MediaType.APPLICATION_JSON).content(newFireStationInJson))
 				.andExpect(status().isOk());
@@ -48,19 +50,23 @@ public class FireStationControllerTest {
 		// GIVEN
 		fireStation.setAddress("Paris");
 		fireStation.setStation((long) 77);
+		
 		// WHEN
 		ObjectMapper objectMapper = new ObjectMapper();
 		String newFireStationInJson = objectMapper.writeValueAsString(fireStation);
+		
 		// THEN
 		// Post
 		mockMvc.perform(post("/firestation").contentType(MediaType.APPLICATION_JSON).content(newFireStationInJson))
 				.andExpect(status().isCreated());
+		
 		mockMvc.perform(get("/firestation")).andExpect(status().isOk()).andExpect(jsonPath("$[13].id", is(14)));
 		mockMvc.perform(get("/firestation")).andExpect(status().isOk())
 				.andExpect(jsonPath("$[13].address", is("Paris")));
 		mockMvc.perform(get("/firestation")).andExpect(status().isOk()).andExpect(jsonPath("$[13].station", is(77)));
 		// Delete
-		mockMvc.perform(delete("/firestation?address=29 15th St"));
+		mockMvc.perform(delete("/firestation").queryParam("address", "29 15th St"));
+		
 		mockMvc.perform(get("/firestation")).andExpect(status().isOk()).andExpect(jsonPath("$[12].id", is(14)));
 		mockMvc.perform(get("/firestation")).andExpect(status().isOk())
 				.andExpect(jsonPath("$[12].address", is("Paris")));

@@ -83,7 +83,7 @@ public class MedicalRecordService {
 	// DELETE
 	// ----------------------------------------------------------------------------------------
 
-	public boolean deleteMedicalRecords(String firstNamelastName) throws IllegalArgumentException {
+	public boolean deleteMedicalRecords(String id) throws IllegalArgumentException {
 
 		boolean result = false;
 		List<Long> listIdsEntitiesMedicalRecords = new ArrayList<Long>();
@@ -93,8 +93,8 @@ public class MedicalRecordService {
 		for (Long i : listIdsEntitiesMedicalRecords) {
 			medicalRecords = medicalRecordRepository.getById(i);
 
-			if (firstNamelastName.contains(medicalRecords.getFirstName())
-					&& firstNamelastName.contains(medicalRecords.getLastName())) {
+			if (id.contains(medicalRecords.getFirstName())
+					&& id.contains(medicalRecords.getLastName())) {
 				medicalRecordRepository.delete(medicalRecords);
 				listIdsEntitiesMedicalRecords.remove(i);
 				result = true;

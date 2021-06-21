@@ -35,9 +35,11 @@ public class MedicalRecordControllerTest {
 		medicalRecord.setFirstName("John");
 		medicalRecord.setLastName("Boyd");
 		medicalRecord.setBirthdate("11/11/1111");
+		
 		// WHEN
 		ObjectMapper objectMapper = new ObjectMapper();
 		String newFireStationInJson = objectMapper.writeValueAsString(medicalRecord);
+		
 		// THEN
 		mockMvc.perform(put("/medicalRecord").contentType(MediaType.APPLICATION_JSON).content(newFireStationInJson))
 				.andExpect(status().isOk());
@@ -62,18 +64,20 @@ public class MedicalRecordControllerTest {
 		// WHEN
 		ObjectMapper objectMapper = new ObjectMapper();
 		String newFireStationInJson = objectMapper.writeValueAsString(medicalRecord);
+		
 		// THEN
 		// Post
 		mockMvc.perform(post("/medicalRecord").contentType(MediaType.APPLICATION_JSON).content(newFireStationInJson))
 				.andExpect(status().isCreated());
+		
 		mockMvc.perform(get("/medicalRecord")).andExpect(status().isOk()).andExpect(jsonPath("$[23].id", is(24)));
 		mockMvc.perform(get("/medicalRecord")).andExpect(status().isOk()).andExpect(jsonPath("$[23].birthdate", is("02/02/2002")));
 		mockMvc.perform(get("/medicalRecord")).andExpect(status().isOk()).andExpect(jsonPath("$[23].firstName", is("Aurelien")));
 		mockMvc.perform(get("/medicalRecord")).andExpect(status().isOk()).andExpect(jsonPath("$[23].allergies", is(allergies)));
 
 		// Delete
-		mockMvc.perform(delete("/medicalRecord?firstNamelastName=JacobBoyd").contentType(MediaType.APPLICATION_JSON).content(newFireStationInJson))
-				.andExpect(status().isOk());
+		mockMvc.perform(delete("/medicalRecord").queryParam("id", "JacobBoyd"));
+		
 		mockMvc.perform(get("/medicalRecord")).andExpect(status().isOk()).andExpect(jsonPath("$[22].id", is(24)));
 		mockMvc.perform(get("/medicalRecord")).andExpect(status().isOk()).andExpect(jsonPath("$[22].birthdate", is("02/02/2002")));
 		mockMvc.perform(get("/medicalRecord")).andExpect(status().isOk()).andExpect(jsonPath("$[22].firstName", is("Aurelien")));
