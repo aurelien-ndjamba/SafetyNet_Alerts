@@ -48,7 +48,7 @@ public class MedicalRecordController {
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// DELETE http://localhost:8080/medicalRecord
+	// DELETE http://localhost:8080/medicalRecord?firstNamelastName=JohnBoyd
 	// ---------------------------------------------------------------------------------------- 
 	@DeleteMapping("/medicalRecord")
 	public boolean deleteMedicalRecords(@RequestParam String firstNamelastName) throws IllegalArgumentException {
