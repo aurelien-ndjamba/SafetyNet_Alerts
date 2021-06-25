@@ -161,4 +161,12 @@ public class FireStationService {
 		return fireStationRepository.existsById(id);
 	}
 
+	public List<FireStationDataBaseModel>  getFirestationsByManyStation(List<Long> stations) {
+		List<FireStationDataBaseModel> firestationsByManyStation = new ArrayList<FireStationDataBaseModel>();
+		for (long station : stations) {
+			firestationsByManyStation = getFirestationsByStation(station);
+		}
+		return firestationsByManyStation;
+	}
+
 }

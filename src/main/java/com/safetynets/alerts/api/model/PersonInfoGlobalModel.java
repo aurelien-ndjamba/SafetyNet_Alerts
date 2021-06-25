@@ -8,8 +8,7 @@ import lombok.Data;
 
 @Data
 @Component
-public class PersonInfoModel {
-    private Long id;
+public class PersonInfoGlobalModel {
     private String firstName;
 	private String lastName;
 	private String address;

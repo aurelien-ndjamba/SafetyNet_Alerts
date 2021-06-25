@@ -13,7 +13,7 @@ import com.safetynets.alerts.api.model.FireStationDataBaseModel;
 import com.safetynets.alerts.api.model.PersonsByStationNumberModel;
 import com.safetynets.alerts.api.model.MedicalRecordDataBaseModel;
 import com.safetynets.alerts.api.model.PersonDataBaseModel;
-import com.safetynets.alerts.api.model.PersonInfoModel;
+import com.safetynets.alerts.api.model.PersonInfoGlobalModel;
 import com.safetynets.alerts.api.model.PersonModel;
 import com.safetynets.alerts.api.model.PersonInfoAdvanced;
 import com.safetynets.alerts.api.repository.FireStationRepository;
@@ -101,12 +101,13 @@ public class CommunService {
 			PersonInfoAdvanced.setStationNumber(fireStationService.getStationNumberByAddress(address));
 			PersonInfoAdvanced.setAge(countService.getAge(person.getFirstName(), person.getLastName()));
 			PersonInfoAdvanced.setPhone(person.getPhone());
-			
+
 			MedicalRecordDataBaseModel medicalRecord = new MedicalRecordDataBaseModel();
-			medicalRecord = medicalRecordService.getMedicalRecordByFirstNameAndLastName(person.getFirstName(), person.getLastName());
+			medicalRecord = medicalRecordService.getMedicalRecordByFirstNameAndLastName(person.getFirstName(),
+					person.getLastName());
 			PersonInfoAdvanced.setMedications(medicalRecord.getMedications());
 			PersonInfoAdvanced.setAllergies(medicalRecord.getAllergies());
-			
+
 			personsInfoAdvanced.add(PersonInfoAdvanced);
 		}
 		return personsInfoAdvanced;
@@ -116,71 +117,81 @@ public class CommunService {
 	// ----------------------------------------------------------------------------------------
 	// http://localhost:8080/flood/stations?stations=<a list of station_numbers>
 	// ----------------------------------------------------------------------------------------
-//	public List<PersonsByStationNumberModel> getPersonsByManyStations(List<Long> stations) throws ParseException {
-//
-//		List<PersonsByStationNumberModel> personsByManyStationNumber = new ArrayList<PersonsByStationNumberModel>();
-//		Iterable<FireStationDataBaseModel> fireStationsByManyStations = new ArrayList<FireStationDataBaseModel>();
-//		fireStationsByManyStations = fireStationService.getFirestationsByManyStation(stations);
-//		
-//		for (FireStationDataBaseModel fireStation : fireStationsByManyStations) {
-//
-//			PersonsByStationNumberModel personsByStationNumber = new PersonsByStationNumberModel();
-//			personsByStationNumber.setAddress(fireStation.getAddress());
-//			personsByStationNumber.setPersonsByAddress(personService.getPersonsByAddress(fireStation.getAddress()));
-//
-//			personsByManyStationNumber.add(personsByStationNumber);
-//		}
-//		
-//		return personsByManyStationNumber;
-//	}
+	public List<PersonsByStationNumberModel> getPersonsByManyStations(List<Long> stations) throws ParseException {
+
+		List<PersonsByStationNumberModel> personsByManyStationNumber = new ArrayList<PersonsByStationNumberModel>();
+		Iterable<FireStationDataBaseModel> fireStationsByManyStations = new ArrayList<FireStationDataBaseModel>();
+		fireStationsByManyStations = fireStationService.getFirestationsByManyStation(stations);
+		
+		for (FireStationDataBaseModel fireStation : fireStationsByManyStations) {
+
+			PersonsByStationNumberModel personsByStationNumber = new PersonsByStationNumberModel();
+			personsByStationNumber.setAddress(fireStation.getAddress());
+			personsByStationNumber.setPersonsByAddress(personService.getPersonsByAddress(fireStation.getAddress()));
+
+			personsByManyStationNumber.add(personsByStationNumber);
+		}
+		
+		return personsByManyStationNumber;
+	}
 
 	// ----------------------------------------------------------------------------------------
 	// http://localhost:8080/personInfo?firstName=<firstName>&lastName=<lastName> OK
 	// ----------------------------------------------------------------------------------------
-//	public PersonInfoModel getPersonInfo(String firstName, String lastName) throws ParseException {
-//
-//		HashSet<String> listMedicationsHistory = new HashSet<String>();
-//		HashSet<String> listAllergiesHistory = new HashSet<String>();
-//		List<PersonModel> listIdsEntitiesPerson = personService.findByFirstNameAndLastName(firstName, lastName);
-//
-//		for (PersonModel person : listIdsEntitiesPerson) {
-//
-////			person = personRepository.getById(i);
-//
-//
-//				personInfo.setId(i);
-//				personInfo.setFirstName(firstName);
-//				personInfo.setLastName(lastName);
-//				personInfo.setAddress(person.getAddress());
-//				int age = countService.getAge(firstName, lastName);
-//				personInfo.setAge(age);
-//				personInfo.setEmail(person.getEmail());
-//				listMedicationsHistory = medicalRecordService.getMedicationsHistory(lastName);
-//				personInfo.setMedications(listMedicationsHistory);
-//				listAllergiesHistory = medicalRecordService.getAllergiesHistoryByLastName(lastName);
-//				personInfo.setAllergies(listAllergiesHistory);
-//
-//		}
-//
-//		return personInfo;
-//	}
-//
-//	// ----------------------------------------------------------------------------------------
-//	// http://localhost:8080/communityEmail?city=<city> OK
-//	// ----------------------------------------------------------------------------------------
-//	public List<String> getCommunityEmail(String city) {
-//
-//		List<Long> listIdsEntitiesPerson = personService.getlistIdsEntitiesPerson();
-//		List<String> listCommunityEmail = new ArrayList<String>();
-//
-//		for (Long i : listIdsEntitiesPerson) {
-//			person = personRepository.getById(i);
-//			if (person.getCity().equals(city)) {
-//				listCommunityEmail.add(person.getEmail());
-//			}
-//		}
-//
-//		return listCommunityEmail;
-//	}
+	public PersonInfoGlobalModel getPersonInfoGlobal(String firstName, String lastName) throws ParseException {
+
+		PersonDataBaseModel person = new PersonDataBaseModel();
+		person = personService.getPersonByFirstNameAndLastName(firstName, lastName);
+
+		PersonInfoGlobalModel personInfoGlobal = new PersonInfoGlobalModel();
+		personInfoGlobal.setFirstName(person.getFirstName());
+		personInfoGlobal.setLastName(person.getLastName());
+		personInfoGlobal.setAddress(person.getAddress());
+		personInfoGlobal.setAge(countService.getAge(person.getFirstName(), person.getLastName()));
+		personInfoGlobal.setEmail(person.getEmail());
+
+		HashSet<String> medicationsByLastName = new HashSet<String>();
+		HashSet<String> allergiesByLastName = new HashSet<String>();
+		List<MedicalRecordDataBaseModel> medicalRecords = new ArrayList<MedicalRecordDataBaseModel>();
+		medicalRecords = medicalRecordService.getMedicalRecordsByLastName(person.getLastName());
+		int i = 0;
+		int j = 0;
+		for (MedicalRecordDataBaseModel medicalRecord : medicalRecords) {
+
+			int countMedications = medicalRecord.getMedications().size();
+			while (i < countMedications) {
+				medicationsByLastName.add(medicalRecord.getMedications().get(i));
+				i++;
+			}
+
+			int countAllergies = medicalRecord.getAllergies().size();
+			while (j < countAllergies) {
+				allergiesByLastName.add(medicalRecord.getAllergies().get(j));
+				j++;
+			}
+			i = 0;
+			j = 0;
+		}
+
+		personInfoGlobal.setMedications(medicationsByLastName);
+		personInfoGlobal.setAllergies(allergiesByLastName);
+
+		return personInfoGlobal;
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// http://localhost:8080/communityEmail?city=<city> OK
+	// ----------------------------------------------------------------------------------------
+	public List<String> getCommunityEmail(String city) {
+		List<PersonDataBaseModel> persons = new ArrayList<PersonDataBaseModel>();
+		persons = personService.getPersonsByCity(city);
+		List<String> CommunityEmail = new ArrayList<String>();
+		
+		for (PersonDataBaseModel person : persons) {
+			CommunityEmail.add(person.getEmail());
+			}
+		
+		return CommunityEmail;
+	}
 
 }

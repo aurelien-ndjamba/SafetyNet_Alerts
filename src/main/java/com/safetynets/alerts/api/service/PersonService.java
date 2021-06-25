@@ -47,6 +47,13 @@ public class PersonService {
 	public  List<PersonDataBaseModel> getPersonsByAddress(String address) {
 		return personRepository.findByAddress(address);
 	}
+	
+	// ----------------------------------------------------------------------------------------
+	// GET BY: Methode pour obtenir des personnes à partir d'une adresse
+	// ----------------------------------------------------------------------------------------
+	public  List<PersonDataBaseModel> getPersonsByCity(String city) {
+		return personRepository.findByCity(city);
+	}
 
 	// ----------------------------------------------------------------------------------------
 	// GET BY: Methode pour obtenir des personnes par nom

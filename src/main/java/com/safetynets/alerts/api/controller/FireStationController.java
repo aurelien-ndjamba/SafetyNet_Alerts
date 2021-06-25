@@ -17,59 +17,39 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.safetynets.alerts.api.model.FireStationDataBaseModel;
 import com.safetynets.alerts.api.model.InfoByStationNumber;
-import com.safetynets.alerts.api.repository.FireStationRepository;
 import com.safetynets.alerts.api.service.FireStationService;
 
 @RestController
 public class FireStationController {
 
 	@Autowired private FireStationService fireStationService;
-	@Autowired FireStationRepository fireStationRepository;
 
-	// ----------------------------------------------------------------------------------------
-	// GET	http://localhost:8080/firestation
-	// ----------------------------------------------------------------------------------------
+	/** GET	http://localhost:8080/firestation */
 	@GetMapping("/firestation")
 	public List<FireStationDataBaseModel> getAllFireStation() {
 		return fireStationService.getAllFireStation();
 	}
 	
-	// ----------------------------------------------------------------------------------------
-	// GET	http://localhost:8080/firestation?stationNumber=2
-	// ----------------------------------------------------------------------------------------
+	/** GET	http://localhost:8080/firestation?stationNumber=2 */
 	@RequestMapping(value = "/firestation", method = RequestMethod.GET, params = { "station" })
 	public InfoByStationNumber getInfoByStationNumber(long station) throws ParseException {
 		return fireStationService.getInfoByStationNumber(station);
 	}
 
-	
-	@GetMapping("/titi")
-	public Iterable<FireStationDataBaseModel> titi(@RequestParam List<Long> ids) {
-		return fireStationRepository.findAllByStation(ids);
-	}
-	
-	
-	
-	// ----------------------------------------------------------------------------------------
-	// POST	http://localhost:8080/firestation
-	// ----------------------------------------------------------------------------------------
+	/** POST	http://localhost:8080/firestation */
 	@PostMapping("/firestation")
 	@ResponseStatus(HttpStatus.CREATED)
 	public FireStationDataBaseModel postFireStation(@RequestBody FireStationDataBaseModel fireStation) {
 		return fireStationService.postFireStation(fireStation);
 	}
 
-	// ----------------------------------------------------------------------------------------
-	// PUT	http://localhost:8080/firestation 
-	// ----------------------------------------------------------------------------------------
+	/** PUT	http://localhost:8080/firestation */
 	@PutMapping("/firestation")
 	public boolean updateFireStation(@RequestBody FireStationDataBaseModel firestation) {
 		return fireStationService.updateFireStation(firestation);
 	}
 
-	// ----------------------------------------------------------------------------------------
-	// DELETE	http://localhost:8080/firestation?address=951 LoneTree Rd
-	// ----------------------------------------------------------------------------------------
+	/** DELETE	http://localhost:8080/firestation?address=951 LoneTree Rd */
 	@RequestMapping(value = "/firestation", method = RequestMethod.DELETE, params = { "address" })
 	public void deleteFireStationByAddress(
 			@RequestParam("address") String address) throws ParseException {

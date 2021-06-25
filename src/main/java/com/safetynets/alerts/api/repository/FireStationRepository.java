@@ -13,7 +13,6 @@ public interface FireStationRepository extends JpaRepository<FireStationDataBase
 
 	List<FireStationDataBaseModel> findByStation(long station);	
 	List<FireStationDataBaseModel> findByAddress(String address);
-//	Iterable<FireStationDataBaseModel> findAllByStation(List<Long> stations);
 	
 	@Transactional
 	void deleteByAddress(String address);
