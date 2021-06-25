@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.safetynets.alerts.api.model.MedicalRecordDataBaseModel;
+import com.safetynets.alerts.api.model.MedicalRecordModel;
 import com.safetynets.alerts.api.service.MedicalRecordService;
 
 @RestController
@@ -25,20 +25,20 @@ public class MedicalRecordController {
 
 	/** GET http://localhost:8080/medicalRecord */
 	@GetMapping("/medicalRecord")
-	public List<MedicalRecordDataBaseModel> getAllMedicalRecord() {
+	public List<MedicalRecordModel> getAllMedicalRecord() {
 		return medicalRecordService.getAllMedicalRecord();
 	}
 
 	/** POST http://localhost:8080/medicalRecord */
 	@PostMapping("/medicalRecord")
 	@ResponseStatus(HttpStatus.CREATED)
-	public MedicalRecordDataBaseModel postMedicalRecord(@RequestBody MedicalRecordDataBaseModel medicalRecord) {
+	public MedicalRecordModel postMedicalRecord(@RequestBody MedicalRecordModel medicalRecord) {
 		return medicalRecordService.postMedicalRecord(medicalRecord);
 	}
 
 	/** PUT http://localhost:8080/medicalRecord */
 	@PutMapping("/medicalRecord")
-	public boolean updateMedicalRecord(@RequestBody MedicalRecordDataBaseModel medicalRecord) {
+	public boolean updateMedicalRecord(@RequestBody MedicalRecordModel medicalRecord) {
 		return medicalRecordService.updateMedicalRecord(medicalRecord);
 	}
 

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.safetynets.alerts.api.model.PersonDataBaseModel;
+import com.safetynets.alerts.api.model.PersonModel;
 import com.safetynets.alerts.api.service.PersonService;
 
 @RestController
@@ -26,44 +26,44 @@ public class PersonController {
 
 	/** GET http://localhost:8080/person?id=<id> */
 	@GetMapping("/person")
-	public List<PersonDataBaseModel> getAllPerson() {
+	public List<PersonModel> getAllPerson() {
 		return personService.getAllPerson(); 
 	}
 	
 	/** */
 	@RequestMapping(value = "/person", method = RequestMethod.GET, params = { "id" })
-	public Optional<PersonDataBaseModel> getPersonById(@RequestParam long id) {
+	public Optional<PersonModel> getPersonById(@RequestParam long id) {
 		return personService.getPersonById(id); 
 	}
 	
 	/** */
 	@RequestMapping(value = "/person", method = RequestMethod.GET, params = { "address" })
-	public List<PersonDataBaseModel> getPersonsByAddress(@RequestParam String address) {
+	public List<PersonModel> getPersonsByAddress(@RequestParam String address) {
 		return personService.getPersonsByAddress(address); 
 	}
 	
 	/** */
 	@RequestMapping(value = "/person", method = RequestMethod.GET, params = { "lastName" })
-	public List<PersonDataBaseModel> getPersonsByLastName(@RequestParam String lastName) {
+	public List<PersonModel> getPersonsByLastName(@RequestParam String lastName) {
 		return personService.getPersonsByLastName(lastName); 
 	}
 	
 	/** */
 	@RequestMapping(value = "/person", method = RequestMethod.GET, params = { "firstName", "lastName" })
-	public PersonDataBaseModel getPersonsByFirstNameAndLastName(@RequestParam String firstName, @RequestParam String lastName) {
+	public PersonModel getPersonsByFirstNameAndLastName(@RequestParam String firstName, @RequestParam String lastName) {
 		return personService.getPersonByFirstNameAndLastName(firstName, lastName); 
 	}
 
 	/** POST http://localhost:8080/person */
 	@PostMapping("/person")
 	@ResponseStatus(HttpStatus.CREATED)
-	public PersonDataBaseModel postPerson(@RequestBody PersonDataBaseModel person) {
+	public PersonModel postPerson(@RequestBody PersonModel person) {
 		return personService.postPerson(person);
 	}
 
 	/** PUT http://localhost:8080/person */
 	@PutMapping("/person")
-	public boolean updatePerson(@RequestBody PersonDataBaseModel person) {
+	public boolean updatePerson(@RequestBody PersonModel person) {
 		return personService.updatePerson(person);
 	}
 
@@ -73,7 +73,7 @@ public class PersonController {
 	}
 	
 	/** DELETE http://localhost:8080/person */
-	public void deletePersonByEntity(@RequestBody PersonDataBaseModel person) throws IllegalArgumentException {
+	public void deletePersonByEntity(@RequestBody PersonModel person) throws IllegalArgumentException {
 		personService.deletePersonByEntity(person);
 	}
 	

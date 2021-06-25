@@ -9,15 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.safetynets.alerts.api.model.ChildInfoModel;
-import com.safetynets.alerts.api.model.FireStationDataBaseModel;
+import com.safetynets.alerts.api.model.FireStationModel;
 import com.safetynets.alerts.api.model.PersonsByStationNumberModel;
-import com.safetynets.alerts.api.model.MedicalRecordDataBaseModel;
-import com.safetynets.alerts.api.model.PersonDataBaseModel;
-import com.safetynets.alerts.api.model.PersonInfoGlobalModel;
+import com.safetynets.alerts.api.model.MedicalRecordModel;
 import com.safetynets.alerts.api.model.PersonModel;
-import com.safetynets.alerts.api.model.PersonInfoAdvanced;
-import com.safetynets.alerts.api.repository.FireStationRepository;
-import com.safetynets.alerts.api.repository.PersonRepository;
+import com.safetynets.alerts.api.model.PersonInfoGlobalModel;
+import com.safetynets.alerts.api.model.PersonInfoAdvancedModel;
 
 @Service
 public class CommunService {
@@ -25,11 +22,7 @@ public class CommunService {
 	@Autowired
 	private PersonService personService;
 	@Autowired
-	private PersonRepository personRepository;
-	@Autowired
 	private FireStationService fireStationService;
-	@Autowired
-	private FireStationRepository fireStationRepository;
 	@Autowired
 	private MedicalRecordService medicalRecordService;
 	@Autowired
@@ -41,10 +34,10 @@ public class CommunService {
 	public List<ChildInfoModel> getChildInfos(String address) throws ParseException {
 
 		List<ChildInfoModel> ChildInfos = new ArrayList<ChildInfoModel>();
-		List<PersonDataBaseModel> persons = new ArrayList<PersonDataBaseModel>();
+		List<PersonModel> persons = new ArrayList<PersonModel>();
 		persons = personService.getPersonsByAddress(address);
 
-		for (PersonDataBaseModel person : persons) {
+		for (PersonModel person : persons) {
 
 			if (countService.getAge(person.getFirstName(), person.getLastName()) <= 18) {
 
@@ -69,13 +62,13 @@ public class CommunService {
 	public HashSet<String> getPhoneAlert(Long firestation) {
 
 		HashSet<String> phoneAlert = new HashSet<String>();
-		List<FireStationDataBaseModel> fireStations = new ArrayList<FireStationDataBaseModel>();
+		List<FireStationModel> fireStations = new ArrayList<FireStationModel>();
 		fireStations = fireStationService.getFirestationsByStation(firestation);
 
-		for (FireStationDataBaseModel fireStation : fireStations) {
-			List<PersonDataBaseModel> persons = new ArrayList<PersonDataBaseModel>();
+		for (FireStationModel fireStation : fireStations) {
+			List<PersonModel> persons = new ArrayList<PersonModel>();
 			persons = personService.getPersonsByAddress(fireStation.getAddress());
-			for (PersonDataBaseModel person : persons) {
+			for (PersonModel person : persons) {
 				phoneAlert.add(person.getPhone());
 			}
 		}
@@ -85,15 +78,15 @@ public class CommunService {
 	// ----------------------------------------------------------------------------------------
 	// http://localhost:8080/fire?address=<address> OK
 	// ----------------------------------------------------------------------------------------
-	public ArrayList<PersonInfoAdvanced> getPersonsInfoAdvanced(String address) throws ParseException {
+	public ArrayList<PersonInfoAdvancedModel> getPersonsInfoAdvanced(String address) throws ParseException {
 
-		ArrayList<PersonInfoAdvanced> personsInfoAdvanced = new ArrayList<PersonInfoAdvanced>();
-		List<PersonDataBaseModel> persons = new ArrayList<PersonDataBaseModel>();
+		ArrayList<PersonInfoAdvancedModel> personsInfoAdvanced = new ArrayList<PersonInfoAdvancedModel>();
+		List<PersonModel> persons = new ArrayList<PersonModel>();
 		persons = personService.getPersonsByAddress(address);
 
-		for (PersonDataBaseModel person : persons) {
+		for (PersonModel person : persons) {
 
-			PersonInfoAdvanced PersonInfoAdvanced = new PersonInfoAdvanced();
+			PersonInfoAdvancedModel PersonInfoAdvanced = new PersonInfoAdvancedModel();
 			PersonInfoAdvanced.setId(person.getId());
 			PersonInfoAdvanced.setFirstName(person.getFirstName());
 			PersonInfoAdvanced.setLastName(person.getLastName());
@@ -102,7 +95,7 @@ public class CommunService {
 			PersonInfoAdvanced.setAge(countService.getAge(person.getFirstName(), person.getLastName()));
 			PersonInfoAdvanced.setPhone(person.getPhone());
 
-			MedicalRecordDataBaseModel medicalRecord = new MedicalRecordDataBaseModel();
+			MedicalRecordModel medicalRecord = new MedicalRecordModel();
 			medicalRecord = medicalRecordService.getMedicalRecordByFirstNameAndLastName(person.getFirstName(),
 					person.getLastName());
 			PersonInfoAdvanced.setMedications(medicalRecord.getMedications());
@@ -120,10 +113,10 @@ public class CommunService {
 	public List<PersonsByStationNumberModel> getPersonsByManyStations(List<Long> stations) throws ParseException {
 
 		List<PersonsByStationNumberModel> personsByManyStationNumber = new ArrayList<PersonsByStationNumberModel>();
-		Iterable<FireStationDataBaseModel> fireStationsByManyStations = new ArrayList<FireStationDataBaseModel>();
+		Iterable<FireStationModel> fireStationsByManyStations = new ArrayList<FireStationModel>();
 		fireStationsByManyStations = fireStationService.getFirestationsByManyStation(stations);
 		
-		for (FireStationDataBaseModel fireStation : fireStationsByManyStations) {
+		for (FireStationModel fireStation : fireStationsByManyStations) {
 
 			PersonsByStationNumberModel personsByStationNumber = new PersonsByStationNumberModel();
 			personsByStationNumber.setAddress(fireStation.getAddress());
@@ -140,7 +133,7 @@ public class CommunService {
 	// ----------------------------------------------------------------------------------------
 	public PersonInfoGlobalModel getPersonInfoGlobal(String firstName, String lastName) throws ParseException {
 
-		PersonDataBaseModel person = new PersonDataBaseModel();
+		PersonModel person = new PersonModel();
 		person = personService.getPersonByFirstNameAndLastName(firstName, lastName);
 
 		PersonInfoGlobalModel personInfoGlobal = new PersonInfoGlobalModel();
@@ -152,11 +145,11 @@ public class CommunService {
 
 		HashSet<String> medicationsByLastName = new HashSet<String>();
 		HashSet<String> allergiesByLastName = new HashSet<String>();
-		List<MedicalRecordDataBaseModel> medicalRecords = new ArrayList<MedicalRecordDataBaseModel>();
+		List<MedicalRecordModel> medicalRecords = new ArrayList<MedicalRecordModel>();
 		medicalRecords = medicalRecordService.getMedicalRecordsByLastName(person.getLastName());
 		int i = 0;
 		int j = 0;
-		for (MedicalRecordDataBaseModel medicalRecord : medicalRecords) {
+		for (MedicalRecordModel medicalRecord : medicalRecords) {
 
 			int countMedications = medicalRecord.getMedications().size();
 			while (i < countMedications) {
@@ -183,11 +176,11 @@ public class CommunService {
 	// http://localhost:8080/communityEmail?city=<city> OK
 	// ----------------------------------------------------------------------------------------
 	public List<String> getCommunityEmail(String city) {
-		List<PersonDataBaseModel> persons = new ArrayList<PersonDataBaseModel>();
+		List<PersonModel> persons = new ArrayList<PersonModel>();
 		persons = personService.getPersonsByCity(city);
 		List<String> CommunityEmail = new ArrayList<String>();
 		
-		for (PersonDataBaseModel person : persons) {
+		for (PersonModel person : persons) {
 			CommunityEmail.add(person.getEmail());
 			}
 		

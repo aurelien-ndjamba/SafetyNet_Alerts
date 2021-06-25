@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.safetynets.alerts.api.model.ChildInfoModel;
 import com.safetynets.alerts.api.model.PersonsByStationNumberModel;
 import com.safetynets.alerts.api.model.PersonInfoGlobalModel;
-import com.safetynets.alerts.api.model.PersonInfoAdvanced;
+import com.safetynets.alerts.api.model.PersonInfoAdvancedModel;
 import com.safetynets.alerts.api.service.CommunService;
 
 @RestController
@@ -35,7 +35,7 @@ public class CommunController {
 
 	/** GET http://localhost:8080/fire?address=951 LoneTree Rd */
 	@GetMapping("/fire")
-	public ArrayList<PersonInfoAdvanced> getPersonsInfoAdvanced(
+	public ArrayList<PersonInfoAdvancedModel> getPersonsInfoAdvanced(
 			@RequestParam String address) throws ParseException {
 		return communService.getPersonsInfoAdvanced(address);
 	}

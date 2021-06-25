@@ -1,5 +1,7 @@
 package com.safetynets.alerts.api.model;
 
+import java.util.ArrayList;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,14 +14,16 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "firestations")
+@Table(name = "medicalrecords")
 @Component
-public class FireStationDataBaseModel {
-
-	@Id
+public class MedicalRecordModel {
+	
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    public String address;
-	public long station;
-
+	private String firstName;
+	private String lastName;
+	private String birthdate;
+	private ArrayList<String> medications;
+	private ArrayList<String> allergies;
 }

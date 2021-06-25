@@ -1,14 +1,12 @@
 package com.safetynets.alerts.api.service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.safetynets.alerts.api.model.MedicalRecordDataBaseModel;
-import com.safetynets.alerts.api.model.PersonDataBaseModel;
+import com.safetynets.alerts.api.model.MedicalRecordModel;
 import com.safetynets.alerts.api.repository.MedicalRecordRepository;
 
 @Service
@@ -21,35 +19,35 @@ public class MedicalRecordService {
 	// ----------------------------------------------------------------------------------------
 	// GET ALL: Methode pour obtenir la liste des personnes dans une BDD
 	// ----------------------------------------------------------------------------------------
-	public List<MedicalRecordDataBaseModel> getAllMedicalRecord() {
+	public List<MedicalRecordModel> getAllMedicalRecord() {
 		return medicalRecordRepository.findAll();
 	}
 
 	// ----------------------------------------------------------------------------------------
 	// GET BY: Methode pour obtenir ungetPersonsByAddresse personne par id
 	// ----------------------------------------------------------------------------------------
-	public Optional<MedicalRecordDataBaseModel> getMedicalRecordById(long id) {
+	public Optional<MedicalRecordModel> getMedicalRecordById(long id) {
 		return medicalRecordRepository.findById(id);
 	}
 
 	// ----------------------------------------------------------------------------------------
 	// GET BY: Methode pour obtenir des personnes par nom
 	// ----------------------------------------------------------------------------------------
-	public List<MedicalRecordDataBaseModel> getMedicalRecordsByLastName(String lastName) {
+	public List<MedicalRecordModel> getMedicalRecordsByLastName(String lastName) {
 		return medicalRecordRepository.findByLastName(lastName);
 	}
 
 	// ----------------------------------------------------------------------------------------
 	// GET BY: Methode pour obtenir une personne par prénom et nom
 	// ----------------------------------------------------------------------------------------
-	public MedicalRecordDataBaseModel getMedicalRecordByFirstNameAndLastName(String firstName, String lastName) {
+	public MedicalRecordModel getMedicalRecordByFirstNameAndLastName(String firstName, String lastName) {
 		return medicalRecordRepository.findByFirstNameAndLastName(firstName, lastName);
 	}
 
 	// ----------------------------------------------------------------------------------------
 	// POST: Methode pour ajouter une personne dans la BDD
 	// ----------------------------------------------------------------------------------------
-	public MedicalRecordDataBaseModel postMedicalRecord(MedicalRecordDataBaseModel medicalRecord) {
+	public MedicalRecordModel postMedicalRecord(MedicalRecordModel medicalRecord) {
 
 		System.out.println("Nouvelle personne enregistrée dans la base de donnée avec succès !");
 
@@ -60,7 +58,7 @@ public class MedicalRecordService {
 	// ----------------------------------------------------------------------------------------
 	// PUT: Methode pour mettre à jour les infos d'une personne dans la BDD
 	// ----------------------------------------------------------------------------------------
-	public boolean updateMedicalRecord(MedicalRecordDataBaseModel medicalRecord) throws IllegalArgumentException {
+	public boolean updateMedicalRecord(MedicalRecordModel medicalRecord) throws IllegalArgumentException {
 		boolean result = false;
 		long i = 0;
 		long j = 0;
@@ -92,7 +90,7 @@ public class MedicalRecordService {
 	// ----------------------------------------------------------------------------------------
 	// DELETE: Methode pour supprimer une personne à partir d'une entité
 	// ----------------------------------------------------------------------------------------
-	public void deleteMedicalRecordByEntity(MedicalRecordDataBaseModel medicalRecord) throws IllegalArgumentException {
+	public void deleteMedicalRecordByEntity(MedicalRecordModel medicalRecord) throws IllegalArgumentException {
 		medicalRecordRepository.delete(medicalRecord);
 	}
 
@@ -116,7 +114,7 @@ public class MedicalRecordService {
 		long countEntities = medicalRecordRepository.count();
 
 		do {
-			MedicalRecordDataBaseModel medicalRecord = new MedicalRecordDataBaseModel();
+			MedicalRecordModel medicalRecord = new MedicalRecordModel();
 			if (medicalRecordRepository.existsById(i)) {
 				j++;
 				medicalRecord = medicalRecordRepository.findById(i).get();

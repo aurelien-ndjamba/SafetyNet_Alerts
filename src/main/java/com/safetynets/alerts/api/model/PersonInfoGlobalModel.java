@@ -2,12 +2,9 @@ package com.safetynets.alerts.api.model;
 
 import java.util.HashSet;
 
-import org.springframework.stereotype.Component;
-
 import lombok.Data;
 
 @Data
-@Component
 public class PersonInfoGlobalModel {
     private String firstName;
 	private String lastName;

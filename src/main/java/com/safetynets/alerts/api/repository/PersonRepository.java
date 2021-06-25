@@ -7,20 +7,20 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.safetynets.alerts.api.model.PersonDataBaseModel;
+import com.safetynets.alerts.api.model.PersonModel;
 
 @Repository
-public interface PersonRepository extends JpaRepository<PersonDataBaseModel, Long> {
+public interface PersonRepository extends JpaRepository<PersonModel, Long> {
 	
-	List<PersonDataBaseModel> findAll();
-	Optional<PersonDataBaseModel> findById(long id);
-	List<PersonDataBaseModel> findByAddress(String address);
-	List<PersonDataBaseModel> findByCity(String city);
-	List<PersonDataBaseModel> findByLastName(String lastName);
-	PersonDataBaseModel findByFirstNameAndLastName(String firstName, String lastName);
+	List<PersonModel> findAll();
+	Optional<PersonModel> findById(long id);
+	List<PersonModel> findByAddress(String address);
+	List<PersonModel> findByCity(String city);
+	List<PersonModel> findByLastName(String lastName);
+	PersonModel findByFirstNameAndLastName(String firstName, String lastName);
 	
 	void deleteById(long id);
-	void delete(PersonDataBaseModel person);
+	void delete(PersonModel person);
 	@Transactional
 	void deleteByLastName(String lastName);
 	@Transactional

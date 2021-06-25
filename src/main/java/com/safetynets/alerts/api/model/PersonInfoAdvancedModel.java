@@ -1,18 +1,19 @@
 package com.safetynets.alerts.api.model;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 
 import lombok.Data;
 
 @Data
 public class PersonInfoAdvancedModel {
 	
-	long id;
-	String firstName;
-	String lastName;
-	String phone;
-	int age;
-	HashSet<String> medications;
-	HashSet<String> allergies;
-
+    private Long id;
+	private String firstName;
+	private String lastName;
+	private String address;
+	private Long stationNumber;
+	private int age;
+	private String phone;
+	private ArrayList<String> medications;
+	private ArrayList<String> allergies;
 }

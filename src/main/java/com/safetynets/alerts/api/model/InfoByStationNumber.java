@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class InfoByStationNumber {
 	
-	ArrayList<PersonDataBaseModel> PersonsByStation;
+	ArrayList<PersonModel> PersonsByStation;
 	long Station;
 	int CountAdult;
 	int CountChildren;

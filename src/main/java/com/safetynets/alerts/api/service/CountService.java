@@ -2,18 +2,16 @@ package com.safetynets.alerts.api.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.safetynets.alerts.api.model.FireStationDataBaseModel;
-import com.safetynets.alerts.api.model.MedicalRecordDataBaseModel;
-import com.safetynets.alerts.api.model.PersonDataBaseModel;
+import com.safetynets.alerts.api.model.FireStationModel;
+import com.safetynets.alerts.api.model.MedicalRecordModel;
+import com.safetynets.alerts.api.model.PersonModel;
 
 @Service
 public class CountService {
@@ -32,7 +30,7 @@ public class CountService {
 	@SuppressWarnings("deprecation")
 	public int getAge(String firstName, String lastName) throws ParseException {
 
-		MedicalRecordDataBaseModel medicalRecord = new MedicalRecordDataBaseModel();
+		MedicalRecordModel medicalRecord = new MedicalRecordModel();
 		medicalRecord = medicalRecordService.getMedicalRecordByFirstNameAndLastName(firstName, lastName);
 
 		int age = 0;
@@ -63,11 +61,11 @@ public class CountService {
 
 		int countAdult = 0;
 
-		List<FireStationDataBaseModel> firestations = fireStationService.getFirestationsByStation(station);
+		List<FireStationModel> firestations = fireStationService.getFirestationsByStation(station);
 
-		for (FireStationDataBaseModel fireStation : firestations) {
-			List<PersonDataBaseModel> persons = personService.getPersonsByAddress(fireStation.getAddress());
-			for (PersonDataBaseModel person : persons) {
+		for (FireStationModel fireStation : firestations) {
+			List<PersonModel> persons = personService.getPersonsByAddress(fireStation.getAddress());
+			for (PersonModel person : persons) {
 				if (fireStation.getAddress().equals(person.getAddress())) {
 					int agePerson = getAge(person.getFirstName(), person.getLastName());
 					if (agePerson > 18)
@@ -86,11 +84,11 @@ public class CountService {
 
 		int countChildren = 0;
 
-		List<FireStationDataBaseModel> firestations = fireStationService.getFirestationsByStation(station);
+		List<FireStationModel> firestations = fireStationService.getFirestationsByStation(station);
 
-		for (FireStationDataBaseModel fireStation : firestations) {
-			List<PersonDataBaseModel> persons = personService.getPersonsByAddress(fireStation.getAddress());
-			for (PersonDataBaseModel person : persons) {
+		for (FireStationModel fireStation : firestations) {
+			List<PersonModel> persons = personService.getPersonsByAddress(fireStation.getAddress());
+			for (PersonModel person : persons) {
 				if (fireStation.getAddress().equals(person.getAddress())) {
 					int agePerson = getAge(person.getFirstName(), person.getLastName());
 					if (agePerson <= 18)

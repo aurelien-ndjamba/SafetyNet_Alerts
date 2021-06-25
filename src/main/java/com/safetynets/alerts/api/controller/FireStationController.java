@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.safetynets.alerts.api.model.FireStationDataBaseModel;
+import com.safetynets.alerts.api.model.FireStationModel;
 import com.safetynets.alerts.api.model.InfoByStationNumber;
 import com.safetynets.alerts.api.service.FireStationService;
 
@@ -26,7 +26,7 @@ public class FireStationController {
 
 	/** GET	http://localhost:8080/firestation */
 	@GetMapping("/firestation")
-	public List<FireStationDataBaseModel> getAllFireStation() {
+	public List<FireStationModel> getAllFireStation() {
 		return fireStationService.getAllFireStation();
 	}
 	
@@ -39,13 +39,13 @@ public class FireStationController {
 	/** POST	http://localhost:8080/firestation */
 	@PostMapping("/firestation")
 	@ResponseStatus(HttpStatus.CREATED)
-	public FireStationDataBaseModel postFireStation(@RequestBody FireStationDataBaseModel fireStation) {
+	public FireStationModel postFireStation(@RequestBody FireStationModel fireStation) {
 		return fireStationService.postFireStation(fireStation);
 	}
 
 	/** PUT	http://localhost:8080/firestation */
 	@PutMapping("/firestation")
-	public boolean updateFireStation(@RequestBody FireStationDataBaseModel firestation) {
+	public boolean updateFireStation(@RequestBody FireStationModel firestation) {
 		return fireStationService.updateFireStation(firestation);
 	}
 

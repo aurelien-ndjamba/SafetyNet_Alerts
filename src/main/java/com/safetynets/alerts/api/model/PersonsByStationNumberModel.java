@@ -1,6 +1,5 @@
 package com.safetynets.alerts.api.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
@@ -9,6 +8,6 @@ import lombok.Data;
 public class PersonsByStationNumberModel {
 	
 	private String address;
-	private List<PersonDataBaseModel> PersonsByAddress;
+	private List<PersonModel> PersonsByAddress;
 	
 }

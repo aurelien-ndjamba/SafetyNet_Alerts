@@ -7,15 +7,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
-import com.safetynets.alerts.api.model.PersonInfoAdvancedModel;
+import com.safetynets.alerts.api.model.FireStationModel;
 import com.safetynets.alerts.api.model.PersonModel;
-import com.safetynets.alerts.api.model.FireStationDataBaseModel;
-import com.safetynets.alerts.api.model.PersonDataBaseModel;
-import com.safetynets.alerts.api.model.PersonImpactedByStationNumber;
 import com.safetynets.alerts.api.repository.PersonRepository;
 
 @Service
@@ -30,55 +25,55 @@ public class PersonService {
 	// ----------------------------------------------------------------------------------------
 	// GET ALL: Methode pour obtenir la liste des personnes dans une BDD
 	// ----------------------------------------------------------------------------------------
-	public List<PersonDataBaseModel> getAllPerson() {
+	public List<PersonModel> getAllPerson() {
 		return personRepository.findAll();
 	}
 
 	// ----------------------------------------------------------------------------------------
 	// GET BY: Methode pour obtenir ungetPersonsByAddresse personne par id
 	// ----------------------------------------------------------------------------------------
-	public Optional<PersonDataBaseModel> getPersonById(long id) {
+	public Optional<PersonModel> getPersonById(long id) {
 		return personRepository.findById(id);
 	}
 
 	// ----------------------------------------------------------------------------------------
 	// GET BY: Methode pour obtenir des personnes à partir d'une adresse
 	// ----------------------------------------------------------------------------------------
-	public  List<PersonDataBaseModel> getPersonsByAddress(String address) {
+	public  List<PersonModel> getPersonsByAddress(String address) {
 		return personRepository.findByAddress(address);
 	}
 	
 	// ----------------------------------------------------------------------------------------
 	// GET BY: Methode pour obtenir des personnes à partir d'une adresse
 	// ----------------------------------------------------------------------------------------
-	public  List<PersonDataBaseModel> getPersonsByCity(String city) {
+	public  List<PersonModel> getPersonsByCity(String city) {
 		return personRepository.findByCity(city);
 	}
 
 	// ----------------------------------------------------------------------------------------
 	// GET BY: Methode pour obtenir des personnes par nom
 	// ----------------------------------------------------------------------------------------
-	public List<PersonDataBaseModel> getPersonsByLastName(String lastName) {
+	public List<PersonModel> getPersonsByLastName(String lastName) {
 		return personRepository.findByLastName(lastName);
 	}
 
 	// ----------------------------------------------------------------------------------------
 	// GET BY: Methode pour obtenir une personne par prénom et nom
 	// ----------------------------------------------------------------------------------------
-	public PersonDataBaseModel getPersonByFirstNameAndLastName(String firstName, String lastName) {
+	public PersonModel getPersonByFirstNameAndLastName(String firstName, String lastName) {
 		return personRepository.findByFirstNameAndLastName(firstName, lastName);
 	}
 
 	// ----------------------------------------------------------------------------------------
 	// GET BY: Methode pour obtenir une personne par prénom et nom
 	// ----------------------------------------------------------------------------------------
-	public ArrayList<PersonDataBaseModel> getPersonsByStation(long station) {
+	public ArrayList<PersonModel> getPersonsByStation(long station) {
 		
-		ArrayList<PersonDataBaseModel> personsByStation = new ArrayList<PersonDataBaseModel>();
-		List<FireStationDataBaseModel> fireStations = fireStationService.getFirestationsByStation(station);
+		ArrayList<PersonModel> personsByStation = new ArrayList<PersonModel>();
+		List<FireStationModel> fireStations = fireStationService.getFirestationsByStation(station);
 		
-		for (FireStationDataBaseModel fireStation : fireStations) {
-			for ( PersonDataBaseModel person : getPersonsByAddress(fireStation.getAddress()) ){
+		for (FireStationModel fireStation : fireStations) {
+			for ( PersonModel person : getPersonsByAddress(fireStation.getAddress()) ){
 				personsByStation.add(person);
 			}
 		}
@@ -122,22 +117,22 @@ public class PersonService {
 	// Methode pour obtenir les parentés d'une personne en fonction du nom et de
 	// l'adresse
 	// ----------------------------------------------------------------------------------------
-		public HashSet<PersonDataBaseModel> getRelationship(String address, String firstName, String lastName)
+		public HashSet<PersonModel> getRelationship(String address, String firstName, String lastName)
 				throws ParseException {
 
 			// Liste du foyer ayant nom et adresse similaire avec la personne dont le prénom
 			// est en argument
-			HashSet<PersonDataBaseModel> Relationship = new HashSet<PersonDataBaseModel>();
+			HashSet<PersonModel> Relationship = new HashSet<PersonModel>();
 			// Obtenir une personne par son nom et prénom
-			PersonDataBaseModel person = new PersonDataBaseModel();
+			PersonModel person = new PersonModel();
 			person = getPersonByFirstNameAndLastName(firstName, lastName);
 			// Obtenir des personnes du même nom
-			List<PersonDataBaseModel> PersonsByLastName = getPersonsByLastName(lastName);
+			List<PersonModel> PersonsByLastName = getPersonsByLastName(lastName);
 			// Obtenir des personnes du même nom sans une personne (celle ayant le prénom en
 			// argument)
 			PersonsByLastName.remove(person);
 
-			for (PersonDataBaseModel pM : PersonsByLastName) {
+			for (PersonModel pM : PersonsByLastName) {
 
 				if (pM.getAddress().equals(address))
 					Relationship.add(pM);
@@ -149,7 +144,7 @@ public class PersonService {
 	// ----------------------------------------------------------------------------------------
 	// POST: Methode pour ajouter une personne dans la BDD
 	// ----------------------------------------------------------------------------------------
-	public PersonDataBaseModel postPerson(PersonDataBaseModel person) {
+	public PersonModel postPerson(PersonModel person) {
 
 		System.out.println("Nouvelle personne enregistrée dans la base de donnée avec succès !");
 
@@ -160,7 +155,7 @@ public class PersonService {
 	// ----------------------------------------------------------------------------------------
 	// PUT: Methode pour mettre à jour les infos d'une personne dans la BDD
 	// ----------------------------------------------------------------------------------------
-	public boolean updatePerson(PersonDataBaseModel person) throws IllegalArgumentException {
+	public boolean updatePerson(PersonModel person) throws IllegalArgumentException {
 		boolean result = false;
 		long i = 0;
 		long j = 0;
@@ -194,7 +189,7 @@ public class PersonService {
 	// ----------------------------------------------------------------------------------------
 	// DELETE: Methode pour supprimer une personne à partir d'une entité
 	// ----------------------------------------------------------------------------------------
-	public void deletePersonByEntity(PersonDataBaseModel person) throws IllegalArgumentException {
+	public void deletePersonByEntity(PersonModel person) throws IllegalArgumentException {
 		personRepository.delete(person);
 	}
 
@@ -225,7 +220,7 @@ public class PersonService {
 		long countEntities = personRepository.count();
 
 		do {
-			PersonDataBaseModel person = new PersonDataBaseModel();
+			PersonModel person = new PersonModel();
 			if (personRepository.existsById(i)) {
 				j++;
 				person = personRepository.findById(i).get();

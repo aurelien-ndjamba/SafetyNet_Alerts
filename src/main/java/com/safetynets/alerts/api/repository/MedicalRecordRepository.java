@@ -8,19 +8,19 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.safetynets.alerts.api.model.MedicalRecordDataBaseModel;
+import com.safetynets.alerts.api.model.MedicalRecordModel;
 
 @Repository
-public interface MedicalRecordRepository extends JpaRepository<MedicalRecordDataBaseModel, Long> {
+public interface MedicalRecordRepository extends JpaRepository<MedicalRecordModel, Long> {
 	
 
-	List<MedicalRecordDataBaseModel> findAll();
-	Optional<MedicalRecordDataBaseModel> findById(long id);
-	List<MedicalRecordDataBaseModel> findByLastName(String lastName);
-	MedicalRecordDataBaseModel findByFirstNameAndLastName(String firstName, String lastName);
+	List<MedicalRecordModel> findAll();
+	Optional<MedicalRecordModel> findById(long id);
+	List<MedicalRecordModel> findByLastName(String lastName);
+	MedicalRecordModel findByFirstNameAndLastName(String firstName, String lastName);
 	
 	void deleteById(long id);
-	void delete(MedicalRecordDataBaseModel medicalRecord);
+	void delete(MedicalRecordModel medicalRecord);
 	@Transactional
 	void deleteByLastName(String lastName);
 	@Transactional

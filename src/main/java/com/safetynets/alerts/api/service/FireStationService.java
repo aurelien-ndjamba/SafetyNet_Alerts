@@ -3,15 +3,12 @@ package com.safetynets.alerts.api.service;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.safetynets.alerts.api.model.FireStationDataBaseModel;
+import com.safetynets.alerts.api.model.FireStationModel;
 import com.safetynets.alerts.api.model.InfoByStationNumber;
-import com.safetynets.alerts.api.model.MedicalRecordDataBaseModel;
-import com.safetynets.alerts.api.service.CountService;
 import com.safetynets.alerts.api.repository.FireStationRepository;
 
 @Service
@@ -27,14 +24,14 @@ public class FireStationService {
 	// ----------------------------------------------------------------------------------------
 	// GET ALL: Methode pour obtenir la liste de 'firestation' dans une BDD
 	// ----------------------------------------------------------------------------------------
-	public List<FireStationDataBaseModel> getAllFireStation() {
+	public List<FireStationModel> getAllFireStation() {
 		return fireStationRepository.findAll();
 	}
 
 	// ----------------------------------------------------------------------------------------
 	// Methode pour filtrer des 'firestations' à partir d'un numéro de station
 	// ----------------------------------------------------------------------------------------
-	public List<FireStationDataBaseModel> getFirestationsByStation(long station) {
+	public List<FireStationModel> getFirestationsByStation(long station) {
 		return fireStationRepository.findByStation(station);
 	}
 	
@@ -49,7 +46,7 @@ public class FireStationService {
 	// Methode pour obtenir des adresses de station liées à un
 	// numéro de caserne
 	// ----------------------------------------------------------------------------------------
-	public List<FireStationDataBaseModel> getFirestationsByAddress(String address) {
+	public List<FireStationModel> getFirestationsByAddress(String address) {
 		return fireStationRepository.findByAddress(address);
 	}
 	
@@ -59,7 +56,7 @@ public class FireStationService {
 	// ----------------------------------------------------------------------------------------
 	public long getStationNumberByAddress(String address) {
 		long result = 0;
-		for (FireStationDataBaseModel fireStation : getFirestationsByAddress(address)) {
+		for (FireStationModel fireStation : getFirestationsByAddress(address)) {
 			if (fireStation.getAddress().equals(address))
 				result = fireStation.getStation();
 		}
@@ -69,7 +66,7 @@ public class FireStationService {
 	// ----------------------------------------------------------------------------------------
 	// POST: Methode pour ajouter une 'firestation' dans la BDD
 	// ----------------------------------------------------------------------------------------
-	public FireStationDataBaseModel postFireStation(FireStationDataBaseModel fireStation) {
+	public FireStationModel postFireStation(FireStationModel fireStation) {
 		fireStation.setId(null);
 		return fireStationRepository.save(fireStation);
 	}
@@ -77,7 +74,7 @@ public class FireStationService {
 	// ----------------------------------------------------------------------------------------
 	// PUT: Methode pour mettre à jour les infos d'une 'firestation' dans la BDD
 	// ----------------------------------------------------------------------------------------
-	public boolean updateFireStation(FireStationDataBaseModel fireStation) throws IllegalArgumentException {
+	public boolean updateFireStation(FireStationModel fireStation) throws IllegalArgumentException {
 		boolean result = false;
 		long i = 0;
 		long j = 0;
@@ -115,7 +112,7 @@ public class FireStationService {
 	// ----------------------------------------------------------------------------------------
 	// DELETE: Methode pour supprimer une personne à partir d'une entité
 	// ----------------------------------------------------------------------------------------
-	public void deleteFireStationByEntity(FireStationDataBaseModel fireStation) throws IllegalArgumentException {
+	public void deleteFireStationByEntity(FireStationModel fireStation) throws IllegalArgumentException {
 		fireStationRepository.delete(fireStation);
 	}
 
@@ -161,8 +158,8 @@ public class FireStationService {
 		return fireStationRepository.existsById(id);
 	}
 
-	public List<FireStationDataBaseModel>  getFirestationsByManyStation(List<Long> stations) {
-		List<FireStationDataBaseModel> firestationsByManyStation = new ArrayList<FireStationDataBaseModel>();
+	public List<FireStationModel>  getFirestationsByManyStation(List<Long> stations) {
+		List<FireStationModel> firestationsByManyStation = new ArrayList<FireStationModel>();
 		for (long station : stations) {
 			firestationsByManyStation = getFirestationsByStation(station);
 		}
