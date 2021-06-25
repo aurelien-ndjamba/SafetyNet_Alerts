@@ -15,59 +15,65 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.safetynets.alerts.api.model.FireStationModel;
-import com.safetynets.alerts.api.model.PersonImpactedByStationNumberModel;
+import com.safetynets.alerts.api.model.FireStationDataBaseModel;
+import com.safetynets.alerts.api.model.InfoByStationNumber;
 import com.safetynets.alerts.api.repository.FireStationRepository;
 import com.safetynets.alerts.api.service.FireStationService;
-import com.safetynets.alerts.api.service.PersonService;
 
 @RestController
 public class FireStationController {
 
-	@Autowired
-	FireStationService fireStationService;
-	@Autowired PersonService personService;
-	@Autowired FireStationRepository fireStationRepository; //ajout à chck
+	@Autowired private FireStationService fireStationService;
+	@Autowired FireStationRepository fireStationRepository;
 
 	// ----------------------------------------------------------------------------------------
 	// GET	http://localhost:8080/firestation
 	// ----------------------------------------------------------------------------------------
 	@GetMapping("/firestation")
-	public List<FireStationModel> getAllFireStation() {
-//		return fireStationService.getAllFireStation();
-		return fireStationRepository.findAll();
+	public List<FireStationDataBaseModel> getAllFireStation() {
+		return fireStationService.getAllFireStation();
 	}
 	
-	@RequestMapping(value = "/firestation", method = RequestMethod.GET, params = { "stationNumber" })
-	public PersonImpactedByStationNumberModel getSpecificInfoPersonsImpacted(
-			@RequestParam("stationNumber") long stationNumber) throws ParseException {
-		return personService.getSpecificInfoPersonsImpacted(stationNumber);
+	// ----------------------------------------------------------------------------------------
+	// GET	http://localhost:8080/firestation?stationNumber=2
+	// ----------------------------------------------------------------------------------------
+	@RequestMapping(value = "/firestation", method = RequestMethod.GET, params = { "station" })
+	public InfoByStationNumber getInfoByStationNumber(long station) throws ParseException {
+		return fireStationService.getInfoByStationNumber(station);
 	}
 
+	
+	@GetMapping("/titi")
+	public Iterable<FireStationDataBaseModel> titi(@RequestParam List<Long> ids) {
+		return fireStationRepository.findAllByStation(ids);
+	}
+	
+	
+	
 	// ----------------------------------------------------------------------------------------
 	// POST	http://localhost:8080/firestation
 	// ----------------------------------------------------------------------------------------
 	@PostMapping("/firestation")
 	@ResponseStatus(HttpStatus.CREATED)
-	public FireStationModel createFireStation(@RequestBody FireStationModel newFireStation) {
-		return fireStationService.createFireStation(newFireStation);
+	public FireStationDataBaseModel postFireStation(@RequestBody FireStationDataBaseModel fireStation) {
+		return fireStationService.postFireStation(fireStation);
 	}
 
 	// ----------------------------------------------------------------------------------------
 	// PUT	http://localhost:8080/firestation 
 	// ----------------------------------------------------------------------------------------
 	@PutMapping("/firestation")
-	public boolean updateStationNumber(@RequestBody FireStationModel updateFireStation) {
-		return fireStationService.updateStationNumber(updateFireStation);
+	public boolean updateFireStation(@RequestBody FireStationDataBaseModel firestation) {
+		return fireStationService.updateFireStation(firestation);
 	}
 
 	// ----------------------------------------------------------------------------------------
 	// DELETE	http://localhost:8080/firestation?address=951 LoneTree Rd
 	// ----------------------------------------------------------------------------------------
 	@RequestMapping(value = "/firestation", method = RequestMethod.DELETE, params = { "address" })
-	public boolean deleteFireStationByAddress(
+	public void deleteFireStationByAddress(
 			@RequestParam("address") String address) throws ParseException {
-		return fireStationService.deleteFireStationByAddress(address);
+		fireStationService.deleteFireStationByAddress(address);
 	}
 	
 }

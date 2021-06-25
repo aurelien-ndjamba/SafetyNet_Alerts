@@ -11,10 +11,10 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.safetynets.alerts.api.model.FireStationModel;
+import com.safetynets.alerts.api.model.FireStationDataBaseModel;
 import com.safetynets.alerts.api.model.DataSourceModel;
-import com.safetynets.alerts.api.model.MedicalRecordModel;
-import com.safetynets.alerts.api.model.PersonModel;
+import com.safetynets.alerts.api.model.MedicalRecordDataBaseModel;
+import com.safetynets.alerts.api.model.PersonDataBaseModel;
 import com.safetynets.alerts.api.repository.FireStationRepository;
 import com.safetynets.alerts.api.repository.MedicalRecordRepository;
 import com.safetynets.alerts.api.repository.PersonRepository;
@@ -32,21 +32,21 @@ public class ReaderJsonService {
 	@Autowired
 	private MedicalRecordRepository medicalrecordRepository;
 
-	public static List<PersonModel> getListPersons(String link)
+	public static List<PersonDataBaseModel> getListPersons(String link)
 			throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		DataSourceModel dataSource = objectMapper.readValue(new File(link), DataSourceModel.class);
 		return dataSource.getPersons();
 	}
 
-	public static List<FireStationModel> getListFireStations(String link)
+	public static List<FireStationDataBaseModel> getListFireStations(String link)
 			throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		DataSourceModel dataSource = objectMapper.readValue(new File(link), DataSourceModel.class);
 		return dataSource.getFireStations();
 	}
 
-	public static List<MedicalRecordModel> getListMedicalRecords(String link)
+	public static List<MedicalRecordDataBaseModel> getListMedicalRecords(String link)
 			throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		DataSourceModel dataSource = objectMapper.readValue(new File(link), DataSourceModel.class);
@@ -60,15 +60,15 @@ public class ReaderJsonService {
 		DataSourceModel dataSource = objectMapper.readValue(new File(path), DataSourceModel.class);
 		
 		// Sauvegarde dans la base de données des entités "Persons"
-		List<PersonModel> listPersons = dataSource.getPersons();
+		List<PersonDataBaseModel> listPersons = dataSource.getPersons();
 		personRepository.saveAll(listPersons);
 
 		// Sauvegarde dans la base de données des entités "FireStations"
-		List<FireStationModel> listFireStations = dataSource.getFireStations();
+		List<FireStationDataBaseModel> listFireStations = dataSource.getFireStations();
 		firestationRepository.saveAll(listFireStations);
 
 		// Sauvegarde dans la base de données des entités "MedicalRecords"
-		List<MedicalRecordModel> listMedicalrecords = dataSource.getMedicalRecords();
+		List<MedicalRecordDataBaseModel> listMedicalrecords = dataSource.getMedicalRecords();
 		medicalrecordRepository.saveAll(listMedicalrecords);
 
 	}

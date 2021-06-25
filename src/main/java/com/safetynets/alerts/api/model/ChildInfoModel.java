@@ -10,5 +10,5 @@ public class ChildInfoModel {
     private String firstName;
 	private String lastName;
 	private int age;
-	private HashSet<PersonModel> familyRelationShip;
+	private HashSet<PersonDataBaseModel> familyRelationShip;
 }

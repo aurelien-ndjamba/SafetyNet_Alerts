@@ -1,5 +1,5 @@
-package com.safetynets.alerts.api.service;
-
-public class CommunServiceTest {
-
-}
+//package com.safetynets.alerts.api.service;
+//
+//public class CommunServiceTest {
+//
+//}

@@ -1,5 +1,5 @@
-package com.safetynets.alerts.api.service;
-
-public class ReaderJsonServiceTest {
-
-}
+//package com.safetynets.alerts.api.service;
+//
+//public class ReaderJsonServiceTest {
+//
+//}

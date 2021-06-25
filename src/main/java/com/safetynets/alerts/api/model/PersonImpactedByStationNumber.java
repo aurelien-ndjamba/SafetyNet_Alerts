@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Component
-public class SpecificInfoPersonsModel {
+public class PersonImpactedByStationNumber {
 	
 	private String firstName;
 	private String lastName;

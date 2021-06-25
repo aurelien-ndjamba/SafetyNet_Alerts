@@ -1,151 +1,164 @@
 package com.safetynets.alerts.api.service;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-//import java.util.Optional;
+import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Service;
 
-import com.safetynets.alerts.api.model.FireStationModel;
+import com.safetynets.alerts.api.model.FireStationDataBaseModel;
+import com.safetynets.alerts.api.model.InfoByStationNumber;
+import com.safetynets.alerts.api.model.MedicalRecordDataBaseModel;
+import com.safetynets.alerts.api.service.CountService;
 import com.safetynets.alerts.api.repository.FireStationRepository;
 
-
-@Configuration
-@EnableJpaRepositories("com.safetynets.alerts.api.repository")
 @Service
 public class FireStationService {
 
 	@Autowired
-	private FireStationModel fireStation;
+	private PersonService personService;
 	@Autowired
 	private FireStationRepository fireStationRepository;
+	@Autowired
+	private CountService countService;
 
 	// ----------------------------------------------------------------------------------------
-	// GET
+	// GET ALL: Methode pour obtenir la liste de 'firestation' dans une BDD
 	// ----------------------------------------------------------------------------------------
-	public List<FireStationModel> getAllFireStation() {
+	public List<FireStationDataBaseModel> getAllFireStation() {
 		return fireStationRepository.findAll();
 	}
+
+	// ----------------------------------------------------------------------------------------
+	// Methode pour filtrer des 'firestations' à partir d'un numéro de station
+	// ----------------------------------------------------------------------------------------
+	public List<FireStationDataBaseModel> getFirestationsByStation(long station) {
+		return fireStationRepository.findByStation(station);
+	}
 	
 	// ----------------------------------------------------------------------------------------
-	// CREATE "listIdsEntitiesFireStation" FROM FirestationsRepository
+	// Methode pour filtrer des 'firestations' à partir d'un numéro de station
 	// ----------------------------------------------------------------------------------------
-	public List<Long> getlistIdsEntitiesFireStation() {
-		List<FireStationModel> listEntitiesFireStation = fireStationRepository.findAll();
-		long CountIds = fireStationRepository.count();
-		int id = 0;
-		List<Long> listIdsEntitiesFireStation = new ArrayList<Long>();
-		while (id != CountIds) {
-			fireStation = listEntitiesFireStation.get(id);
-			listIdsEntitiesFireStation.add(fireStation.getId());
-			++id;
-		}
-		return listIdsEntitiesFireStation;
+//	public Iterable<FireStationDataBaseModel> getFirestationsByManyStation(List<Long> stations) {
+//		return fireStationRepository.findAllByStation(stations);
+//	}
+	
+	// ----------------------------------------------------------------------------------------
+	// Methode pour obtenir des adresses de station liées à un
+	// numéro de caserne
+	// ----------------------------------------------------------------------------------------
+	public List<FireStationDataBaseModel> getFirestationsByAddress(String address) {
+		return fireStationRepository.findByAddress(address);
 	}
-
+	
 	// ----------------------------------------------------------------------------------------
-	// POST OK Vérifier qu'il n'effectue pas de mise à jour
+	// Methode pour obtenir des adresses de station liées à un
+	// numéro de caserne
 	// ----------------------------------------------------------------------------------------
-	public FireStationModel createFireStation(FireStationModel newFirestation) {
-		return fireStationRepository.save(newFirestation);
-	}
-
-	// ----------------------------------------------------------------------------------------
-	// PUT OK // pourquoi renvoi une erreur quand je cherche en renoyer l'entité per
-	// ----------------------------------------------------------------------------------------
-	public boolean updateStationNumber(FireStationModel firestationToUpdateStationNumber)
-			throws IllegalArgumentException {
-
-		boolean result = false;
-		List<Long> listIdsEntitiesFireStation = new ArrayList<Long>();
-		listIdsEntitiesFireStation = getlistIdsEntitiesFireStation();
-
-		// Mise à jour du numéro de station en fonction de l'adresse de la caserne
-		for (Long i : listIdsEntitiesFireStation) {
-			fireStation = fireStationRepository.getById(i);
-			final long StationNumber = fireStation.getStation();
-			long newStationNumber = firestationToUpdateStationNumber.getStation();
-			if (fireStation.getAddress().equals(firestationToUpdateStationNumber.getAddress())) {
-				fireStation.setStation(newStationNumber);
-				fireStationRepository.saveAndFlush(fireStation); // à bien comprendre
-				System.out.println("Numéro de la caserne ayant l'ID : " + i + " situé à l'adresse '"
-						+ fireStation.getAddress() + "' a été mis à jour avec succès ! -> l'ancien numéro de caserne '"
-						+ StationNumber + "' a été remplacé par le nouveau numéro de caserne :" + newStationNumber);
-				result = true;
-				break;
-			}
+	public long getStationNumberByAddress(String address) {
+		long result = 0;
+		for (FireStationDataBaseModel fireStation : getFirestationsByAddress(address)) {
+			if (fireStation.getAddress().equals(address))
+				result = fireStation.getStation();
 		}
 		return result;
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// DELETE
+	// POST: Methode pour ajouter une 'firestation' dans la BDD
 	// ----------------------------------------------------------------------------------------
-	public boolean deleteFireStationByAddress(String address) throws IllegalArgumentException {
+	public FireStationDataBaseModel postFireStation(FireStationDataBaseModel fireStation) {
+		fireStation.setId(null);
+		return fireStationRepository.save(fireStation);
+	}
 
+	// ----------------------------------------------------------------------------------------
+	// PUT: Methode pour mettre à jour les infos d'une 'firestation' dans la BDD
+	// ----------------------------------------------------------------------------------------
+	public boolean updateFireStation(FireStationDataBaseModel fireStation) throws IllegalArgumentException {
 		boolean result = false;
-		List<Long> listIdsEntitiesFireStation = new ArrayList<Long>();
-		listIdsEntitiesFireStation = getlistIdsEntitiesFireStation();
+		long i = 0;
+		long j = 0;
+		long countEntities = fireStationRepository.count();
 
-		// Suppression caserne(s) identifiée(s) par 'addressToDelete'dans la BDD
-		for (Long i : listIdsEntitiesFireStation) {
-			fireStation = fireStationRepository.getById(i);
-			if (fireStation.getAddress().equals(address)) {
-				fireStationRepository.deleteById(i);
-				System.out.println("La caserne ayant pour adresse '" + address
-						+ "' a été supprimée de la base de donnée avec succès !");
+		do {
+			if ((fireStationRepository.existsById(i))
+					&& fireStation.getAddress().equals(fireStationRepository.findById(i).get().getAddress())) {
+				System.out.println("la valeur de i est: " + i);
+				System.out.println("la valeur de i est: " + j);
+				j++;
+				fireStation.setId(i);
+				fireStationRepository.saveAndFlush(fireStation);
 				result = true;
-				listIdsEntitiesFireStation.remove(i);
 				break;
 			}
-		}
+			System.out.println("la valeur de i est: " + i);
+			System.out.println("la valeur de i est: " + j);
+			i++;
+			if (i == 5000)
+				;
+			break;
+		} while (j != countEntities);
+
 		return result;
 	}
-	
+
 	// ----------------------------------------------------------------------------------------
-	// Methode pour obtenir la liste des adresses concernées par un numéro de
-	// caserne donné
+	// DELETE: Methode pour supprimer une personne par id
 	// ----------------------------------------------------------------------------------------
-	public ArrayList<String> getListAdressImpactedByStationNumber(long stationNumber) {
-
-		List<Long> listIdsEntitiesFireStation = new ArrayList<Long>();
-		listIdsEntitiesFireStation = getlistIdsEntitiesFireStation();
-		ArrayList<String> listAdressImpacted = new ArrayList<String>();
-
-		// Suppression caserne(s) identifiée(s) par numéro dans la BDD
-		for (Long i : listIdsEntitiesFireStation) {
-			fireStation = fireStationRepository.getById(i);
-			if (fireStation.getStation() == stationNumber) {
-				listAdressImpacted.add(fireStation.getAddress());
-			}
-		}
-
-		return listAdressImpacted;
+	public void deleteFireStationById(long id) throws IllegalArgumentException {
+		fireStationRepository.deleteById(id);
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// Methode pour obtenir la liste des adresses concernées par un numéro de
-	// caserne donné
+	// DELETE: Methode pour supprimer une personne à partir d'une entité
 	// ----------------------------------------------------------------------------------------
-	public Long getStationNumber(String address) {
+	public void deleteFireStationByEntity(FireStationDataBaseModel fireStation) throws IllegalArgumentException {
+		fireStationRepository.delete(fireStation);
+	}
 
-		List<Long> listIdsEntitiesFireStations = getlistIdsEntitiesFireStation();
-		Long stationNumberFromAdresse = null;
+	// ----------------------------------------------------------------------------------------
+	// DELETE: Methode pour supprimer une personne à partir son nom et prenom dans
+	// la BDD
+	// ----------------------------------------------------------------------------------------
+	public void deleteFireStationByAddress(String address) throws IllegalArgumentException {
+		fireStationRepository.deleteByAddress(address);
+	}
 
-		for (Long i : listIdsEntitiesFireStations) {
+	// ----------------------------------------------------------------------------------------
+	// DELETE: Methode pour supprimer une personne à partir son nom et prenom dans
+	// la BDD
+	// ----------------------------------------------------------------------------------------
+	public void deleteFireStationByStation(long station) throws IllegalArgumentException {
+		fireStationRepository.deleteByStation(station);
+	}
 
-			fireStation = fireStationRepository.getById(i);
+	// ----------------------------------------------------------------------------------------
+	// Methode pour obtenir des informations spécifiques d'une station liées à un
+	// numéro de caserne
+	// ----------------------------------------------------------------------------------------
+	public InfoByStationNumber getInfoByStationNumber(long station) throws ParseException {
 
-			if (fireStation.getAddress().equals(address)) {
-				stationNumberFromAdresse = fireStation.getStation();
-				break;
-			}
-		}
+		InfoByStationNumber infoByStationNumber = new InfoByStationNumber();
 
-		return stationNumberFromAdresse;
+		infoByStationNumber.setStation(station);
+		infoByStationNumber.setPersonsByStation(personService.getPersonsByStation(station));
+		int countAdult = countService.getCountAdult(station);
+		int countChildren = countService.getCountChildren(station);
+		infoByStationNumber.setCountAdult(countAdult);
+		infoByStationNumber.setCountChildren(countChildren);
+
+		return infoByStationNumber;
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// Methode pour obtenir des informations spécifiques d'une station liées à un
+	// numéro de caserne
+	// ----------------------------------------------------------------------------------------
+	public boolean existsById(long id) {
+		return fireStationRepository.existsById(id);
 	}
 
 }

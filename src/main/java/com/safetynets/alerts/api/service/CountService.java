@@ -6,30 +6,34 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.safetynets.alerts.api.model.MedicalRecordModel;
-import com.safetynets.alerts.api.model.SpecificInfoPersonsModel;
-import com.safetynets.alerts.api.repository.MedicalRecordRepository;
+import com.safetynets.alerts.api.model.FireStationDataBaseModel;
+import com.safetynets.alerts.api.model.MedicalRecordDataBaseModel;
+import com.safetynets.alerts.api.model.PersonDataBaseModel;
 
 @Service
 public class CountService {
 
 	@Autowired
-	private PersonService personsService;
+	PersonService personService;
 	@Autowired
-	private MedicalRecordModel medicalRecord;
+	private FireStationService fireStationService;
 	@Autowired
 	private MedicalRecordService medicalRecordService;
-	@Autowired
-	private MedicalRecordRepository medicalRecordRepository;
-	@Autowired
-	private CountService countService;
 
+	// ----------------------------------------------------------------------------------------
+	// GETAGE: Methode pour supprimer une personne à partir d'un
+	// id=firstNamelastName
+	// ----------------------------------------------------------------------------------------
 	@SuppressWarnings("deprecation")
 	public int getAge(String firstName, String lastName) throws ParseException {
+
+		MedicalRecordDataBaseModel medicalRecord = new MedicalRecordDataBaseModel();
+		medicalRecord = medicalRecordService.getMedicalRecordByFirstNameAndLastName(firstName, lastName);
 
 		int age = 0;
 		String birthdayInString;
@@ -37,57 +41,64 @@ public class CountService {
 		int currentYear;
 		int birthdayYear;
 
-		List<Long> listIdsEntitiesMedicalRecords = medicalRecordService.getlistIdsEntitiesMedicalRecords();
-
-		for (Long i : listIdsEntitiesMedicalRecords) {
-			medicalRecord = medicalRecordRepository.getById(i);
-
-			if (medicalRecord.getFirstName().equals(firstName) && medicalRecord.getLastName().equals(lastName)) {
-
-				// Date de naissance sous le type String
-				birthdayInString = medicalRecord.getBirthdate();
-				// Date de naissance sous le type Date
-				birthdayInDate = new SimpleDateFormat("MM/dd/yyyy").parse(birthdayInString);
-				// Année de naissance sous le type Date
-				birthdayYear = 1900 + birthdayInDate.getYear();
-				// Année courante
-				currentYear = Calendar.getInstance().get(Calendar.YEAR);
-				// Calcul de l'age
-				age = currentYear - birthdayYear;
-			}
-		}
+		// Date de naissance sous le type String
+		birthdayInString = medicalRecord.getBirthdate();
+		// Date de naissance sous le type Date
+		birthdayInDate = new SimpleDateFormat("MM/dd/yyyy").parse(birthdayInString);
+		// Année de naissance sous le type Date
+		birthdayYear = 1900 + birthdayInDate.getYear();
+		// Année courante
+		currentYear = Calendar.getInstance().get(Calendar.YEAR);
+		// Calcul de l'age
+		age = currentYear - birthdayYear;
 
 		return age;
 	}
 
-	public int getCountAdult(long stationNumber) throws ParseException {
+	// ----------------------------------------------------------------------------------------
+	// GETCOUNTADULTANDCHILDREN: Methode pour supprimer une personne à partir d'un
+	// id=firstNamelastName
+	// ----------------------------------------------------------------------------------------
+	public int getCountAdult(long station) throws ParseException {
 
-		ArrayList<SpecificInfoPersonsModel> listSpecificPersonImpacted = personsService
-				.getListSpecificPersonImpacted(stationNumber);
-
-		int numberOfSpecificPersonImpacted = listSpecificPersonImpacted.size();
-		int ageOfMajority = 18;
 		int countAdult = 0;
 
-		for (int i = 0; i < numberOfSpecificPersonImpacted; i++) {
-			SpecificInfoPersonsModel specificPersonImpacted = listSpecificPersonImpacted.get(i);
-			if (countService.getAge(specificPersonImpacted.getFirstName(),
-					specificPersonImpacted.getLastName()) > ageOfMajority) {
-				countAdult++;
+		List<FireStationDataBaseModel> firestations = fireStationService.getFirestationsByStation(station);
+
+		for (FireStationDataBaseModel fireStation : firestations) {
+			List<PersonDataBaseModel> persons = personService.getPersonsByAddress(fireStation.getAddress());
+			for (PersonDataBaseModel person : persons) {
+				if (fireStation.getAddress().equals(person.getAddress())) {
+					int agePerson = getAge(person.getFirstName(), person.getLastName());
+					if (agePerson > 18)
+						countAdult++;
+				}
 			}
 		}
 		return countAdult;
 	}
 
-	public int getCountChildren(long stationNumber) throws ParseException {
+	// ----------------------------------------------------------------------------------------
+	// GETCOUNTADULTANDCHILDREN: Methode pour supprimer une personne à partir d'un
+	// id=firstNamelastName
+	// ----------------------------------------------------------------------------------------
+	public int getCountChildren(long station) throws ParseException {
 
-		ArrayList<SpecificInfoPersonsModel> listSpecificPersonImpacted = personsService
-				.getListSpecificPersonImpacted(stationNumber);
+		int countChildren = 0;
 
-		int numberOfSpecificPersonImpacted = listSpecificPersonImpacted.size();
-		int countAdult = countService.getCountAdult(stationNumber);
-		int countChildren = numberOfSpecificPersonImpacted - countAdult;
+		List<FireStationDataBaseModel> firestations = fireStationService.getFirestationsByStation(station);
 
+		for (FireStationDataBaseModel fireStation : firestations) {
+			List<PersonDataBaseModel> persons = personService.getPersonsByAddress(fireStation.getAddress());
+			for (PersonDataBaseModel person : persons) {
+				if (fireStation.getAddress().equals(person.getAddress())) {
+					int agePerson = getAge(person.getFirstName(), person.getLastName());
+					if (agePerson <= 18)
+						countChildren++;
+				}
+			}
+		}
 		return countChildren;
 	}
+
 }

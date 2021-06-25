@@ -1,13 +1,14 @@
 package com.safetynets.alerts.api.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import lombok.Data;
 
 @Data
-public class HomeByFireStationModel {
+public class PersonsByStationNumberModel {
 	
 	private String address;
-	private ArrayList<PersonForStationModel> listPersonsByAddress;
+	private List<PersonDataBaseModel> PersonsByAddress;
 	
 }

@@ -1,217 +1,229 @@
 package com.safetynets.alerts.api.service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.safetynets.alerts.api.model.MedicalRecordModel;
+import com.safetynets.alerts.api.model.MedicalRecordDataBaseModel;
+import com.safetynets.alerts.api.model.PersonDataBaseModel;
 import com.safetynets.alerts.api.repository.MedicalRecordRepository;
 
 @Service
 public class MedicalRecordService {
 
 	@Autowired
-	private MedicalRecordModel medicalRecords;
-	@Autowired
 	private MedicalRecordRepository medicalRecordRepository;
 
+	// ###############################################################################################
 	// ----------------------------------------------------------------------------------------
-	// CREATE "listIdsEntitiesFireStation" FROM MedicalrecordsRepository
+	// GET ALL: Methode pour obtenir la liste des personnes dans une BDD
 	// ----------------------------------------------------------------------------------------
-	public List<Long> getlistIdsEntitiesMedicalRecords() {
-
-		List<MedicalRecordModel> listEntitiesMedicalRecords = getAllMedicalRecords();
-		long CountIds = medicalRecordRepository.count();
-		int id = 0;
-		List<Long> listIdsEntitiesMedicalRecords = new ArrayList<Long>();
-		while (id != CountIds) {
-			medicalRecords = listEntitiesMedicalRecords.get(id);
-			listIdsEntitiesMedicalRecords.add(medicalRecords.getId());
-			++id;
-		}
-		return listIdsEntitiesMedicalRecords;
-	}
-
-	// ----------------------------------------------------------------------------------------
-	// GET AllMedicalRecords
-	// ----------------------------------------------------------------------------------------
-	public List<MedicalRecordModel> getAllMedicalRecords() {
+	public List<MedicalRecordDataBaseModel> getAllMedicalRecord() {
 		return medicalRecordRepository.findAll();
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// POST OK Vérifier qu'il n'effectue pas de mise à jour
+	// GET BY: Methode pour obtenir ungetPersonsByAddresse personne par id
 	// ----------------------------------------------------------------------------------------
-	public MedicalRecordModel createMedicalRecords(MedicalRecordModel newMedicalRecords) {
-		System.out.println("Nouveau dossier medical enregistrée dans la base de donnée avec succès !");
-		return medicalRecordRepository.save(newMedicalRecords);
+	public Optional<MedicalRecordDataBaseModel> getMedicalRecordById(long id) {
+		return medicalRecordRepository.findById(id);
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// PUT
+	// GET BY: Methode pour obtenir des personnes par nom
 	// ----------------------------------------------------------------------------------------
+	public List<MedicalRecordDataBaseModel> getMedicalRecordsByLastName(String lastName) {
+		return medicalRecordRepository.findByLastName(lastName);
+	}
 
-	public boolean updateMedicalRecords(MedicalRecordModel updateMedicalRecords) throws IllegalArgumentException {
+	// ----------------------------------------------------------------------------------------
+	// GET BY: Methode pour obtenir une personne par prénom et nom
+	// ----------------------------------------------------------------------------------------
+	public MedicalRecordDataBaseModel getMedicalRecordByFirstNameAndLastName(String firstName, String lastName) {
+		return medicalRecordRepository.findByFirstNameAndLastName(firstName, lastName);
+	}
 
+	// ----------------------------------------------------------------------------------------
+	// POST: Methode pour ajouter une personne dans la BDD
+	// ----------------------------------------------------------------------------------------
+	public MedicalRecordDataBaseModel postMedicalRecord(MedicalRecordDataBaseModel medicalRecord) {
+
+		System.out.println("Nouvelle personne enregistrée dans la base de donnée avec succès !");
+
+		medicalRecord.setId(null); // Pour éviter que le post face l'update avec un id déjà existant
+		return medicalRecordRepository.save(medicalRecord);
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// PUT: Methode pour mettre à jour les infos d'une personne dans la BDD
+	// ----------------------------------------------------------------------------------------
+	public boolean updateMedicalRecord(MedicalRecordDataBaseModel medicalRecord) throws IllegalArgumentException {
 		boolean result = false;
-		List<Long> listIdsEntitiesMedicalRecords = new ArrayList<Long>();
-		listIdsEntitiesMedicalRecords = getlistIdsEntitiesMedicalRecords();
+		long i = 0;
+		long j = 0;
+		long countEntities = medicalRecordRepository.count();
 
-		// Mise à jour un dossier medical existant
-		for (long i : listIdsEntitiesMedicalRecords) {
-			medicalRecords = medicalRecordRepository.getById(i);
-			if (medicalRecords.getFirstName().equals(updateMedicalRecords.getFirstName())
-					&& medicalRecords.getLastName().equals(updateMedicalRecords.getLastName())) {
-
-				medicalRecords.setBirthdate(updateMedicalRecords.getBirthdate());
-				medicalRecords.setMedications(updateMedicalRecords.getMedications());
-				medicalRecords.setAllergies(updateMedicalRecords.getAllergies());
-
-				medicalRecordRepository.saveAndFlush(medicalRecords);
-				System.out.println("Mise à jour effectuée dans la base de donnée avec succès !");
+		do {
+			if ((medicalRecordRepository.existsById(i))
+					&& medicalRecord.getFirstName().equals(medicalRecordRepository.findById(i).get().getFirstName())
+					&& medicalRecord.getLastName().equals(medicalRecordRepository.findById(i).get().getLastName())) {
+				j++;
+				medicalRecord.setId(i);
+				medicalRecordRepository.saveAndFlush(medicalRecord);
 				result = true;
 				break;
 			}
-		}
+			i++;
+		} while (j != countEntities);
 		return result;
+
 	}
 
 	// ----------------------------------------------------------------------------------------
-	// DELETE
+	// DELETE: Methode pour supprimer une personne par id
 	// ----------------------------------------------------------------------------------------
+	public void deleteMedicalRecordById(long id) throws IllegalArgumentException {
+		medicalRecordRepository.deleteById(id);
+	}
 
-	public boolean deleteMedicalRecords(String id) throws IllegalArgumentException {
+	// ----------------------------------------------------------------------------------------
+	// DELETE: Methode pour supprimer une personne à partir d'une entité
+	// ----------------------------------------------------------------------------------------
+	public void deleteMedicalRecordByEntity(MedicalRecordDataBaseModel medicalRecord) throws IllegalArgumentException {
+		medicalRecordRepository.delete(medicalRecord);
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// DELETE: Methode pour supprimer une personne à partir son nom et prenom dans
+	// la BDD
+	// ----------------------------------------------------------------------------------------
+	public void deleteMedicalRecordByFirstNameAndLastName(String firstName, String lastName) throws IllegalArgumentException {
+		medicalRecordRepository.deleteByFirstNameAndLastName(firstName, lastName);
+	}
+
+	// ----------------------------------------------------------------------------------------
+	// DELETE: Methode pour supprimer une personne à partir d'un
+	// id=firstNamelastName
+	// ------------------------------------------------------------------------------------
+	public boolean deleteMedicalRecordByLastNameFirstname(String id) {
 
 		boolean result = false;
-		List<Long> listIdsEntitiesMedicalRecords = new ArrayList<Long>();
-		listIdsEntitiesMedicalRecords = getlistIdsEntitiesMedicalRecords();
+		long i = 0;
+		long j = 0;
+		long countEntities = medicalRecordRepository.count();
 
-		// Suppression d'un dossier medical identifié dans la BDD par le nom et prénom
-		for (Long i : listIdsEntitiesMedicalRecords) {
-			medicalRecords = medicalRecordRepository.getById(i);
-
-			if (id.contains(medicalRecords.getFirstName())
-					&& id.contains(medicalRecords.getLastName())) {
-				medicalRecordRepository.delete(medicalRecords);
-				listIdsEntitiesMedicalRecords.remove(i);
-				result = true;
-				System.out.println("l'ID du dossier medical supprimé est le suivant: " + i);
-				break;
+		do {
+			MedicalRecordDataBaseModel medicalRecord = new MedicalRecordDataBaseModel();
+			if (medicalRecordRepository.existsById(i)) {
+				j++;
+				medicalRecord = medicalRecordRepository.findById(i).get();
+				if (id.startsWith(medicalRecord.getFirstName()) && id.endsWith(medicalRecord.getLastName())) {
+					medicalRecordRepository.deleteByFirstNameAndLastName(medicalRecord.getFirstName(),
+							medicalRecord.getLastName());
+					result = true;
+					break;
+				}
 			}
-		}
+			i++;
+		} while (j != countEntities);
 		return result;
 	}
-	
-	// ----------------------------------------------------------------------------------------
-	// getAllergiesHistory
-	// ----------------------------------------------------------------------------------------
-	public HashSet<String> getAllergiesHistory(String lastName) {
 
-		HashSet<String> listAllergiesHistory = new HashSet<String>();
-		ArrayList<String> allergies = new ArrayList<String>();
+	public long getMedicalRecordCount() {
+		return medicalRecordRepository.count();
+	}
 
-		List<Long> listIdsEntitiesMedicalRecords = new ArrayList<Long>();
-		listIdsEntitiesMedicalRecords = getlistIdsEntitiesMedicalRecords();
-
-		for (Long i : listIdsEntitiesMedicalRecords) {
-
-			medicalRecords = medicalRecordRepository.getById(i);
-
-			if (medicalRecords.getLastName().equals(lastName)) {
-
-				allergies = medicalRecords.getAllergies();
-				int allergiesNumber = allergies.size();
-
-				for (int j = 0; j < allergiesNumber; j++) {
-					listAllergiesHistory.add(allergies.get(j));
-				}
-			}
-		}
-		return listAllergiesHistory;
+	public boolean existsById(long id) {
+		return medicalRecordRepository.existsById(id);
 	}
 	
-	public HashSet<String>getAllergiesHistory(String firstName, String lastName) {
+	// ###############################################################################################
 
-		HashSet<String> listAllergiesHistory = new HashSet<String>();
-		ArrayList<String> allergies = new ArrayList<String>();
 
-		List<Long> listIdsEntitiesMedicalRecords = new ArrayList<Long>();
-		listIdsEntitiesMedicalRecords = getlistIdsEntitiesMedicalRecords();
 
-		for (Long i : listIdsEntitiesMedicalRecords) {
-
-			medicalRecords = medicalRecordRepository.getById(i);
-
-			if (medicalRecords.getFirstName().equals(firstName) && medicalRecords.getLastName().equals(lastName)) {
-
-				allergies = medicalRecords.getAllergies();
-				int allergiesNumber = allergies.size();
-
-				for (int j = 0; j < allergiesNumber; j++) {
-					listAllergiesHistory.add(allergies.get(j));
-				}
-			}
-		}
-		return listAllergiesHistory;
-	}
-	
-	// ----------------------------------------------------------------------------------------
-	// getMedicationsHistory
-	// ----------------------------------------------------------------------------------------
-	public HashSet<String> getMedicationsHistory(String lastName) {
-
-		HashSet<String> listMedicationsHistory = new HashSet<String>();
-		ArrayList<String> medications = new ArrayList<String>();
-
-		List<Long> listIdsEntitiesMedicalRecords = new ArrayList<Long>();
-		listIdsEntitiesMedicalRecords = getlistIdsEntitiesMedicalRecords();
-
-		for (Long i : listIdsEntitiesMedicalRecords) {
-
-			medicalRecords = medicalRecordRepository.getById(i);
-
-			if (medicalRecords.getLastName().equals(lastName)) {
-
-				medications = medicalRecords.getMedications();
-				int medicationsNumber = medications.size();
-
-				for (int j = 0; j < medicationsNumber; j++) {
-					listMedicationsHistory.add(medications.get(j));
-				}
-			}
-		}
-		return listMedicationsHistory;
-	}
-	
-	public HashSet<String> getMedicationsHistory(String firstName, String lastName) {
-
-		HashSet<String> listMedicationsHistory = new HashSet<String>();
-		ArrayList<String> medications = new ArrayList<String>();
-
-		List<Long> listIdsEntitiesMedicalRecords = new ArrayList<Long>();
-		listIdsEntitiesMedicalRecords = getlistIdsEntitiesMedicalRecords();
-
-		for (Long i : listIdsEntitiesMedicalRecords) {
-
-			medicalRecords = medicalRecordRepository.getById(i);
-
-			if (medicalRecords.getFirstName().equals(firstName) && medicalRecords.getLastName().equals(lastName)) {
-
-				medications = medicalRecords.getMedications();
-				int medicationsNumber = medications.size();
-
-				for (int j = 0; j < medicationsNumber; j++) {
-					listMedicationsHistory.add(medications.get(j));
-				}
-			}
-		}
-		return listMedicationsHistory;
-	}
-	
-	
-	
-	
+//	// ----------------------------------------------------------------------------------------
+//	// GET: Methode pour obtenir la liste de 'medicalRecord' dans une BDD
+//	// ----------------------------------------------------------------------------------------
+//	public List<MedicalRecordDataBaseModel> getAllMedicalRecord() {
+//		return medicalRecordRepository.findAll();
+//	}
+//
+//	// ----------------------------------------------------------------------------------------
+//	// GET: Methode pour obtenir un 'medicalRecord' à partir d'un nom
+//	// ----------------------------------------------------------------------------------------
+//	public HashSet<MedicalRecordDataBaseModel> getMedicalRecordByLastName(String lastName) {
+//		return medicalRecordRepository.findByLastName(lastName);
+//	}
+//
+//	// ----------------------------------------------------------------------------------------
+//	// GET: Methode pour obtenir un 'medicalRecord' à partir d'un 
+//	// ----------------------------------------------------------------------------------------
+//	public MedicalRecordDataBaseModel getMedicalRecordByFirstNameAndLastName(String firstName, String lastName) {
+//		return medicalRecordRepository.findByFirstNameAndLastName(lastName);
+//	}
+//	
+//	// ----------------------------------------------------------------------------------------
+//	// GET: Méthode pour obtenir l'historique des allergies à partir du nom
+//	// ----------------------------------------------------------------------------------------
+//	public HashSet<String> getAllergiesHistoryByLastName(String lastName) {
+//		return medicalRecordRepository.findAllergiesByLastName(lastName);
+//	}
+//
+//	// ----------------------------------------------------------------------------------------
+//	// GET: Méthode pour obtenir l'historique des allergies à partir du prénom et du
+//	// nom
+//	// ----------------------------------------------------------------------------------------
+//	public HashSet<String> getAllergiesHistoryByFisrtNameAndLastName(String firstName, String lastName) {
+//		return medicalRecordRepository.findAllergiesByFisrtNameAndLastName(firstName, lastName);
+//	}
+//
+//	// ----------------------------------------------------------------------------------------
+//	// GET: Méthode pour obtenir l'historique des traitements à partir du nom
+//	// ----------------------------------------------------------------------------------------
+//	public HashSet<String> getMedicationsHistoryByLastName(String lastName) {
+//		return medicalRecordRepository.findMedicationsByLastName(lastName);
+//	}
+//
+//	// ----------------------------------------------------------------------------------------
+//	// GET: Méthode pour obtenir l'historique des traitements à partir du prénom et
+//	// du nom
+//	// ----------------------------------------------------------------------------------------
+//	public HashSet<String> getMedicationsHistoryByFisrtNameAndLastName(String firstName, String lastName) {
+//		return medicalRecordRepository.findMedicationsByFisrtNameAndLastName(firstName, lastName);
+//	}
+//
+//	// ----------------------------------------------------------------------------------------
+//	// POST: Methode pour ajouter un 'medicalRecord' dans la BDD
+//	// ----------------------------------------------------------------------------------------
+//	public MedicalRecordDataBaseModel postMedicalRecord(MedicalRecordDataBaseModel medicalRecord) {
+//		System.out.println("Nouveau dossier medical enregistrée dans la base de donnée avec succès !");
+//		return medicalRecordRepository.save(medicalRecord);
+//	}
+//
+//	// ----------------------------------------------------------------------------------------
+//	// PUT: Methode pour mettre à jour les infos d'une 'medicalRecord' dans la BDD
+//	// ----------------------------------------------------------------------------------------
+//	public MedicalRecordDataBaseModel updateMedicalRecord(MedicalRecordDataBaseModel medicalRecord) throws IllegalArgumentException {
+//		return medicalRecordRepository.saveAndFlush(medicalRecord);
+//	}
+//
+//	// ----------------------------------------------------------------------------------------
+//	// DELETE: Methode pour Supprimer un 'medicalRecord'dans la BDD
+//	// ----------------------------------------------------------------------------------------
+//	public void deleteMedicalRecord(MedicalRecordDataBaseModel medicalRecord) throws IllegalArgumentException {
+//		medicalRecordRepository.delete(medicalRecord);
+//	}
+//	
+//	// ----------------------------------------------------------------------------------------
+//	// DELETE: Methode pour obtenir un 'medicalRecord' à partir d'un id représentant
+//	// lastNameFirstName
+//	// ----------------------------------------------------------------------------------------
+//	public void deleteMedicalRecordById(String id) {
+//		// String id = "lastName" + "firstName"
+//		medicalRecordRepository.deleteByLastNameFirstName();
+////		medicalRecordRepository.deleteByLastNameAndFirstName(lastName, firstName);
+//	}
 }

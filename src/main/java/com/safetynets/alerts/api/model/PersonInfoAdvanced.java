@@ -1,11 +1,11 @@
 package com.safetynets.alerts.api.model;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 
 import lombok.Data;
 
 @Data
-public class PersonWithMedicalHistoryModel {
+public class PersonInfoAdvanced {
 	
     private Long id;
 	private String firstName;
@@ -14,6 +14,6 @@ public class PersonWithMedicalHistoryModel {
 	private Long stationNumber;
 	private int age;
 	private String phone;
-	private HashSet<String> medications;
-	private HashSet<String> allergies;
+	private ArrayList<String> medications;
+	private ArrayList<String> allergies;
 }

@@ -11,7 +11,7 @@ import lombok.Data;
 public class PersonImpactedByStationNumberModel {
 	
     private long stationNumber;
-    private ArrayList<SpecificInfoPersonsModel> listSpecificInfoPersons;
+    private ArrayList<PersonImpactedByStationNumber> listSpecificInfoPersons;
 	private int countAdult;
 	private int countChildren;
 	
