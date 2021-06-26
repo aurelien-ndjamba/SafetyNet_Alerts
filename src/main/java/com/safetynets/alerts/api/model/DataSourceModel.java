@@ -6,6 +6,10 @@ import org.springframework.stereotype.Component;
 
 import lombok.Data;
 
+/** 
+ * Classe modélisant un objet de type "DataSourceModel"
+ * 
+ */
 @Data
 @Component
 public class DataSourceModel {

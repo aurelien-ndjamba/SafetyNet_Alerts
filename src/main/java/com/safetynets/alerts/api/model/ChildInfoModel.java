@@ -4,6 +4,10 @@ import java.util.HashSet;
 
 import lombok.Data;
 
+/** 
+ * Classe modélisant un objet de type "ChildInfoModel"
+ * 
+ */
 @Data
 public class ChildInfoModel {
     private Long id;

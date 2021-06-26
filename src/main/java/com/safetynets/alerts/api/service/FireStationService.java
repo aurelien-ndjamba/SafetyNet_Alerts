@@ -1,6 +1,5 @@
 package com.safetynets.alerts.api.service;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,52 +7,61 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.safetynets.alerts.api.model.FireStationModel;
-import com.safetynets.alerts.api.model.InfoByStationNumber;
 import com.safetynets.alerts.api.repository.FireStationRepository;
 
+/**
+ * Classe définissant les méthodes de Service "FireStation"
+ * 
+ * @author aurelien.ndjamba
+ * @version 1.0
+ */
 @Service
 public class FireStationService {
 
 	@Autowired
-	private PersonService personService;
-	@Autowired
 	private FireStationRepository fireStationRepository;
-	@Autowired
-	private CountService countService;
 
-	// ----------------------------------------------------------------------------------------
-	// GET ALL: Methode pour obtenir la liste de 'firestation' dans une BDD
-	// ----------------------------------------------------------------------------------------
+	/**
+	 * Liste toutes les casernes présentes dans la base de donnée
+	 * 
+	 * @return List<FireStationModel>
+	 * 
+	 */
 	public List<FireStationModel> getAllFireStation() {
 		return fireStationRepository.findAll();
 	}
 
-	// ----------------------------------------------------------------------------------------
-	// Methode pour filtrer des 'firestations' à partir d'un numéro de station
-	// ----------------------------------------------------------------------------------------
+	/**
+	 * Filtre les casernes présentes dans la base de donnée à partir du numéro de
+	 * station en parametre
+	 * 
+	 * @param long station
+	 * @return List<FireStationModel>
+	 * 
+	 */
 	public List<FireStationModel> getFirestationsByStation(long station) {
 		return fireStationRepository.findByStation(station);
 	}
-	
-	// ----------------------------------------------------------------------------------------
-	// Methode pour filtrer des 'firestations' à partir d'un numéro de station
-	// ----------------------------------------------------------------------------------------
-//	public Iterable<FireStationDataBaseModel> getFirestationsByManyStation(List<Long> stations) {
-//		return fireStationRepository.findAllByStation(stations);
-//	}
-	
-	// ----------------------------------------------------------------------------------------
-	// Methode pour obtenir des adresses de station liées à un
-	// numéro de caserne
-	// ----------------------------------------------------------------------------------------
+
+	/**
+	 * Filtre les casernes présentes dans la base de donnée à partir de l'adresse en
+	 * parametre
+	 * 
+	 * @param String address
+	 * @return List<FireStationModel>
+	 * 
+	 */
 	public List<FireStationModel> getFirestationsByAddress(String address) {
 		return fireStationRepository.findByAddress(address);
 	}
-	
-	// ----------------------------------------------------------------------------------------
-	// Methode pour obtenir des adresses de station liées à un
-	// numéro de caserne
-	// ----------------------------------------------------------------------------------------
+
+	/**
+	 * Donne le numéro de station de la caserne dont l'adresse est le paramètre
+	 * 
+	 * @param String address
+	 * @return long
+	 * @see getFirestationsByAddress()
+	 */
 	public long getStationNumberByAddress(String address) {
 		long result = 0;
 		for (FireStationModel fireStation : getFirestationsByAddress(address)) {
@@ -63,17 +71,42 @@ public class FireStationService {
 		return result;
 	}
 
-	// ----------------------------------------------------------------------------------------
-	// POST: Methode pour ajouter une 'firestation' dans la BDD
-	// ----------------------------------------------------------------------------------------
+	/**
+	 * Liste les casernes de pompier dans la base de donnée dont les numéros de
+	 * caserne sont en paramètres.
+	 * 
+	 * @Param List<Long> stations
+	 * @return List<FireStationModel> 
+	 * @see getFirestationsByStation()
+	 */
+	public List<FireStationModel> getFirestationsByManyStation(List<Long> stations) {
+		List<FireStationModel> firestationsByManyStation = new ArrayList<FireStationModel>();
+		for (long station : stations) {
+			firestationsByManyStation.addAll(getFirestationsByStation(station));
+		}
+		return firestationsByManyStation;
+	}
+
+	/**
+	 * Ajoute une caserne de pompier dans la base de donnée
+	 * 
+	 * @param FireStationModel fireStation
+	 * @return FireStationModel -> la caserne ajoutée avec son id dans la base de
+	 *         donnée
+	 * 
+	 */
 	public FireStationModel postFireStation(FireStationModel fireStation) {
 		fireStation.setId(null);
 		return fireStationRepository.save(fireStation);
 	}
 
-	// ----------------------------------------------------------------------------------------
-	// PUT: Methode pour mettre à jour les infos d'une 'firestation' dans la BDD
-	// ----------------------------------------------------------------------------------------
+	/**
+	 * Met à jour une caserne de pompier dans la base de donnée
+	 * 
+	 * @param FireStationModel fireStation
+	 * @return boolean -> true=OK & false=NOK
+	 * 
+	 */
 	public boolean updateFireStation(FireStationModel fireStation) throws IllegalArgumentException {
 		boolean result = false;
 		long i = 0;
@@ -83,87 +116,29 @@ public class FireStationService {
 		do {
 			if ((fireStationRepository.existsById(i))
 					&& fireStation.getAddress().equals(fireStationRepository.findById(i).get().getAddress())) {
-				System.out.println("la valeur de i est: " + i);
-				System.out.println("la valeur de i est: " + j);
 				j++;
 				fireStation.setId(i);
 				fireStationRepository.saveAndFlush(fireStation);
 				result = true;
 				break;
 			}
-			System.out.println("la valeur de i est: " + i);
-			System.out.println("la valeur de i est: " + j);
 			i++;
 			if (i == 5000)
-				;
-			break;
+				break;
 		} while (j != countEntities);
 
 		return result;
 	}
 
-	// ----------------------------------------------------------------------------------------
-	// DELETE: Methode pour supprimer une personne par id
-	// ----------------------------------------------------------------------------------------
-	public void deleteFireStationById(long id) throws IllegalArgumentException {
-		fireStationRepository.deleteById(id);
-	}
-
-	// ----------------------------------------------------------------------------------------
-	// DELETE: Methode pour supprimer une personne à partir d'une entité
-	// ----------------------------------------------------------------------------------------
-	public void deleteFireStationByEntity(FireStationModel fireStation) throws IllegalArgumentException {
-		fireStationRepository.delete(fireStation);
-	}
-
-	// ----------------------------------------------------------------------------------------
-	// DELETE: Methode pour supprimer une personne à partir son nom et prenom dans
-	// la BDD
-	// ----------------------------------------------------------------------------------------
+	/**
+	 * Supprime une caserne de pompier par l'adresse en parametre
+	 * 
+	 * @Param String address
+	 * @return void
+	 * 
+	 */
 	public void deleteFireStationByAddress(String address) throws IllegalArgumentException {
 		fireStationRepository.deleteByAddress(address);
-	}
-
-	// ----------------------------------------------------------------------------------------
-	// DELETE: Methode pour supprimer une personne à partir son nom et prenom dans
-	// la BDD
-	// ----------------------------------------------------------------------------------------
-	public void deleteFireStationByStation(long station) throws IllegalArgumentException {
-		fireStationRepository.deleteByStation(station);
-	}
-
-	// ----------------------------------------------------------------------------------------
-	// Methode pour obtenir des informations spécifiques d'une station liées à un
-	// numéro de caserne
-	// ----------------------------------------------------------------------------------------
-	public InfoByStationNumber getInfoByStationNumber(long station) throws ParseException {
-
-		InfoByStationNumber infoByStationNumber = new InfoByStationNumber();
-
-		infoByStationNumber.setStation(station);
-		infoByStationNumber.setPersonsByStation(personService.getPersonsByStation(station));
-		int countAdult = countService.getCountAdult(station);
-		int countChildren = countService.getCountChildren(station);
-		infoByStationNumber.setCountAdult(countAdult);
-		infoByStationNumber.setCountChildren(countChildren);
-
-		return infoByStationNumber;
-	}
-
-	// ----------------------------------------------------------------------------------------
-	// Methode pour obtenir des informations spécifiques d'une station liées à un
-	// numéro de caserne
-	// ----------------------------------------------------------------------------------------
-	public boolean existsById(long id) {
-		return fireStationRepository.existsById(id);
-	}
-
-	public List<FireStationModel>  getFirestationsByManyStation(List<Long> stations) {
-		List<FireStationModel> firestationsByManyStation = new ArrayList<FireStationModel>();
-		for (long station : stations) {
-			firestationsByManyStation = getFirestationsByStation(station);
-		}
-		return firestationsByManyStation;
 	}
 
 }

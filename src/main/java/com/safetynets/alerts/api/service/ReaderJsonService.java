@@ -21,10 +21,19 @@ import com.safetynets.alerts.api.repository.PersonRepository;
 
 import lombok.Data;
 
+/**
+ * Classe définissant les méthodes permettant de:
+ * 
+ * - Obtenir des listes d'objets désérialisés depuis un fichier JSON.
+ * - Sauvegarde des entités dans une base de donnée depuis des listes d'objet.
+ * 
+ * @author aurelien.ndjamba
+ * @version 1.0
+ */
 @Data
 @Service
 public class ReaderJsonService {
-	
+
 	@Autowired
 	private PersonRepository personRepository;
 	@Autowired
@@ -32,33 +41,61 @@ public class ReaderJsonService {
 	@Autowired
 	private MedicalRecordRepository medicalrecordRepository;
 
-	public static List<PersonModel> getListPersons(String link)
+	/**
+	 * Donne la liste d'objets "PersonModel" désérialisés depuis un fichier JSON.
+	 * 
+	 * @param firstName (String path)
+	 * @return List<PersonModel>
+	 * 
+	 */
+	public static List<PersonModel> getListPersons(String path)
 			throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
-		DataSourceModel dataSource = objectMapper.readValue(new File(link), DataSourceModel.class);
+		DataSourceModel dataSource = objectMapper.readValue(new File(path), DataSourceModel.class);
 		return dataSource.getPersons();
 	}
 
-	public static List<FireStationModel> getListFireStations(String link)
+	/**
+	 * Donne la liste d'objets "FireStationModel" désérialisés depuis un fichier JSON.
+	 * 
+	 * @param firstName (String path)
+	 * @return List<FireStationModel>
+	 * 
+	 */
+	public static List<FireStationModel> getListFireStations(String path)
 			throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
-		DataSourceModel dataSource = objectMapper.readValue(new File(link), DataSourceModel.class);
+		DataSourceModel dataSource = objectMapper.readValue(new File(path), DataSourceModel.class);
 		return dataSource.getFireStations();
 	}
 
-	public static List<MedicalRecordModel> getListMedicalRecords(String link)
+	/**
+	 * Donne la liste d'objets "MedicalRecordModel" désérialisés depuis un fichier JSON.
+	 * 
+	 * @param firstName (String path)
+	 * @return List<MedicalRecordModel>
+	 * 
+	 */
+	public static List<MedicalRecordModel> getListMedicalRecords(String path)
 			throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
-		DataSourceModel dataSource = objectMapper.readValue(new File(link), DataSourceModel.class);
+		DataSourceModel dataSource = objectMapper.readValue(new File(path), DataSourceModel.class);
 		return dataSource.getMedicalRecords();
 	}
 
+	/**
+	 * Sauvegarde des entités dans une base de donnée depuis des listes d'objet.
+	 * 
+	 * @param firstName (String path)
+	 * @return void
+	 * 
+	 */
 	public void SavingJsonInDataBase(String path) throws JsonParseException, JsonMappingException, IOException {
 
 		// Creation d'un objet java à partir de la lecture du JSON
 		ObjectMapper objectMapper = new ObjectMapper();
 		DataSourceModel dataSource = objectMapper.readValue(new File(path), DataSourceModel.class);
-		
+
 		// Sauvegarde dans la base de données des entités "Persons"
 		List<PersonModel> listPersons = dataSource.getPersons();
 		personRepository.saveAll(listPersons);

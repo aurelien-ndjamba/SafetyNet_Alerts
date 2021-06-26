@@ -13,6 +13,12 @@ import com.safetynets.alerts.api.model.FireStationModel;
 import com.safetynets.alerts.api.model.MedicalRecordModel;
 import com.safetynets.alerts.api.model.PersonModel;
 
+/**
+ * Classe définissant les méthodes de Service "Count"
+ * 
+ * @author aurelien.ndjamba
+ * @version 1.0
+ */
 @Service
 public class CountService {
 
@@ -23,10 +29,14 @@ public class CountService {
 	@Autowired
 	private MedicalRecordService medicalRecordService;
 
-	// ----------------------------------------------------------------------------------------
-	// GETAGE: Methode pour supprimer une personne à partir d'un
-	// id=firstNamelastName
-	// ----------------------------------------------------------------------------------------
+	/**
+	 * Donne l'age d'une personne à partir de son nom et prénom en paramètres
+	 * 
+	 * @param firstName (String)
+	 * @param lastName (String)
+	 * @return age (int)
+	 * 
+	 */
 	@SuppressWarnings("deprecation")
 	public int getAge(String firstName, String lastName) throws ParseException {
 
@@ -53,10 +63,14 @@ public class CountService {
 		return age;
 	}
 
-	// ----------------------------------------------------------------------------------------
-	// GETCOUNTADULTANDCHILDREN: Methode pour supprimer une personne à partir d'un
-	// id=firstNamelastName
-	// ----------------------------------------------------------------------------------------
+	/**
+	 * Donne le nombre d'adulte vivants à une adresse désservie par une caserne dont
+	 * le numéro est en paramètre
+	 * 
+	 * @param station (long)
+	 * @return countAdult (int)
+	 * 
+	 */
 	public int getCountAdult(long station) throws ParseException {
 
 		int countAdult = 0;
@@ -76,10 +90,14 @@ public class CountService {
 		return countAdult;
 	}
 
-	// ----------------------------------------------------------------------------------------
-	// GETCOUNTADULTANDCHILDREN: Methode pour supprimer une personne à partir d'un
-	// id=firstNamelastName
-	// ----------------------------------------------------------------------------------------
+	/**
+	 * Donne le nombre d'enfants (<=18 ans) vivants à une adresse désservie par une caserne dont
+	 * le numéro est en paramètre
+	 * 
+	 * @param station (long)
+	 * @return CountChildren (int)
+	 * 
+	 */
 	public int getCountChildren(long station) throws ParseException {
 
 		int countChildren = 0;

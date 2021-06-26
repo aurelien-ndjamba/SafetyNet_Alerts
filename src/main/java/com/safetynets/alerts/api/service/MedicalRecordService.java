@@ -9,55 +9,83 @@ import org.springframework.stereotype.Service;
 import com.safetynets.alerts.api.model.MedicalRecordModel;
 import com.safetynets.alerts.api.repository.MedicalRecordRepository;
 
+/** 
+ * Classe définissant les méthodes de Service "MedicalRecord"
+ * 
+ * @author aurelien.ndjamba
+ * @version 1.0
+ */
 @Service
 public class MedicalRecordService {
 
 	@Autowired
 	private MedicalRecordRepository medicalRecordRepository;
 
-	// ###############################################################################################
-	// ----------------------------------------------------------------------------------------
-	// GET ALL: Methode pour obtenir la liste des personnes dans une BDD
-	// ----------------------------------------------------------------------------------------
-	public List<MedicalRecordModel> getAllMedicalRecord() {
+	/**
+	 * Liste tous les enregistrements médicaux présents dans la base de donnée
+	 * 
+	 * @return List<FireStationModel>
+	 * 
+	 */
+	public List<MedicalRecordModel> getMedicalRecords() {
 		return medicalRecordRepository.findAll();
 	}
 
-	// ----------------------------------------------------------------------------------------
-	// GET BY: Methode pour obtenir ungetPersonsByAddresse personne par id
-	// ----------------------------------------------------------------------------------------
+	/** 
+	 * Filtre un enregistrement médical dans la base de donnée ayant l'id en paramètre
+	 * 
+	 * @Param long id
+	 * @return	Optional<MedicalRecordModel>
+	 * 
+	 */
 	public Optional<MedicalRecordModel> getMedicalRecordById(long id) {
 		return medicalRecordRepository.findById(id);
 	}
 
-	// ----------------------------------------------------------------------------------------
-	// GET BY: Methode pour obtenir des personnes par nom
-	// ----------------------------------------------------------------------------------------
+	/** 
+	 * Filtre des enregistrements médicaux dans la base de donnée ayant le même nom en paramètre
+	 * 
+	 * @Param String lastName
+	 * @return	List<MedicalRecordModel>
+	 * 
+	 */
 	public List<MedicalRecordModel> getMedicalRecordsByLastName(String lastName) {
 		return medicalRecordRepository.findByLastName(lastName);
 	}
 
-	// ----------------------------------------------------------------------------------------
-	// GET BY: Methode pour obtenir une personne par prénom et nom
-	// ----------------------------------------------------------------------------------------
+	/** 
+	 * Filtre un enregistrement médical dans la base de donnée à partir de son prénom et nom en paramètre
+	 * 
+	 * @Param String firstName
+	 * @Param String lastName
+	 * @return	MedicalRecordModel
+	 * 
+	 */
 	public MedicalRecordModel getMedicalRecordByFirstNameAndLastName(String firstName, String lastName) {
 		return medicalRecordRepository.findByFirstNameAndLastName(firstName, lastName);
 	}
 
-	// ----------------------------------------------------------------------------------------
-	// POST: Methode pour ajouter une personne dans la BDD
-	// ----------------------------------------------------------------------------------------
+	/** 
+	 * Ajoute un enregistrement medical dans la base de donnée
+	 * 
+	 * @Param MedicalRecordModel medicalRecord
+	 * @return	MedicalRecord -> le nouvel enregistrement avec son id dans la base de donnée
+	 * 
+	 */
 	public MedicalRecordModel postMedicalRecord(MedicalRecordModel medicalRecord) {
-
-		System.out.println("Nouvelle personne enregistrée dans la base de donnée avec succès !");
 
 		medicalRecord.setId(null); // Pour éviter que le post face l'update avec un id déjà existant
 		return medicalRecordRepository.save(medicalRecord);
 	}
 
-	// ----------------------------------------------------------------------------------------
-	// PUT: Methode pour mettre à jour les infos d'une personne dans la BDD
-	// ----------------------------------------------------------------------------------------
+	/** 
+	 * Met à jour un enregistrement medical dans la base de donnée 
+	 * Le prénom et le nom ne peuvent pas être modifiable
+	 * 
+	 * @param MedicalRecordModel medicalRecord
+	 * @return	boolean
+	 * 
+	 */
 	public boolean updateMedicalRecord(MedicalRecordModel medicalRecord) throws IllegalArgumentException {
 		boolean result = false;
 		long i = 0;
@@ -75,37 +103,21 @@ public class MedicalRecordService {
 				break;
 			}
 			i++;
+			if (i == 5000)
+				break;
 		} while (j != countEntities);
 		return result;
 
 	}
 
-	// ----------------------------------------------------------------------------------------
-	// DELETE: Methode pour supprimer une personne par id
-	// ----------------------------------------------------------------------------------------
-	public void deleteMedicalRecordById(long id) throws IllegalArgumentException {
-		medicalRecordRepository.deleteById(id);
-	}
-
-	// ----------------------------------------------------------------------------------------
-	// DELETE: Methode pour supprimer une personne à partir d'une entité
-	// ----------------------------------------------------------------------------------------
-	public void deleteMedicalRecordByEntity(MedicalRecordModel medicalRecord) throws IllegalArgumentException {
-		medicalRecordRepository.delete(medicalRecord);
-	}
-
-	// ----------------------------------------------------------------------------------------
-	// DELETE: Methode pour supprimer une personne à partir son nom et prenom dans
-	// la BDD
-	// ----------------------------------------------------------------------------------------
-	public void deleteMedicalRecordByFirstNameAndLastName(String firstName, String lastName) throws IllegalArgumentException {
-		medicalRecordRepository.deleteByFirstNameAndLastName(firstName, lastName);
-	}
-
-	// ----------------------------------------------------------------------------------------
-	// DELETE: Methode pour supprimer une personne à partir d'un
-	// id=firstNamelastName
-	// ------------------------------------------------------------------------------------
+	/**
+	 * Supprime un enregistrement medical dans la base de donnée à partir d'un
+	 * id représentant son prénom et son nom (exemple : firstnamelastName => EmmanuelMacron)
+	 * 
+	 * @Param String id
+	 * @return boolean
+	 * 
+	 */
 	public boolean deleteMedicalRecordByLastNameFirstname(String id) {
 
 		boolean result = false;
@@ -130,98 +142,4 @@ public class MedicalRecordService {
 		return result;
 	}
 
-	public long getMedicalRecordCount() {
-		return medicalRecordRepository.count();
-	}
-
-	public boolean existsById(long id) {
-		return medicalRecordRepository.existsById(id);
-	}
-	
-	// ###############################################################################################
-
-
-
-//	// ----------------------------------------------------------------------------------------
-//	// GET: Methode pour obtenir la liste de 'medicalRecord' dans une BDD
-//	// ----------------------------------------------------------------------------------------
-//	public List<MedicalRecordDataBaseModel> getAllMedicalRecord() {
-//		return medicalRecordRepository.findAll();
-//	}
-//
-//	// ----------------------------------------------------------------------------------------
-//	// GET: Methode pour obtenir un 'medicalRecord' à partir d'un nom
-//	// ----------------------------------------------------------------------------------------
-//	public HashSet<MedicalRecordDataBaseModel> getMedicalRecordByLastName(String lastName) {
-//		return medicalRecordRepository.findByLastName(lastName);
-//	}
-//
-//	// ----------------------------------------------------------------------------------------
-//	// GET: Methode pour obtenir un 'medicalRecord' à partir d'un 
-//	// ----------------------------------------------------------------------------------------
-//	public MedicalRecordDataBaseModel getMedicalRecordByFirstNameAndLastName(String firstName, String lastName) {
-//		return medicalRecordRepository.findByFirstNameAndLastName(lastName);
-//	}
-//	
-//	// ----------------------------------------------------------------------------------------
-//	// GET: Méthode pour obtenir l'historique des allergies à partir du nom
-//	// ----------------------------------------------------------------------------------------
-//	public HashSet<String> getAllergiesHistoryByLastName(String lastName) {
-//		return medicalRecordRepository.findAllergiesByLastName(lastName);
-//	}
-//
-//	// ----------------------------------------------------------------------------------------
-//	// GET: Méthode pour obtenir l'historique des allergies à partir du prénom et du
-//	// nom
-//	// ----------------------------------------------------------------------------------------
-//	public HashSet<String> getAllergiesHistoryByFisrtNameAndLastName(String firstName, String lastName) {
-//		return medicalRecordRepository.findAllergiesByFisrtNameAndLastName(firstName, lastName);
-//	}
-//
-//	// ----------------------------------------------------------------------------------------
-//	// GET: Méthode pour obtenir l'historique des traitements à partir du nom
-//	// ----------------------------------------------------------------------------------------
-//	public HashSet<String> getMedicationsHistoryByLastName(String lastName) {
-//		return medicalRecordRepository.findMedicationsByLastName(lastName);
-//	}
-//
-//	// ----------------------------------------------------------------------------------------
-//	// GET: Méthode pour obtenir l'historique des traitements à partir du prénom et
-//	// du nom
-//	// ----------------------------------------------------------------------------------------
-//	public HashSet<String> getMedicationsHistoryByFisrtNameAndLastName(String firstName, String lastName) {
-//		return medicalRecordRepository.findMedicationsByFisrtNameAndLastName(firstName, lastName);
-//	}
-//
-//	// ----------------------------------------------------------------------------------------
-//	// POST: Methode pour ajouter un 'medicalRecord' dans la BDD
-//	// ----------------------------------------------------------------------------------------
-//	public MedicalRecordDataBaseModel postMedicalRecord(MedicalRecordDataBaseModel medicalRecord) {
-//		System.out.println("Nouveau dossier medical enregistrée dans la base de donnée avec succès !");
-//		return medicalRecordRepository.save(medicalRecord);
-//	}
-//
-//	// ----------------------------------------------------------------------------------------
-//	// PUT: Methode pour mettre à jour les infos d'une 'medicalRecord' dans la BDD
-//	// ----------------------------------------------------------------------------------------
-//	public MedicalRecordDataBaseModel updateMedicalRecord(MedicalRecordDataBaseModel medicalRecord) throws IllegalArgumentException {
-//		return medicalRecordRepository.saveAndFlush(medicalRecord);
-//	}
-//
-//	// ----------------------------------------------------------------------------------------
-//	// DELETE: Methode pour Supprimer un 'medicalRecord'dans la BDD
-//	// ----------------------------------------------------------------------------------------
-//	public void deleteMedicalRecord(MedicalRecordDataBaseModel medicalRecord) throws IllegalArgumentException {
-//		medicalRecordRepository.delete(medicalRecord);
-//	}
-//	
-//	// ----------------------------------------------------------------------------------------
-//	// DELETE: Methode pour obtenir un 'medicalRecord' à partir d'un id représentant
-//	// lastNameFirstName
-//	// ----------------------------------------------------------------------------------------
-//	public void deleteMedicalRecordById(String id) {
-//		// String id = "lastName" + "firstName"
-//		medicalRecordRepository.deleteByLastNameFirstName();
-////		medicalRecordRepository.deleteByLastNameAndFirstName(lastName, firstName);
-//	}
 }

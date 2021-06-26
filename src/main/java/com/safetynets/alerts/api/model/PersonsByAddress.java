@@ -4,8 +4,12 @@ import java.util.List;
 
 import lombok.Data;
 
+/** 
+ * Classe modélisant un objet de type "PersonsByAddress"
+ * 
+ */
 @Data
-public class PersonsByStationNumberModel {
+public class PersonsByAddress {
 	
 	private String address;
 	private List<PersonModel> PersonsByAddress;

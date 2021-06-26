@@ -4,6 +4,10 @@ import java.util.HashSet;
 
 import lombok.Data;
 
+/** 
+ * Classe modélisant un objet de type "PersonInfoGlobalModel"
+ * 
+ */
 @Data
 public class PersonInfoGlobalModel {
     private String firstName;

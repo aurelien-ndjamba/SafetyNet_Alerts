@@ -9,6 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.safetynets.alerts.api.model.PersonModel;
 
+/**
+ * Interface définissant les contrats utilisables les classes. elle permet
+ * d'effectuer des opérations CRUD sur le repository "Person" grace à
+ * JpaRepository
+ * 
+ * @author aurelien.ndjamba
+ * @version 1.0
+ */
 @Repository
 public interface PersonRepository extends JpaRepository<PersonModel, Long> {
 	

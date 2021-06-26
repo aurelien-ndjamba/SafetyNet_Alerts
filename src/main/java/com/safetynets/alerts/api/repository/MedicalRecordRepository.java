@@ -10,6 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.safetynets.alerts.api.model.MedicalRecordModel;
 
+/**
+ * Interface définissant les contrats utilisables les classes. elle permet
+ * d'effectuer des opérations CRUD sur le repository "MedicalRecord" grace à
+ * JpaRepository
+ * 
+ * @author aurelien.ndjamba
+ * @version 1.0
+ */
 @Repository
 public interface MedicalRecordRepository extends JpaRepository<MedicalRecordModel, Long> {
 	

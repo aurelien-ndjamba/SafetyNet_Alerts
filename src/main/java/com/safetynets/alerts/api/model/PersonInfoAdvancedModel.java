@@ -4,6 +4,10 @@ import java.util.ArrayList;
 
 import lombok.Data;
 
+/** 
+ * Classe modélisant un objet de type "PersonInfoAdvancedModel"
+ * 
+ */
 @Data
 public class PersonInfoAdvancedModel {
 	

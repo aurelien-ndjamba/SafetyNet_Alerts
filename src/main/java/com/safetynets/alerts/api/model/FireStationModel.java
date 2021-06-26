@@ -10,6 +10,10 @@ import org.springframework.stereotype.Component;
 
 import lombok.Data;
 
+/** 
+ * Classe modélisant un objet entité de type "FireStationModel"
+ * 
+ */
 @Data
 @Entity
 @Table(name = "firestations")
