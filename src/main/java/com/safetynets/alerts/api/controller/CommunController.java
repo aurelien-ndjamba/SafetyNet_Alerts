@@ -57,7 +57,7 @@ public class CommunController {
 	 * 
 	 */
 	@GetMapping("/phoneAlert")
-	public HashSet<String> phoneAlert(@RequestParam Long firestation) {
+	public HashSet<String> getPhoneAlert(@RequestParam Long firestation) {
 		return communService.getPhoneAlert(firestation);
 	}
 

@@ -20,6 +20,8 @@ public class FireStationService {
 
 	@Autowired
 	private FireStationRepository fireStationRepository;
+	
+	private long dataBaseScoredEstimated = 5000;
 
 	/**
 	 * Liste toutes les casernes présentes dans la base de donnée
@@ -123,7 +125,7 @@ public class FireStationService {
 				break;
 			}
 			i++;
-			if (i == 5000)
+			if (i == dataBaseScoredEstimated)
 				break;
 		} while (j != countEntities);
 

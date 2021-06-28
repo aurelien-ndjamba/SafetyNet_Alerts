@@ -20,6 +20,8 @@ public class MedicalRecordService {
 
 	@Autowired
 	private MedicalRecordRepository medicalRecordRepository;
+	
+	private long dataBaseScoredEstimated = 5000;
 
 	/**
 	 * Liste tous les enregistrements médicaux présents dans la base de donnée
@@ -103,7 +105,7 @@ public class MedicalRecordService {
 				break;
 			}
 			i++;
-			if (i == 5000)
+			if (i == dataBaseScoredEstimated)
 				break;
 		} while (j != countEntities);
 		return result;

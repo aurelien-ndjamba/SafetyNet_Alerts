@@ -26,7 +26,9 @@ public class PersonService {
 	private PersonRepository personRepository;
 	@Autowired
 	private FireStationService fireStationService;
-
+	
+	private long dataBaseScoredEstimated = 5000;
+	
 	/**
 	 * Liste toutes les personnes présentes dans la base de donnée
 	 * 
@@ -180,7 +182,7 @@ public class PersonService {
 				break;
 			}
 			i++;
-			if (i == 5000)
+			if (i == dataBaseScoredEstimated)
 				break;
 		} while (j != countEntities);
 		return result;

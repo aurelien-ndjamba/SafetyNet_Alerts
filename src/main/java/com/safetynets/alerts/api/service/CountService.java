@@ -23,7 +23,7 @@ import com.safetynets.alerts.api.model.PersonModel;
 public class CountService {
 
 	@Autowired
-	PersonService personService;
+	private PersonService personService;
 	@Autowired
 	private FireStationService fireStationService;
 	@Autowired
