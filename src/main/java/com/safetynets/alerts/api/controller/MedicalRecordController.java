@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,8 @@ import com.safetynets.alerts.api.service.MedicalRecordService;
  */
 @RestController
 public class MedicalRecordController {
+	
+	Logger logger = Logger.getLogger(this.getClass());
 
 	@Autowired
 	private MedicalRecordService medicalRecordService;
@@ -41,6 +44,7 @@ public class MedicalRecordController {
 	 */
 	@GetMapping("/medicalRecord")
 	public List<MedicalRecordModel> getMedicalRecords() {
+		logger.info("Appel de l'api GET sur '/medicalRecord' sans parametre");
 		return medicalRecordService.getMedicalRecords();
 	}
 	
@@ -54,6 +58,7 @@ public class MedicalRecordController {
 	 */
 	@RequestMapping(value = "/medicalRecord", method = RequestMethod.GET, params = { "id" })
 	public Optional<MedicalRecordModel> getMedicalRecordById(long id) throws ParseException {
+		logger.info("Appel de l'api GET sur '/medicalRecord' avec le parametre id :" + id);
 		return medicalRecordService.getMedicalRecordById(id);
 	}
 
@@ -68,6 +73,7 @@ public class MedicalRecordController {
 	@PostMapping("/medicalRecord")
 	@ResponseStatus(HttpStatus.CREATED)
 	public MedicalRecordModel postMedicalRecord(@RequestBody MedicalRecordModel medicalRecord) {
+		logger.info("Appel de l'api POST sur '/medicalRecord' avec pour parametre Body 'MedicalRecordModel' :" + medicalRecord);
 		return medicalRecordService.postMedicalRecord(medicalRecord);
 	}
 
@@ -82,6 +88,7 @@ public class MedicalRecordController {
 	 */
 	@PutMapping("/medicalRecord")
 	public boolean updateMedicalRecord(@RequestBody MedicalRecordModel medicalRecord) {
+		logger.info("Appel de l'api PUT sur '/medicalRecord' avec pour parametre Body 'MedicalRecordModel' :" + medicalRecord);
 		return medicalRecordService.updateMedicalRecord(medicalRecord);
 	}
 	
@@ -96,6 +103,7 @@ public class MedicalRecordController {
 	 */
 	@RequestMapping(value = "/medicalRecord", method = RequestMethod.DELETE, params = { "id" })
 	public boolean deleteMedicalRecordByLastNameFirstname(@RequestParam String id) throws IllegalArgumentException {
+		logger.info("Appel de l'api DELETE sur '/medicalRecord' avec pour parametre 'id' :" + id);
 		return medicalRecordService.deleteMedicalRecordByLastNameFirstname(id);
 	}
 	

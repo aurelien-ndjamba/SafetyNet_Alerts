@@ -3,6 +3,7 @@ package com.safetynets.alerts.api.controller;
 import java.text.ParseException;
 import java.util.List;
 
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,8 @@ import com.safetynets.alerts.api.service.FireStationService;
  */
 @RestController
 public class FireStationController {
+	
+	private Logger logger = Logger.getLogger(this.getClass());
 
 	@Autowired private FireStationService fireStationService;
 
@@ -39,6 +42,7 @@ public class FireStationController {
 	 */
 	@GetMapping("/firestation")
 	public List<FireStationModel> getAllFireStation() {
+		logger.info("Appel de l'api GET sur '/firestation' sans parametre");
 		return fireStationService.getAllFireStation();
 	}
 	
@@ -52,6 +56,7 @@ public class FireStationController {
 	 */
 	@RequestMapping(value = "/firestation", method = RequestMethod.GET, params = { "station" })
 	public List<FireStationModel> getFirestationsByStation(long station) throws ParseException {
+		logger.info("Appel de l'api GET sur '/firestation' avec le parametre station :" + station);
 		return fireStationService.getFirestationsByStation(station);
 	}
 
@@ -66,6 +71,7 @@ public class FireStationController {
 	@PostMapping("/firestation")
 	@ResponseStatus(HttpStatus.CREATED)
 	public FireStationModel postFireStation(@RequestBody FireStationModel fireStation) {
+		logger.info("Appel de l'api POST sur '/firestation' avec pour parametre Body 'FireStationModel' :" + fireStation);
 		return fireStationService.postFireStation(fireStation);
 	}
 
@@ -80,6 +86,7 @@ public class FireStationController {
 	 */
 	@PutMapping("/firestation")
 	public boolean updateFireStation(@RequestBody FireStationModel firestation) {
+		logger.info("Appel de l'api PUT sur '/firestation' avec pour parametre Body 'FireStationModel' :" + firestation);
 		return fireStationService.updateFireStation(firestation);
 	}
 
@@ -94,6 +101,7 @@ public class FireStationController {
 	@RequestMapping(value = "/firestation", method = RequestMethod.DELETE, params = { "address" })
 	public void deleteFireStationByAddress(
 			@RequestParam("address") String address) throws ParseException {
+		logger.info("Appel de l'api DELETE sur '/firestation' avec pour parametre 'address' :" + address);
 		fireStationService.deleteFireStationByAddress(address);
 	}
 	

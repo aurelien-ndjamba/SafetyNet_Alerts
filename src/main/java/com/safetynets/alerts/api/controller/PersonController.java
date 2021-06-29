@@ -3,6 +3,7 @@ package com.safetynets.alerts.api.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,8 @@ import com.safetynets.alerts.api.service.PersonService;
  */
 @RestController
 public class PersonController {
+	
+	private Logger logger = Logger.getLogger(this.getClass());
 
 	@Autowired
 	private PersonService personService;
@@ -40,6 +43,7 @@ public class PersonController {
 	 */
 	@GetMapping("/person")
 	public List<PersonModel> getAllPerson() {
+		logger.info("Appel de l'api GET sur '/person' sans parametre");
 		return personService.getAllPerson();
 	}
 
@@ -54,6 +58,7 @@ public class PersonController {
 	 */
 	@RequestMapping(value = "/person", method = RequestMethod.GET, params = { "id" })
 	public Optional<PersonModel> getPersonById(@RequestParam long id) {
+		logger.info("Appel de l'api GET sur '/person' avec le parametre id :" + id);
 		return personService.getPersonById(id);
 	}
 
@@ -69,6 +74,7 @@ public class PersonController {
 	@PostMapping("/person")
 	@ResponseStatus(HttpStatus.CREATED)
 	public PersonModel postPerson(@RequestBody PersonModel person) {
+		logger.info("Appel de l'api POST sur '/person' avec pour parametre Body 'PersonModel' :" + person);
 		return personService.postPerson(person);
 	}
 
@@ -84,6 +90,7 @@ public class PersonController {
 	 */
 	@PutMapping("/person")
 	public boolean updatePerson(@RequestBody PersonModel person) {
+		logger.info("Appel de l'api PUT sur '/person' avec pour parametre Body 'PersonModel' :" + person);
 		return personService.updatePerson(person);
 	}
 
@@ -99,6 +106,7 @@ public class PersonController {
 	 */
 	@RequestMapping(value = "/person", method = RequestMethod.DELETE, params = { "id" })
 	public boolean deletePersonByLastNameFirstname(@RequestParam String id) throws IllegalArgumentException {
+		logger.info("Appel de l'api DELETE sur '/person' avec pour parametre 'id' :" + id);
 		return personService.deletePersonByLastNameFirstname(id);
 	}
 }
