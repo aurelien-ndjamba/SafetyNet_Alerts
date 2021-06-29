@@ -47,6 +47,13 @@
 		<!-- Rajout -->
 		<!-- =============================================================== -->
 
+		<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-site-plugin -->
+		<dependency>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-site-plugin</artifactId>
+			<version>3.9.1</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
@@ -169,13 +176,6 @@
 				</reportSets>
 			</plugin>
 
-			<!-- ===== Rapport sur les bugs SPOTBUG ===== -->
-			<plugin>
-				<groupId>com.github.spotbugs</groupId>
-				<artifactId>spotbugs-maven-plugin</artifactId>
-				<version>4.2.2</version>
-			</plugin>
-
 			<!-- ===== Code source navigable ===== -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -200,6 +200,7 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
 		</plugins>
 	</build>
 

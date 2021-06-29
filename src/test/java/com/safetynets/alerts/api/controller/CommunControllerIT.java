@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 public class CommunControllerIT {
 
 	@Autowired
-	public MockMvc mockMvc;
+	private MockMvc mockMvc;
 
 	@Test
 	public void testGetChildInfos() throws Exception {

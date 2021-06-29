@@ -48,7 +48,7 @@ public class CommunService {
 	 */
 	public List<ChildInfoModel> getChildInfos(String address) throws ParseException {
 
-		List<ChildInfoModel> ChildInfos = new ArrayList<ChildInfoModel>();
+		List<ChildInfoModel> childInfos = new ArrayList<ChildInfoModel>();
 		List<PersonModel> persons = new ArrayList<PersonModel>();
 		persons = personService.getPersonsByAddress(address);
 
@@ -64,11 +64,11 @@ public class CommunService {
 				childInfo.setFamilyRelationShip(
 						personService.getRelationship(address, person.getFirstName(), person.getLastName()));
 
-				ChildInfos.add(childInfo);
+				childInfos.add(childInfo);
 			}
 
 		}
-		return ChildInfos;
+		return childInfos;
 	}
 
 	/** 
@@ -119,22 +119,22 @@ public class CommunService {
 
 		for (PersonModel person : persons) {
 
-			PersonInfoAdvancedModel PersonInfoAdvanced = new PersonInfoAdvancedModel();
-			PersonInfoAdvanced.setId(person.getId());
-			PersonInfoAdvanced.setFirstName(person.getFirstName());
-			PersonInfoAdvanced.setLastName(person.getLastName());
-			PersonInfoAdvanced.setAddress(person.getAddress());
-			PersonInfoAdvanced.setStationNumber(fireStationService.getStationNumberByAddress(address));
-			PersonInfoAdvanced.setAge(countService.getAge(person.getFirstName(), person.getLastName()));
-			PersonInfoAdvanced.setPhone(person.getPhone());
+			PersonInfoAdvancedModel personInfoAdvanced = new PersonInfoAdvancedModel();
+			personInfoAdvanced.setId(person.getId());
+			personInfoAdvanced.setFirstName(person.getFirstName());
+			personInfoAdvanced.setLastName(person.getLastName());
+			personInfoAdvanced.setAddress(person.getAddress());
+			personInfoAdvanced.setStationNumber(fireStationService.getStationNumberByAddress(address));
+			personInfoAdvanced.setAge(countService.getAge(person.getFirstName(), person.getLastName()));
+			personInfoAdvanced.setPhone(person.getPhone());
 
 			MedicalRecordModel medicalRecord = new MedicalRecordModel();
 			medicalRecord = medicalRecordService.getMedicalRecordByFirstNameAndLastName(person.getFirstName(),
 					person.getLastName());
-			PersonInfoAdvanced.setMedications(medicalRecord.getMedications());
-			PersonInfoAdvanced.setAllergies(medicalRecord.getAllergies());
+			personInfoAdvanced.setMedications(medicalRecord.getMedications());
+			personInfoAdvanced.setAllergies(medicalRecord.getAllergies());
 
-			personsInfoAdvanced.add(PersonInfoAdvanced);
+			personsInfoAdvanced.add(personInfoAdvanced);
 		}
 		return personsInfoAdvanced;
 
@@ -236,13 +236,13 @@ public class CommunService {
 	public List<String> getCommunityEmail(String city) {
 		List<PersonModel> persons = new ArrayList<PersonModel>();
 		persons = personService.getPersonsByCity(city);
-		List<String> CommunityEmail = new ArrayList<String>();
+		List<String> communityEmail = new ArrayList<String>();
 		
 		for (PersonModel person : persons) {
-			CommunityEmail.add(person.getEmail());
+			communityEmail.add(person.getEmail());
 			}
 		
-		return CommunityEmail;
+		return communityEmail;
 	}
 
 }
