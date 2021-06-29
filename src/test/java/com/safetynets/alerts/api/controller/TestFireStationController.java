@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -91,33 +92,18 @@ public class TestFireStationController {
 		mockMvc.perform(req).andExpect(status().isCreated()).andExpect(jsonPath("$.address", is("Dubai")))
 				.andExpect(jsonPath("$.station", is(22)));
 	}
+	
+	@Test
+	public void testPutFireStation() throws Exception {
+		String newFirestation = "{ \"address\":\"Tokyo\", \"station\":\"101\"}";
+		MockHttpServletRequestBuilder req = put("/firestation").contentType(MediaType.APPLICATION_JSON)
+				.content(newFirestation);
+		mockMvc.perform(req).andExpect(status().isOk());
+	}
+	
+	@Test
+	public void testDeleteFireStation() throws Exception {
+		mockMvc.perform(get("/firestation?address=Paris")).andExpect(status().isOk());
+	}
 
 }
-
-// THEN
-
-//		// GIVEN
-//		FireStationModel fireStation = new FireStationModel();
-//		fireStation.setAddress("Paris");
-//		fireStation.setStation((long) 77);
-//
-//		// WHEN
-//		ObjectMapper objectMapper = new ObjectMapper();
-//		String newFireStationInJson = objectMapper.writeValueAsString(fireStation);
-//
-//		// THEN
-//		// Post
-//		mockMvc.perform(post("/firestation").contentType(MediaType.APPLICATION_JSON).content(newFireStationInJson))
-//				.andExpect(status().isCreated());
-//
-//		mockMvc.perform(get("/firestation")).andExpect(status().isOk()).andExpect(jsonPath("$[13].id", is(14)));
-//		mockMvc.perform(get("/firestation")).andExpect(status().isOk())
-//				.andExpect(jsonPath("$[13].address", is("Paris")));
-//		mockMvc.perform(get("/firestation")).andExpect(status().isOk()).andExpect(jsonPath("$[13].station", is(77)));
-//		// Delete
-//		mockMvc.perform(delete("/firestation").queryParam("address", "29 15th St"));
-//
-//		mockMvc.perform(get("/firestation")).andExpect(status().isOk()).andExpect(jsonPath("$[12].id", is(14)));
-//		mockMvc.perform(get("/firestation")).andExpect(status().isOk())
-//				.andExpect(jsonPath("$[12].address", is("Paris")));
-//		mockMvc.perform(get("/firestation")).andExpect(status().isOk()).andExpect(jsonPath("$[12].station", is(77)));

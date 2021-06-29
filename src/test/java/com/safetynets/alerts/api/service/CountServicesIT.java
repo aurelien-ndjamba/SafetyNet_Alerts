@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 
 import java.text.ParseException;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +16,6 @@ import com.safetynets.alerts.api.model.MedicalRecordModel;
 //@WebMvcTest(controllers = CountService.class)
 class CountServicesIT {
 
-//	@Autowired
-//	private MedicalRecordService medicalRecordService;
-//	@Autowired
-//	private FireStationRepository fireStationRepository;
-//	@Autowired
-//	private FireStationService fireStationService;
-//	@Autowired
-//	private CountService countService;
-	@Autowired
-	
 	@Mock
 	private MedicalRecordService medicalRecordService;
 	
@@ -55,6 +46,7 @@ class CountServicesIT {
 		assertThat(countService.getAge("Eric", "Cadigan")).isEqualTo((int) 76);
 	}
 	
+	@Disabled
 	@Test
 	public void testGetMedicalRecordByFirstNameAndLastName() throws ParseException {
 		String firstName = "Eric";
