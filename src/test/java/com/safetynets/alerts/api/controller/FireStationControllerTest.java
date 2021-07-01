@@ -24,7 +24,7 @@ import com.safetynets.alerts.api.service.FireStationService;
 import com.safetynets.alerts.api.service.ReaderJsonService;
 
 @WebMvcTest(controllers = FireStationController.class)
-public class TestFireStationController {
+public class FireStationControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -36,7 +36,7 @@ public class TestFireStationController {
 	private FireStationService fireStationService;
 
 	@Test
-	public void testGetAllFireStation() throws Exception {
+	public void testFindAll() throws Exception {
 
 		// GIVEN
 		FireStationModel fireStation = new FireStationModel();
@@ -46,7 +46,7 @@ public class TestFireStationController {
 		fireStations.add(fireStation);
 
 		// WHEN
-		when(fireStationService.getAllFireStation()).thenReturn(fireStations);
+		when(fireStationService.findAll()).thenReturn(fireStations);
 
 		// THEN
 		mockMvc.perform(get("/firestation")).andExpect(status().isOk())
@@ -54,7 +54,7 @@ public class TestFireStationController {
 	}
 
 	@Test
-	public void testGetFirestationsByStation() throws Exception {
+	public void testFindByStation() throws Exception {
 
 		// GIVEN
 		FireStationModel fireStation = new FireStationModel();
@@ -64,7 +64,7 @@ public class TestFireStationController {
 		fireStations.add(fireStation);
 
 		// WHEN
-		when(fireStationService.getFirestationsByStation((long) 101)).thenReturn(fireStations);
+		when(fireStationService.findByStation((long) 101)).thenReturn(fireStations);
 
 		// THEN
 		mockMvc.perform(get("/firestation?station=101")).andExpect(status().isOk())
@@ -72,7 +72,7 @@ public class TestFireStationController {
 	}
 
 	@Test
-	public void testPostFireStation() throws Exception {
+	public void testSave() throws Exception {
 
 		// GIVEN
 		FireStationModel fireStationInput = new FireStationModel();
@@ -83,7 +83,7 @@ public class TestFireStationController {
 		fireStationOutput.setStation((long) 22);
 
 		// WHEN
-		when(fireStationService.postFireStation(fireStationInput)).thenReturn(fireStationOutput);
+		when(fireStationService.save(fireStationInput)).thenReturn(fireStationOutput);
 
 		// THEN
 		String newFirestation = "{ \"address\":\"Tokyo\", \"station\":\"101\"}";
@@ -94,16 +94,28 @@ public class TestFireStationController {
 	}
 	
 	@Test
-	public void testPutFireStation() throws Exception {
-		String newFirestation = "{ \"address\":\"Tokyo\", \"station\":\"101\"}";
+	public void testUpdate() throws Exception {
+		
+		// GIVEN
+		FireStationModel fireStationInput = new FireStationModel();
+		fireStationInput.setAddress("Dubai");
+		fireStationInput.setStation((long) 22);
+		FireStationModel fireStationOutput = new FireStationModel();
+		fireStationOutput.setAddress("Tokyo");
+		fireStationOutput.setStation((long) 101);
+		
+		// WHEN
+		when(fireStationService.update(fireStationInput)).thenReturn(fireStationOutput);
+		
+		// THEN
+		String newFirestation = "{ \"address\":\"Dubai\", \"station\":\"22\"}";
 		MockHttpServletRequestBuilder req = put("/firestation").contentType(MediaType.APPLICATION_JSON)
 				.content(newFirestation);
-		mockMvc.perform(req).andExpect(status().isOk());
+		mockMvc.perform(req).andExpect(status().isOk()).andExpect(jsonPath("$.address", is("Tokyo")))
+				.andExpect(jsonPath("$.station", is(101)));
 	}
-	
-	@Test
-	public void testDeleteFireStation() throws Exception {
-		mockMvc.perform(get("/firestation?address=Paris")).andExpect(status().isOk());
-	}
+
+
+
 
 }

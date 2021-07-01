@@ -1,7 +1,6 @@
 package com.safetynets.alerts.api.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -21,7 +20,7 @@ import com.safetynets.alerts.api.model.PersonModel;
 public interface PersonRepository extends JpaRepository<PersonModel, Long> {
 	
 	List<PersonModel> findAll();
-	Optional<PersonModel> findById(long id);
+	PersonModel findById(long id);
 	List<PersonModel> findByAddress(String address);
 	List<PersonModel> findByCity(String city);
 	List<PersonModel> findByLastName(String lastName);

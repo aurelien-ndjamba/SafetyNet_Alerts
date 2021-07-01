@@ -1,7 +1,6 @@
 package com.safetynets.alerts.api.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,27 +8,29 @@ import org.springframework.stereotype.Service;
 import com.safetynets.alerts.api.model.MedicalRecordModel;
 import com.safetynets.alerts.api.repository.MedicalRecordRepository;
 
+import lombok.Data;
+
 /** 
  * Classe définissant les méthodes de Service "MedicalRecord"
  * 
  * @author aurelien.ndjamba
  * @version 1.0
  */
+@Data
 @Service
 public class MedicalRecordService {
-
+	
+//	MedicalRecordService(){}
 	@Autowired
 	private MedicalRecordRepository medicalRecordRepository;
 	
-	private long dataBaseScoredEstimated = 5000;
-
 	/**
 	 * Liste tous les enregistrements médicaux présents dans la base de donnée
 	 * 
 	 * @return List<FireStationModel>
 	 * 
 	 */
-	public List<MedicalRecordModel> getMedicalRecords() {
+	public List<MedicalRecordModel> findAll() {
 		return medicalRecordRepository.findAll();
 	}
 
@@ -40,7 +41,7 @@ public class MedicalRecordService {
 	 * @return	Optional<MedicalRecordModel>
 	 * 
 	 */
-	public Optional<MedicalRecordModel> getMedicalRecordById(long id) {
+	public MedicalRecordModel findById(long id) {
 		return medicalRecordRepository.findById(id);
 	}
 
@@ -51,7 +52,7 @@ public class MedicalRecordService {
 	 * @return	List<MedicalRecordModel>
 	 * 
 	 */
-	public List<MedicalRecordModel> getMedicalRecordsByLastName(String lastName) {
+	public List<MedicalRecordModel> findByLastName(String lastName) {
 		return medicalRecordRepository.findByLastName(lastName);
 	}
 
@@ -63,7 +64,7 @@ public class MedicalRecordService {
 	 * @return	MedicalRecordModel
 	 * 
 	 */
-	public MedicalRecordModel getMedicalRecordByFirstNameAndLastName(String firstName, String lastName) {
+	public MedicalRecordModel findByFirstNameAndLastName(String firstName, String lastName) {
 		return medicalRecordRepository.findByFirstNameAndLastName(firstName, lastName);
 	}
 
@@ -74,9 +75,9 @@ public class MedicalRecordService {
 	 * @return	MedicalRecord -> le nouvel enregistrement avec son id dans la base de donnée
 	 * 
 	 */
-	public MedicalRecordModel postMedicalRecord(MedicalRecordModel medicalRecord) {
+	public MedicalRecordModel save(MedicalRecordModel medicalRecord) {
 
-		medicalRecord.setId(null); // Pour éviter que le post face l'update avec un id déjà existant
+		medicalRecord.setId(null);
 		return medicalRecordRepository.save(medicalRecord);
 	}
 
@@ -85,31 +86,14 @@ public class MedicalRecordService {
 	 * Le prénom et le nom ne peuvent pas être modifiable
 	 * 
 	 * @param MedicalRecordModel medicalRecord
-	 * @return	boolean
+	 * @return	MedicalRecordModel
 	 * 
 	 */
-	public boolean updateMedicalRecord(MedicalRecordModel medicalRecord) throws IllegalArgumentException {
-		boolean result = false;
-		long i = 0;
-		long j = 0;
-		long countEntities = medicalRecordRepository.count();
-
-		do {
-			if ((medicalRecordRepository.existsById(i))
-					&& medicalRecord.getFirstName().equals(medicalRecordRepository.findById(i).get().getFirstName())
-					&& medicalRecord.getLastName().equals(medicalRecordRepository.findById(i).get().getLastName())) {
-				j++;
-				medicalRecord.setId(i);
-				medicalRecordRepository.saveAndFlush(medicalRecord);
-				result = true;
-				break;
-			}
-			i++;
-			if (i == dataBaseScoredEstimated)
-				break;
-		} while (j != countEntities);
-		return result;
-
+	public MedicalRecordModel update(MedicalRecordModel medicalRecord) {
+		MedicalRecordModel MedicalRecordInDb = new MedicalRecordModel();
+		MedicalRecordInDb = medicalRecordRepository.findByFirstNameAndLastName(medicalRecord.getFirstName(), medicalRecord.getLastName());
+		medicalRecord.setId(MedicalRecordInDb.getId());
+		return medicalRecordRepository.save(medicalRecord);
 	}
 
 	/**
@@ -117,12 +101,12 @@ public class MedicalRecordService {
 	 * id représentant son prénom et son nom (exemple : firstnamelastName => EmmanuelMacron)
 	 * 
 	 * @Param String id
-	 * @return boolean
+	 * @return MedicalRecordModel
 	 * 
 	 */
-	public boolean deleteMedicalRecordByLastNameFirstname(String id) {
+	public MedicalRecordModel deleteMedicalRecordByLastNameFirstname(String id) { //
 
-		boolean result = false;
+		MedicalRecordModel medicalRecordDelete = new MedicalRecordModel();
 		long i = 0;
 		long j = 0;
 		long countEntities = medicalRecordRepository.count();
@@ -131,17 +115,17 @@ public class MedicalRecordService {
 			MedicalRecordModel medicalRecord = new MedicalRecordModel();
 			if (medicalRecordRepository.existsById(i)) {
 				j++;
-				medicalRecord = medicalRecordRepository.findById(i).get();
+				medicalRecord = medicalRecordRepository.findById(i);
 				if (id.startsWith(medicalRecord.getFirstName()) && id.endsWith(medicalRecord.getLastName())) {
 					medicalRecordRepository.deleteByFirstNameAndLastName(medicalRecord.getFirstName(),
 							medicalRecord.getLastName());
-					result = true;
+					medicalRecordDelete = medicalRecord;
 					break;
 				}
 			}
 			i++;
 		} while (j != countEntities);
-		return result;
+		return medicalRecordDelete;
 	}
 
 }

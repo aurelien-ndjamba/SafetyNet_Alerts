@@ -2,7 +2,6 @@ package com.safetynets.alerts.api.repository;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -23,9 +22,10 @@ public interface MedicalRecordRepository extends JpaRepository<MedicalRecordMode
 	
 
 	List<MedicalRecordModel> findAll();
-	Optional<MedicalRecordModel> findById(long id);
+	MedicalRecordModel findById(long id);
 	List<MedicalRecordModel> findByLastName(String lastName);
 	MedicalRecordModel findByFirstNameAndLastName(String firstName, String lastName);
+	HashSet<String> findAllergiesByLastName(String lastName);
 	
 	void deleteById(long id);
 	void delete(MedicalRecordModel medicalRecord);
@@ -33,5 +33,4 @@ public interface MedicalRecordRepository extends JpaRepository<MedicalRecordMode
 	void deleteByLastName(String lastName);
 	@Transactional
 	void deleteByFirstNameAndLastName(String firstName, String lastName);
-	HashSet<String> findAllergiesByLastName(String lastName);
 }

@@ -18,10 +18,12 @@ import com.safetynets.alerts.api.model.FireStationModel;
  */
 @Repository
 public interface FireStationRepository extends JpaRepository<FireStationModel, Long> {
-
+	
 	List<FireStationModel> findByStation(long station);
 
 	List<FireStationModel> findByAddress(String address);
+	
+	FireStationModel findByAddressAndStation(String address, long station);
 
 	@Transactional
 	void deleteByAddress(String address);

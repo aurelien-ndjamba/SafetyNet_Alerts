@@ -1,7 +1,6 @@
 package com.safetynets.alerts.api.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +41,9 @@ public class PersonController {
 	 * 
 	 */
 	@GetMapping("/person")
-	public List<PersonModel> getAllPerson() {
+	public List<PersonModel> findAll() {
 		logger.info("Appel de l'api GET sur '/person' sans parametre");
-		return personService.getAllPerson();
+		return personService.findAll();
 	}
 
 	/**
@@ -57,9 +56,9 @@ public class PersonController {
 	 * 
 	 */
 	@RequestMapping(value = "/person", method = RequestMethod.GET, params = { "id" })
-	public Optional<PersonModel> getPersonById(@RequestParam long id) {
+	public PersonModel findById(@RequestParam long id) {
 		logger.info("Appel de l'api GET sur '/person' avec le parametre id :" + id);
-		return personService.getPersonById(id);
+		return personService.findById(id);
 	}
 
 	/**
@@ -73,9 +72,9 @@ public class PersonController {
 	 */
 	@PostMapping("/person")
 	@ResponseStatus(HttpStatus.CREATED)
-	public PersonModel postPerson(@RequestBody PersonModel person) {
+	public PersonModel save(@RequestBody PersonModel person) {
 		logger.info("Appel de l'api POST sur '/person' avec pour parametre Body 'PersonModel' :" + person);
-		return personService.postPerson(person);
+		return personService.save(person);
 	}
 
 	/**
@@ -85,13 +84,13 @@ public class PersonController {
 	 * Le prénom et le nom ne peuvent pas être modifiable
 	 * 
 	 * @Param PersonModel person
-	 * @return boolean
+	 * @return PersonModel
 	 * 
 	 */
 	@PutMapping("/person")
-	public boolean updatePerson(@RequestBody PersonModel person) {
+	public PersonModel update(@RequestBody PersonModel person) {
 		logger.info("Appel de l'api PUT sur '/person' avec pour parametre Body 'PersonModel' :" + person);
-		return personService.updatePerson(person);
+		return personService.update(person);
 	}
 
 	/**
@@ -101,12 +100,13 @@ public class PersonController {
 	 * id représentant son prénom et son nom (exemple : firstnamelastName => EmmanuelMacron)
 	 * 
 	 * @Param String id
-	 * @return boolean
+	 * @return PersonModel
 	 * 
 	 */
 	@RequestMapping(value = "/person", method = RequestMethod.DELETE, params = { "id" })
-	public boolean deletePersonByLastNameFirstname(@RequestParam String id) throws IllegalArgumentException {
+	public PersonModel deletePersonByLastNameFirstname(@RequestParam String id) throws IllegalArgumentException {
 		logger.info("Appel de l'api DELETE sur '/person' avec pour parametre 'id' :" + id);
 		return personService.deletePersonByLastNameFirstname(id);
 	}
+
 }

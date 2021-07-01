@@ -2,7 +2,6 @@ package com.safetynets.alerts.api.controller;
 
 import java.text.ParseException;
 import java.util.List;
-import java.util.Optional;
 
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ import com.safetynets.alerts.api.model.MedicalRecordModel;
 import com.safetynets.alerts.api.service.MedicalRecordService;
 
 /** 
- * Classe qui s'occupe du Controller "FireStation" l'API
+ * Classe qui s'occupe du Controller "MedicalRecord" de l'API
  * 
  * @author aurelien.ndjamba
  * @version 1.0
@@ -29,7 +28,7 @@ import com.safetynets.alerts.api.service.MedicalRecordService;
 @RestController
 public class MedicalRecordController {
 	
-	Logger logger = Logger.getLogger(this.getClass());
+	private Logger logger = Logger.getLogger(this.getClass());
 
 	@Autowired
 	private MedicalRecordService medicalRecordService;
@@ -43,9 +42,9 @@ public class MedicalRecordController {
 	 * 
 	 */
 	@GetMapping("/medicalRecord")
-	public List<MedicalRecordModel> getMedicalRecords() {
+	public List<MedicalRecordModel> findAll() {
 		logger.info("Appel de l'api GET sur '/medicalRecord' sans parametre");
-		return medicalRecordService.getMedicalRecords();
+		return medicalRecordService.findAll();
 	}
 	
 	/** 
@@ -53,13 +52,13 @@ public class MedicalRecordController {
 	 * 
 	 * filtre l'enregistrement medical d'une personne par son id dans la base de donnée
 	 * 
-	 * @return	MedicalRecord
+	 * @return	Optional<MedicalRecordModel>
 	 * 
 	 */
 	@RequestMapping(value = "/medicalRecord", method = RequestMethod.GET, params = { "id" })
-	public Optional<MedicalRecordModel> getMedicalRecordById(long id) throws ParseException {
+	public MedicalRecordModel findById(long id) throws ParseException {
 		logger.info("Appel de l'api GET sur '/medicalRecord' avec le parametre id :" + id);
-		return medicalRecordService.getMedicalRecordById(id);
+		return medicalRecordService.findById(id);
 	}
 
 	/** 
@@ -72,9 +71,9 @@ public class MedicalRecordController {
 	 */
 	@PostMapping("/medicalRecord")
 	@ResponseStatus(HttpStatus.CREATED)
-	public MedicalRecordModel postMedicalRecord(@RequestBody MedicalRecordModel medicalRecord) {
+	public MedicalRecordModel save(@RequestBody MedicalRecordModel medicalRecord) {
 		logger.info("Appel de l'api POST sur '/medicalRecord' avec pour parametre Body 'MedicalRecordModel' :" + medicalRecord);
-		return medicalRecordService.postMedicalRecord(medicalRecord);
+		return medicalRecordService.save(medicalRecord);
 	}
 
 	/** 
@@ -83,13 +82,13 @@ public class MedicalRecordController {
 	 * Met à jour un enregistrement medical dans la base de donnée 
 	 * Le prénom et le nom ne peuvent pas être modifiable
 	 * 
-	 * @return	boolean
+	 * @return	MedicalRecordModel
 	 * 
 	 */
 	@PutMapping("/medicalRecord")
-	public boolean updateMedicalRecord(@RequestBody MedicalRecordModel medicalRecord) {
+	public MedicalRecordModel update(@RequestBody MedicalRecordModel medicalRecord) {
 		logger.info("Appel de l'api PUT sur '/medicalRecord' avec pour parametre Body 'MedicalRecordModel' :" + medicalRecord);
-		return medicalRecordService.updateMedicalRecord(medicalRecord);
+		return medicalRecordService.update(medicalRecord);
 	}
 	
 	/**
@@ -98,11 +97,11 @@ public class MedicalRecordController {
 	 * Supprime un enregistrement medical dans la base de donnée à partir d'un
 	 * id représentant son prénom et son nom (exemple : firstnamelastName => EmmanuelMacron)
 	 * 
-	 * @return boolean
+	 * @return MedicalRecordModel
 	 * 
 	 */
 	@RequestMapping(value = "/medicalRecord", method = RequestMethod.DELETE, params = { "id" })
-	public boolean deleteMedicalRecordByLastNameFirstname(@RequestParam String id) throws IllegalArgumentException {
+	public MedicalRecordModel deleteMedicalRecordByLastNameFirstname(@RequestParam String id) throws IllegalArgumentException {
 		logger.info("Appel de l'api DELETE sur '/medicalRecord' avec pour parametre 'id' :" + id);
 		return medicalRecordService.deleteMedicalRecordByLastNameFirstname(id);
 	}

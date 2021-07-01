@@ -17,6 +17,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
+/** 
+ * Classe qui s'occupe du Controller "FireStation" de l'API
+ * 
+ * @author aurelien.ndjamba
+ * @version 1.0
+ */
 @SpringBootTest
 @AutoConfigureMockMvc
 public class FireStationControllerIT {
@@ -25,21 +31,21 @@ public class FireStationControllerIT {
 	private MockMvc mockMvc;
 
 	@Test
-	public void testGetAllFireStation() throws Exception {
+	public void testFindAll() throws Exception {
 		mockMvc.perform(get("/firestation")).andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$[2].station", is(3)));
 	}
 
 	@Test
-	public void testGetFirestationsByStation() throws Exception {
+	public void testFindByStation() throws Exception {
 		mockMvc.perform(get("/firestation?station=2")).andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$[0].address", is("29 15th St")));
 	}
 
 	@Test
-	public void testPostFireStation() throws Exception {
+	public void testSave() throws Exception {
 		String newFirestation = "{ \"address\":\"PARIS\", \"station\":\"75\"}";
 		MockHttpServletRequestBuilder req = post("/firestation").contentType(MediaType.APPLICATION_JSON)
 				.content(newFirestation);
@@ -48,7 +54,7 @@ public class FireStationControllerIT {
 	}
 
 	@Test
-	public void testUpdateFireStation() throws Exception {
+	public void testUpdate() throws Exception {
 		String updateFirestation = "{ \"address\":\"1509 Culver St\", \"station\":\"99\"}";
 		MockHttpServletRequestBuilder req = put("/firestation").contentType(MediaType.APPLICATION_JSON)
 				.content(updateFirestation);
@@ -59,7 +65,7 @@ public class FireStationControllerIT {
 	}
 
 	@Test
-	public void testDeleteFireStationByAddress() throws Exception {
+	public void testDeleteByAddress() throws Exception {
 		
 		String newFirestation = "{ \"address\":\"PARIS\", \"station\":\"75\"}";
 		MockHttpServletRequestBuilder req = put("/firestation").contentType(MediaType.APPLICATION_JSON)

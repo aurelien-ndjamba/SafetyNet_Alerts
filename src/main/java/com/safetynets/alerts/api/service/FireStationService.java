@@ -20,8 +20,6 @@ public class FireStationService {
 
 	@Autowired
 	private FireStationRepository fireStationRepository;
-	
-	private long dataBaseScoredEstimated = 5000;
 
 	/**
 	 * Liste toutes les casernes présentes dans la base de donnée
@@ -29,7 +27,7 @@ public class FireStationService {
 	 * @return List<FireStationModel>
 	 * 
 	 */
-	public List<FireStationModel> getAllFireStation() {
+	public List<FireStationModel> findAll() {
 		return fireStationRepository.findAll();
 	}
 
@@ -41,22 +39,10 @@ public class FireStationService {
 	 * @return List<FireStationModel>
 	 * 
 	 */
-	public List<FireStationModel> getFirestationsByStation(long station) {
+	public List<FireStationModel> findByStation(long station) {
 		return fireStationRepository.findByStation(station);
 	}
-
-	/**
-	 * Filtre les casernes présentes dans la base de donnée à partir de l'adresse en
-	 * parametre
-	 * 
-	 * @param String address
-	 * @return List<FireStationModel>
-	 * 
-	 */
-	public List<FireStationModel> getFirestationsByAddress(String address) {
-		return fireStationRepository.findByAddress(address);
-	}
-
+	
 	/**
 	 * Donne le numéro de station de la caserne dont l'adresse est le paramètre
 	 * 
@@ -64,9 +50,9 @@ public class FireStationService {
 	 * @return long
 	 * @see getFirestationsByAddress()
 	 */
-	public long getStationNumberByAddress(String address) {
+	public long findStationByAddress(String address) {
 		long result = 0;
-		for (FireStationModel fireStation : getFirestationsByAddress(address)) {
+		for (FireStationModel fireStation : fireStationRepository.findByAddress(address)) {
 			if (fireStation.getAddress().equals(address))
 				result = fireStation.getStation();
 		}
@@ -78,13 +64,13 @@ public class FireStationService {
 	 * caserne sont en paramètres.
 	 * 
 	 * @Param List<Long> stations
-	 * @return List<FireStationModel> 
+	 * @return List<FireStationModel>
 	 * @see getFirestationsByStation()
 	 */
-	public List<FireStationModel> getFirestationsByManyStation(List<Long> stations) {
+	public List<FireStationModel> findFirestationsByManyStation(List<Long> stations) {
 		List<FireStationModel> firestationsByManyStation = new ArrayList<FireStationModel>();
 		for (long station : stations) {
-			firestationsByManyStation.addAll(getFirestationsByStation(station));
+			firestationsByManyStation.addAll(findByStation(station));
 		}
 		return firestationsByManyStation;
 	}
@@ -97,7 +83,7 @@ public class FireStationService {
 	 *         donnée
 	 * 
 	 */
-	public FireStationModel postFireStation(FireStationModel fireStation) {
+	public FireStationModel save(FireStationModel fireStation) {
 		fireStation.setId(null);
 		return fireStationRepository.save(fireStation);
 	}
@@ -109,27 +95,11 @@ public class FireStationService {
 	 * @return boolean -> true=OK & false=NOK
 	 * 
 	 */
-	public boolean updateFireStation(FireStationModel fireStation) throws IllegalArgumentException {
-		boolean result = false;
-		long i = 0;
-		long j = 0;
-		long countEntities = fireStationRepository.count();
-
-		do {
-			if ((fireStationRepository.existsById(i))
-					&& fireStation.getAddress().equals(fireStationRepository.findById(i).get().getAddress())) {
-				j++;
-				fireStation.setId(i);
-				fireStationRepository.saveAndFlush(fireStation);
-				result = true;
-				break;
-			}
-			i++;
-			if (i == dataBaseScoredEstimated)
-				break;
-		} while (j != countEntities);
-
-		return result;
+	public FireStationModel update(FireStationModel fireStation) throws IllegalArgumentException {
+		for ( FireStationModel fireStationInDB : fireStationRepository.findByAddress(fireStation.getAddress())) {
+			fireStation.setId(fireStationInDB.getId());
+		}
+		return fireStationRepository.save(fireStation);
 	}
 
 	/**
@@ -139,7 +109,7 @@ public class FireStationService {
 	 * @return void
 	 * 
 	 */
-	public void deleteFireStationByAddress(String address) throws IllegalArgumentException {
+	public void deleteByAddress(String address) throws IllegalArgumentException {
 		fireStationRepository.deleteByAddress(address);
 	}
 

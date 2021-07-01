@@ -25,21 +25,21 @@ public class MedicalRecordControllerIT {
 	private MockMvc mockMvc;
 
 	@Test
-	public void testGetAllMedicalRecord() throws Exception {
+	public void testFindAll() throws Exception {
 		mockMvc.perform(get("/medicalRecord")).andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.[2].firstName", is("Tenley")));
 	}
 
 	@Test
-	public void testGetMedicalRecordsById() throws Exception {
+	public void testFindById() throws Exception {
 		mockMvc.perform(get("/medicalRecord?id=2")).andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.firstName", is("Jacob")));
 	}
 
 	@Test
-	public void testPostMedicalRecord() throws Exception {
+	public void testSave() throws Exception {
 		String newMedicalRecord = "{ \"firstName\":\"Emmanuel\", \"lastName\":\"Macron\", \"birthdate\":\"21/12/1977\", \"medications\":[\"pfizer:350mg\"], \"allergies\":[\"covid\"] }";
 
 		MockHttpServletRequestBuilder req = post("/medicalRecord").contentType(MediaType.APPLICATION_JSON)
@@ -49,7 +49,7 @@ public class MedicalRecordControllerIT {
 	}
 
 	@Test
-	public void testUpdateMedicalRecord() throws Exception {
+	public void testUpdate() throws Exception {
 
 		String updateFirestation = "{ \"firstName\":\"Roger\", \"lastName\":\"Boyd\", \"birthdate\":\"21/12/2021\", \"medications\":[\"pfizer:350mg\"], \"allergies\":[\"gluten\"] }";
 		MockHttpServletRequestBuilder reqPut = put("/medicalRecord").contentType(MediaType.APPLICATION_JSON)
@@ -64,16 +64,14 @@ public class MedicalRecordControllerIT {
 	}
 
 	@Test
-	public void testDeleteMedicalRecordById() throws Exception {
+	public void testDeleteMedicalRecordByLastNameFirstname() throws Exception {
 
 		String newFirestation = "{ \"firstName\":\"Emmanuel\", \"lastName\":\"Macron\", \"birthdate\":\"21/12/1977\", \"medications\":[\"pfizer:350mg\"], \"allergies\":[\"covid\"] }";
 		MockHttpServletRequestBuilder reqPost = post("/medicalRecord").contentType(MediaType.APPLICATION_JSON)
 				.content(newFirestation);
 
 		mockMvc.perform(reqPost).andExpect(status().isCreated());
-
 		mockMvc.perform(delete("/medicalRecord?id=EmmanuelMacron")).andExpect(status().isOk());
-
 		mockMvc.perform(get("//medicalRecord?id=EmmanuelMacron")).andExpect(status().is4xxClientError());
 
 	}

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.safetynets.alerts.api.model.FireStationModel;
 import com.safetynets.alerts.api.model.MedicalRecordModel;
 import com.safetynets.alerts.api.model.PersonModel;
+import com.safetynets.alerts.api.repository.MedicalRecordRepository;
 
 /**
  * Classe définissant les méthodes de Service "Count"
@@ -27,7 +28,7 @@ public class CountService {
 	@Autowired
 	private FireStationService fireStationService;
 	@Autowired
-	private MedicalRecordService medicalRecordService;
+	private MedicalRecordRepository medicalRecordRepository;
 
 	/**
 	 * Donne l'age d'une personne à partir de son nom et prénom en paramètres
@@ -38,19 +39,13 @@ public class CountService {
 	 * 
 	 */
 	@SuppressWarnings("deprecation")
-	public int getAge(String firstName, String lastName) throws ParseException {
-
-		MedicalRecordModel medicalRecord = new MedicalRecordModel();
-		medicalRecord = medicalRecordService.getMedicalRecordByFirstNameAndLastName(firstName, lastName);
+	public static int getAge(String birthdayInString) throws ParseException {
 
 		int age = 0;
-		String birthdayInString;
 		Date birthdayInDate;
 		int currentYear;
 		int birthdayYear;
 
-		// Date de naissance sous le type String
-		birthdayInString = medicalRecord.getBirthdate();
 		// Date de naissance sous le type Date
 		birthdayInDate = new SimpleDateFormat("MM/dd/yyyy").parse(birthdayInString);
 		// Année de naissance sous le type Date
@@ -62,7 +57,6 @@ public class CountService {
 
 		return age;
 	}
-
 	/**
 	 * Donne le nombre d'adulte vivants à une adresse désservie par une caserne dont
 	 * le numéro est en paramètre
@@ -75,13 +69,14 @@ public class CountService {
 
 		int countAdult = 0;
 
-		List<FireStationModel> firestations = fireStationService.getFirestationsByStation(station);
+		List<FireStationModel> firestations = fireStationService.findByStation(station);
 
 		for (FireStationModel fireStation : firestations) {
-			List<PersonModel> persons = personService.getPersonsByAddress(fireStation.getAddress());
+			List<PersonModel> persons = personService.findByAddress(fireStation.getAddress());
 			for (PersonModel person : persons) {
 				if (fireStation.getAddress().equals(person.getAddress())) {
-					int agePerson = getAge(person.getFirstName(), person.getLastName());
+					MedicalRecordModel medicalRecordModel = medicalRecordRepository.findByFirstNameAndLastName(person.getFirstName(), person.getLastName());
+					int agePerson = getAge(medicalRecordModel.getBirthdate());
 					if (agePerson > 18)
 						countAdult++;
 				}
@@ -102,13 +97,14 @@ public class CountService {
 
 		int countChildren = 0;
 
-		List<FireStationModel> firestations = fireStationService.getFirestationsByStation(station);
+		List<FireStationModel> firestations = fireStationService.findByStation(station);
 
 		for (FireStationModel fireStation : firestations) {
-			List<PersonModel> persons = personService.getPersonsByAddress(fireStation.getAddress());
+			List<PersonModel> persons = personService.findByAddress(fireStation.getAddress());
 			for (PersonModel person : persons) {
 				if (fireStation.getAddress().equals(person.getAddress())) {
-					int agePerson = getAge(person.getFirstName(), person.getLastName());
+					MedicalRecordModel medicalRecordModel = medicalRecordRepository.findByFirstNameAndLastName(person.getFirstName(), person.getLastName());
+					int agePerson = getAge(medicalRecordModel.getBirthdate());
 					if (agePerson <= 18)
 						countChildren++;
 				}

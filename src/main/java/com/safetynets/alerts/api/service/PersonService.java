@@ -4,13 +4,13 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.safetynets.alerts.api.model.FireStationModel;
 import com.safetynets.alerts.api.model.PersonModel;
+import com.safetynets.alerts.api.repository.FireStationRepository;
 import com.safetynets.alerts.api.repository.PersonRepository;
 
 /** 
@@ -25,9 +25,7 @@ public class PersonService {
 	@Autowired
 	private PersonRepository personRepository;
 	@Autowired
-	private FireStationService fireStationService;
-	
-	private long dataBaseScoredEstimated = 5000;
+	private FireStationRepository fireStationRepository;
 	
 	/**
 	 * Liste toutes les personnes présentes dans la base de donnée
@@ -35,7 +33,7 @@ public class PersonService {
 	 * @return List<PersonModel>
 	 * 
 	 */
-	public List<PersonModel> getAllPerson() {
+	public List<PersonModel> findAll() {
 		return personRepository.findAll();
 	}
 
@@ -46,7 +44,7 @@ public class PersonService {
 	 * @return Optional<PersonModel>
 	 * 
 	 */
-	public Optional<PersonModel> getPersonById(long id) {
+	public PersonModel findById(long id) {
 		return personRepository.findById(id);
 	}
 
@@ -57,7 +55,7 @@ public class PersonService {
 	 * @return List<PersonModel>
 	 * 
 	 */
-	public List<PersonModel> getPersonsByAddress(String address) {
+	public List<PersonModel> findByAddress(String address) {
 		return personRepository.findByAddress(address);
 	}
 
@@ -69,7 +67,7 @@ public class PersonService {
 	 * @return List<PersonModel>
 	 * 
 	 */
-	public List<PersonModel> getPersonsByCity(String city) {
+	public List<PersonModel> findByCity(String city) {
 		return personRepository.findByCity(city);
 	}
 
@@ -81,23 +79,21 @@ public class PersonService {
 	 * @return List<PersonModel>
 	 * 
 	 */
-	public List<PersonModel> getPersonsByLastName(String lastName) {
+	public List<PersonModel> findByLastName(String lastName) {
 		return personRepository.findByLastName(lastName);
 	}
 
-	/**
-	 * Filtre une personne dans la base de donnée à partir du nom et prenom en
-	 * paramètres
-	 * 
-	 * @Param String firstName
-	 * @Param String lastName
-	 * @return PersonModel
-	 * @see FireStationService.getFirestationsByStation(station)
-	 * 
-	 */
-	public PersonModel getPersonByFirstNameAndLastName(String firstName, String lastName) {
-		return personRepository.findByFirstNameAndLastName(firstName, lastName);
-	}
+//	/**
+//	 * Filtre une personne dans la base de donnée à partir du nom et prenom en
+//	 * paramètres
+//	 * 
+//	 * @Param String firstName
+//	 * @Param String lastName
+//	 * @return PersonModel
+//	 * @see FireStationService.getFirestationsByStation(station)
+//	 * 
+//	 */
+
 
 	// ----------------------------------------------------------------------------------------
 	// GET BY: Methode pour obtenir une personne par prénom et nom
@@ -105,10 +101,11 @@ public class PersonService {
 	public ArrayList<PersonModel> getPersonsByStation(long station) {
 
 		ArrayList<PersonModel> personsByStation = new ArrayList<PersonModel>();
-		List<FireStationModel> fireStations = fireStationService.getFirestationsByStation(station);
+		List<FireStationModel> fireStations = fireStationRepository.findByStation(station);//findby
+		// requete jointure
 
 		for (FireStationModel fireStation : fireStations) {
-			for (PersonModel person : getPersonsByAddress(fireStation.getAddress())) {
+			for (PersonModel person : findByAddress(fireStation.getAddress())) {
 				personsByStation.add(person);
 			}
 		}
@@ -128,9 +125,9 @@ public class PersonService {
 		HashSet<PersonModel> Relationship = new HashSet<PersonModel>();
 		// Obtenir une personne par son nom et prénom
 		PersonModel person = new PersonModel();
-		person = getPersonByFirstNameAndLastName(firstName, lastName);
+		person = personRepository.findByFirstNameAndLastName(firstName, lastName);
 		// Obtenir des personnes du même nom
-		List<PersonModel> PersonsByLastName = getPersonsByLastName(lastName);
+		List<PersonModel> PersonsByLastName = findByLastName(lastName); //utiliser directement repositoru
 		// Obtenir des personnes du même nom sans une personne (celle ayant le prénom en
 		// argument)
 		PersonsByLastName.remove(person);
@@ -151,9 +148,8 @@ public class PersonService {
 	 * @return PersonModel -> la personne ajoutée avec son id dans la base de donnée
 	 * 
 	 */
-	public PersonModel postPerson(PersonModel person) {
-
-		person.setId(null); // Pour éviter que le post face l'update avec un id déjà existant
+	public PersonModel save(PersonModel person) {
+//		person.setId(null); 
 		return personRepository.save(person);
 	}
 
@@ -162,30 +158,14 @@ public class PersonService {
 	 * Le prénom et le nom ne peuvent pas être modifiable
 	 * 
 	 * @Param PersonModel person
-	 * @return boolean
+	 * @return PersonModel
 	 * 
 	 */
-	public boolean updatePerson(PersonModel person) throws IllegalArgumentException {
-		boolean result = false;
-		long i = 0;
-		long j = 0;
-		long countEntities = personRepository.count();
-
-		do {
-			if ((personRepository.existsById(i))
-					&& person.getFirstName().equals(personRepository.findById(i).get().getFirstName())
-					&& person.getLastName().equals(personRepository.findById(i).get().getLastName())) {
-				j++;
-				person.setId(i);
-				personRepository.saveAndFlush(person);
-				result = true;
-				break;
-			}
-			i++;
-			if (i == dataBaseScoredEstimated)
-				break;
-		} while (j != countEntities);
-		return result;
+	public PersonModel update(PersonModel person) throws IllegalArgumentException {
+		PersonModel personInDb = new PersonModel();
+		personInDb = personRepository.findByFirstNameAndLastName(person.getFirstName(), person.getLastName());
+		person.setId(personInDb.getId());
+		return personRepository.save(person);
 
 	}
 
@@ -194,12 +174,12 @@ public class PersonService {
 	 * id représentant son prénom et son nom (exemple : firstnamelastName => EmmanuelMacron)
 	 * 
 	 * @Param String id
-	 * @return boolean
+	 * @return PersonModel
 	 * 
 	 */
-	public boolean deletePersonByLastNameFirstname(String id) {
+	public PersonModel deletePersonByLastNameFirstname(String id) {
 
-		boolean result = false;
+		PersonModel personDelete = new PersonModel();
 		long i = 0;
 		long j = 0;
 		long countEntities = personRepository.count();
@@ -208,16 +188,16 @@ public class PersonService {
 			PersonModel person = new PersonModel();
 			if (personRepository.existsById(i)) {
 				j++;
-				person = personRepository.findById(i).get();
+				person = personRepository.findById(i);
 				if (id.startsWith(person.getFirstName()) && id.endsWith(person.getLastName())) {
 					personRepository.deleteByFirstNameAndLastName(person.getFirstName(), person.getLastName());
-					result = true;
+					personDelete = person;
 					break;
 				}
 			}
 			i++;
 		} while (j != countEntities);
-		return result;
+		return personDelete;
 	}
 
 }

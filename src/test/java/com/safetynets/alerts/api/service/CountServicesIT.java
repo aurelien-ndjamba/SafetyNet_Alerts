@@ -9,50 +9,56 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import com.safetynets.alerts.api.model.MedicalRecordModel;
+import com.safetynets.alerts.api.repository.MedicalRecordRepository;
 
-//@WebMvcTest(controllers = CountService.class)
+@SpringBootTest
+//@AutoConfigureMockMvc
 class CountServicesIT {
 
-	@Mock
+//	@Mock
+//	private MedicalRecordService medicalRecordService;
+	@Autowired
+	private FireStationService fireStationService;
+	@Autowired
+	private PersonService personService;
+	@Autowired
+	private MedicalRecordRepository medicalRecordRepository;
+	@Autowired
 	private MedicalRecordService medicalRecordService;
+	
 	
 	@MockBean
 	private ReaderJsonService readerJsonService;
 	
-	@MockBean
-	private CountService countService;
+//	@MockBean
+//	private CountService countService;
+//	@Autowired
+//	private CountService countService;
 	
 	@Test
 	public void testGetAge() throws ParseException {
-		
-		// GIVEN
-		String firstName = "Eric";
-		String lastName = "Cadigan";
-		String birthdate = "08/06/1945";
-		MedicalRecordModel medicalRecord = new MedicalRecordModel();
-		medicalRecord.setFirstName(firstName);
-		medicalRecord.setLastName(lastName);
-		medicalRecord.setBirthdate(birthdate);
-//		CountService countService = new CountService();
-		
-		// WHEN
-		when(medicalRecordService.getMedicalRecordByFirstNameAndLastName("Eric", "Cadigan")).thenReturn(medicalRecord);
-		
-		// THEN
-		CountService countService = new CountService();
-		assertThat(countService.getAge("Eric", "Cadigan")).isEqualTo((int) 76);
+		assertThat(CountService.getAge("08/06/1945")).isEqualTo((int) 76);
 	}
 	
-	@Disabled
 	@Test
-	public void testGetMedicalRecordByFirstNameAndLastName() throws ParseException {
+	public void testGetCountAdult() throws ParseException {
 		String firstName = "Eric";
 		String lastName = "Cadigan";
 		MedicalRecordService medicalRecordService = new MedicalRecordService();
-		assertThat(medicalRecordService.getMedicalRecordByFirstNameAndLastName(firstName, lastName).getBirthdate()).isEqualTo("08/06/1945");
+		assertThat(medicalRecordService.findByFirstNameAndLastName(firstName, lastName).getBirthdate()).isEqualTo("08/06/1945");
+	}
+	
+	@Test
+	public void testGetCountChildren() throws ParseException {
+//		String firstName = "Eric";
+//		String lastName = "Cadigan";
+//		MedicalRecordService medicalRecordService = new MedicalRecordService();
+		assertThat(medicalRecordService.findByFirstNameAndLastName("Eric", "Cadigan").getBirthdate()).isEqualTo("08/06/1945");
 	}
 
 }

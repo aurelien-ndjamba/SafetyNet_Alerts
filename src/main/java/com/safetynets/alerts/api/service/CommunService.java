@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import com.safetynets.alerts.api.model.ChildInfoModel;
 import com.safetynets.alerts.api.model.FireStationModel;
 import com.safetynets.alerts.api.model.PersonsByAddress;
+import com.safetynets.alerts.api.repository.MedicalRecordRepository;
+import com.safetynets.alerts.api.repository.PersonRepository;
 import com.safetynets.alerts.api.model.MedicalRecordModel;
 import com.safetynets.alerts.api.model.PersonModel;
 import com.safetynets.alerts.api.model.PersonInfoGlobalModel;
@@ -33,7 +35,11 @@ public class CommunService {
 	private MedicalRecordService medicalRecordService;
 	@Autowired
 	private CountService countService;
-
+	@Autowired
+	private PersonRepository personRepository;
+	@Autowired
+	private MedicalRecordRepository medicalRecordRepository;
+	
 	/** 
 	 * liste les enfants vivants à l'addresse en parametre sous la forme:
 	 * 
@@ -50,17 +56,18 @@ public class CommunService {
 
 		List<ChildInfoModel> childInfos = new ArrayList<ChildInfoModel>();
 		List<PersonModel> persons = new ArrayList<PersonModel>();
-		persons = personService.getPersonsByAddress(address);
+		persons = personService.findByAddress(address);
 
 		for (PersonModel person : persons) {
-
-			if (countService.getAge(person.getFirstName(), person.getLastName()) <= 18) {
+			MedicalRecordModel medicalRecordModel = medicalRecordRepository.findByFirstNameAndLastName(person.getFirstName(), person.getLastName());
+			int age = CountService.getAge(medicalRecordModel.getBirthdate());
+			if (age <= 18) {
 
 				ChildInfoModel childInfo = new ChildInfoModel();
 				childInfo.setId(person.getId());
 				childInfo.setFirstName(person.getFirstName());
 				childInfo.setLastName(person.getLastName());
-				childInfo.setAge(countService.getAge(person.getFirstName(), person.getLastName()));
+				childInfo.setAge(age);
 				childInfo.setFamilyRelationShip(
 						personService.getRelationship(address, person.getFirstName(), person.getLastName()));
 
@@ -83,11 +90,11 @@ public class CommunService {
 
 		HashSet<String> phoneAlert = new HashSet<String>();
 		List<FireStationModel> fireStations = new ArrayList<FireStationModel>();
-		fireStations = fireStationService.getFirestationsByStation(firestation);
+		fireStations = fireStationService.findByStation(firestation);
 
 		for (FireStationModel fireStation : fireStations) {
 			List<PersonModel> persons = new ArrayList<PersonModel>();
-			persons = personService.getPersonsByAddress(fireStation.getAddress());
+			persons = personService.findByAddress(fireStation.getAddress());
 			for (PersonModel person : persons) {
 				phoneAlert.add(person.getPhone());
 			}
@@ -115,7 +122,7 @@ public class CommunService {
 
 		ArrayList<PersonInfoAdvancedModel> personsInfoAdvanced = new ArrayList<PersonInfoAdvancedModel>();
 		List<PersonModel> persons = new ArrayList<PersonModel>();
-		persons = personService.getPersonsByAddress(address);
+		persons = personService.findByAddress(address);
 
 		for (PersonModel person : persons) {
 
@@ -124,12 +131,14 @@ public class CommunService {
 			personInfoAdvanced.setFirstName(person.getFirstName());
 			personInfoAdvanced.setLastName(person.getLastName());
 			personInfoAdvanced.setAddress(person.getAddress());
-			personInfoAdvanced.setStationNumber(fireStationService.getStationNumberByAddress(address));
-			personInfoAdvanced.setAge(countService.getAge(person.getFirstName(), person.getLastName()));
+			personInfoAdvanced.setStationNumber(fireStationService.findStationByAddress(address));
+			
+			MedicalRecordModel medicalRecordModel = medicalRecordRepository.findByFirstNameAndLastName(person.getFirstName(), person.getLastName());
+			personInfoAdvanced.setAge(CountService.getAge(medicalRecordModel.getBirthdate()));
 			personInfoAdvanced.setPhone(person.getPhone());
 
 			MedicalRecordModel medicalRecord = new MedicalRecordModel();
-			medicalRecord = medicalRecordService.getMedicalRecordByFirstNameAndLastName(person.getFirstName(),
+			medicalRecord = medicalRecordService.findByFirstNameAndLastName(person.getFirstName(),
 					person.getLastName());
 			personInfoAdvanced.setMedications(medicalRecord.getMedications());
 			personInfoAdvanced.setAllergies(medicalRecord.getAllergies());
@@ -155,12 +164,12 @@ public class CommunService {
 
 		List<PersonsByAddress> listPersonsByAddress = new ArrayList<PersonsByAddress>();
 		Iterable<FireStationModel> fireStationsByManyStations = new ArrayList<FireStationModel>();
-		fireStationsByManyStations = fireStationService.getFirestationsByManyStation(stations);
+		fireStationsByManyStations = fireStationService.findFirestationsByManyStation(stations);
 		for (FireStationModel fireStation : fireStationsByManyStations) {
 
 			PersonsByAddress personsByStationNumber = new PersonsByAddress();
 			personsByStationNumber.setAddress(fireStation.getAddress());
-			personsByStationNumber.setPersonsByAddress(personService.getPersonsByAddress(fireStation.getAddress()));
+			personsByStationNumber.setPersonsByAddress(personService.findByAddress(fireStation.getAddress()));
 
 			listPersonsByAddress.add(personsByStationNumber);
 		}
@@ -187,19 +196,21 @@ public class CommunService {
 	public PersonInfoGlobalModel getPersonInfoGlobal(String firstName, String lastName) throws ParseException {
 
 		PersonModel person = new PersonModel();
-		person = personService.getPersonByFirstNameAndLastName(firstName, lastName);
+		person = personRepository.findByFirstNameAndLastName(firstName, lastName);
 
 		PersonInfoGlobalModel personInfoGlobal = new PersonInfoGlobalModel();
 		personInfoGlobal.setFirstName(person.getFirstName());
 		personInfoGlobal.setLastName(person.getLastName());
 		personInfoGlobal.setAddress(person.getAddress());
-		personInfoGlobal.setAge(countService.getAge(person.getFirstName(), person.getLastName()));
+		
+		MedicalRecordModel medicalRecordModel = medicalRecordRepository.findByFirstNameAndLastName(firstName, lastName);
+		personInfoGlobal.setAge(CountService.getAge(medicalRecordModel.getBirthdate()));
 		personInfoGlobal.setEmail(person.getEmail());
 
 		HashSet<String> medicationsByLastName = new HashSet<String>();
 		HashSet<String> allergiesByLastName = new HashSet<String>();
 		List<MedicalRecordModel> medicalRecords = new ArrayList<MedicalRecordModel>();
-		medicalRecords = medicalRecordService.getMedicalRecordsByLastName(person.getLastName());
+		medicalRecords = medicalRecordService.findByLastName(person.getLastName());
 		int i = 0;
 		int j = 0;
 		for (MedicalRecordModel medicalRecord : medicalRecords) {
@@ -235,7 +246,7 @@ public class CommunService {
 	 */
 	public List<String> getCommunityEmail(String city) {
 		List<PersonModel> persons = new ArrayList<PersonModel>();
-		persons = personService.getPersonsByCity(city);
+		persons = personService.findByCity(city);
 		List<String> communityEmail = new ArrayList<String>();
 		
 		for (PersonModel person : persons) {

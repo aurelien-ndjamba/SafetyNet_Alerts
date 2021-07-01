@@ -25,7 +25,7 @@ import com.safetynets.alerts.api.service.CommunService;
 import com.safetynets.alerts.api.service.ReaderJsonService;
 
 @WebMvcTest(controllers = CommunController.class)
-public class TestCommunController {
+public class CommunControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;

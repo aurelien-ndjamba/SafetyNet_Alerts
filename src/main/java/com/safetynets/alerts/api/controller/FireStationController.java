@@ -41,9 +41,9 @@ public class FireStationController {
 	 * 
 	 */
 	@GetMapping("/firestation")
-	public List<FireStationModel> getAllFireStation() {
+	public List<FireStationModel> findAll() {
 		logger.info("Appel de l'api GET sur '/firestation' sans parametre");
-		return fireStationService.getAllFireStation();
+		return fireStationService.findAll();
 	}
 	
 	/** 
@@ -55,9 +55,9 @@ public class FireStationController {
 	 * 
 	 */
 	@RequestMapping(value = "/firestation", method = RequestMethod.GET, params = { "station" })
-	public List<FireStationModel> getFirestationsByStation(long station) throws ParseException {
+	public List<FireStationModel> findByStation(long station) throws ParseException {
 		logger.info("Appel de l'api GET sur '/firestation' avec le parametre station :" + station);
-		return fireStationService.getFirestationsByStation(station);
+		return fireStationService.findByStation(station);
 	}
 
 	/** 
@@ -70,9 +70,9 @@ public class FireStationController {
 	 */
 	@PostMapping("/firestation")
 	@ResponseStatus(HttpStatus.CREATED)
-	public FireStationModel postFireStation(@RequestBody FireStationModel fireStation) {
+	public FireStationModel save(@RequestBody FireStationModel fireStation) {
 		logger.info("Appel de l'api POST sur '/firestation' avec pour parametre Body 'FireStationModel' :" + fireStation);
-		return fireStationService.postFireStation(fireStation);
+		return fireStationService.save(fireStation);
 	}
 
 	/** 
@@ -81,13 +81,13 @@ public class FireStationController {
 	 * Met à jour le numéro de station d'une caserne de pompier. 
 	 * L'adresse ne peut pas être modifiée.
 	 * 
-	 * @return	boolean
+	 * @return	FireStationModel -> la caserne mis à jour avec son id dans la base de donnée
 	 * 
 	 */
 	@PutMapping("/firestation")
-	public boolean updateFireStation(@RequestBody FireStationModel firestation) {
+	public FireStationModel update(@RequestBody FireStationModel firestation) {
 		logger.info("Appel de l'api PUT sur '/firestation' avec pour parametre Body 'FireStationModel' :" + firestation);
-		return fireStationService.updateFireStation(firestation);
+		return fireStationService.update(firestation);
 	}
 
 	/** 
@@ -99,10 +99,10 @@ public class FireStationController {
 	 * 
 	 */
 	@RequestMapping(value = "/firestation", method = RequestMethod.DELETE, params = { "address" })
-	public void deleteFireStationByAddress(
+	public void deleteByAddress(
 			@RequestParam("address") String address) throws ParseException {
 		logger.info("Appel de l'api DELETE sur '/firestation' avec pour parametre 'address' :" + address);
-		fireStationService.deleteFireStationByAddress(address);
+		fireStationService.deleteByAddress(address);
 	}
 	
 }
