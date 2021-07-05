@@ -9,14 +9,17 @@
 		<version>2.5.0</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
+	
 	<groupId>com.safetynets.alerts</groupId>
 	<artifactId>api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>api</name>
 	<description>Application for emergency service systems</description>
+	
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -63,18 +66,38 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.7.2</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.7.2</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-junit-jupiter</artifactId>
+			<version>3.11.1</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>3.11.1</version>
+			<scope>test</scope>
+		</dependency>
+
+
+		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>5.7.2</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -180,8 +203,8 @@
 	<!-- =============================================================== -->
 	<distributionManagement>
 		<site>
-			<id>site-projet</id>
-			<url>scp://localhost/tmp/</url>
+			<id>SAFETYNETS ALERTS</id>
+			<url>http://localhost:8080</url>
 		</site>
 	</distributionManagement>
 
@@ -199,7 +222,7 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
@@ -249,7 +272,7 @@
 							<archive>
 								<manifest>
 									<mainClass>
-										com.parkit.parkingsystem.App
+										com.safetynets.alerts.api
 									</mainClass>
 								</manifest>
 							</archive>
@@ -277,25 +300,25 @@
 						<exclude>**/*IT.java</exclude>
 					</excludes>
 				</configuration>
-				<executions>
-					<execution>
-						<id>integration-test</id>
-						<goals>
-							<goal>test</goal>
-						</goals>
-						<phase>integration-test</phase>
-						<configuration>
-							<excludes>
-								<exclude>none</exclude>
-							</excludes>
-							<includes>
-								<include>**/*IT.java</include>
-							</includes>
-						</configuration>
-					</execution>
-				</executions>
+<!-- 				<executions> -->
+<!-- 					<execution> -->
+<!-- 						<id>integration-test</id> -->
+<!-- 						<goals> -->
+<!-- 							<goal>test</goal> -->
+<!-- 						</goals> -->
+<!-- 						<phase>integration-test</phase> -->
+<!-- 						<configuration> -->
+<!-- 							<excludes> -->
+<!-- 								<exclude>none</exclude> -->
+<!-- 							</excludes> -->
+<!-- 							<includes> -->
+<!-- 								<include>**/*IT.java</include> -->
+<!-- 							</includes> -->
+<!-- 						</configuration> -->
+<!-- 					</execution> -->
+<!-- 				</executions> -->
 			</plugin>
-			
+
 
 		</plugins>
 	</build>

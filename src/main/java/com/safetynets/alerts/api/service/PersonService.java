@@ -10,10 +10,9 @@ import org.springframework.stereotype.Service;
 
 import com.safetynets.alerts.api.model.FireStationModel;
 import com.safetynets.alerts.api.model.PersonModel;
-import com.safetynets.alerts.api.repository.FireStationRepository;
 import com.safetynets.alerts.api.repository.PersonRepository;
 
-/** 
+/**
  * Classe définissant les méthodes de Service "Person"
  * 
  * @author aurelien.ndjamba
@@ -25,8 +24,28 @@ public class PersonService {
 	@Autowired
 	private PersonRepository personRepository;
 	@Autowired
-	private FireStationRepository fireStationRepository;
-	
+	private FireStationService fireStationService;
+
+	/**
+	 * Setter de personRepository
+	 * 
+	 * @return void
+	 * 
+	 */
+	public void setPersonRepository(PersonRepository personRepository) {
+		this.personRepository = personRepository;
+	}
+
+	/**
+	 * Setter de fireStationService
+	 * 
+	 * @return void
+	 * 
+	 */
+	public void setFireStationService(FireStationService fireStationService) {
+		this.fireStationService = fireStationService;
+	}
+
 	/**
 	 * Liste toutes les personnes présentes dans la base de donnée
 	 * 
@@ -72,8 +91,8 @@ public class PersonService {
 	}
 
 	/**
-	 * Filtre des personnes dans la base de donnée à partir du nom de famille "lastName" en
-	 * paramètre
+	 * Filtre des personnes dans la base de donnée à partir du nom de famille
+	 * "lastName" en paramètre
 	 * 
 	 * @Param String lastName
 	 * @return List<PersonModel>
@@ -83,27 +102,19 @@ public class PersonService {
 		return personRepository.findByLastName(lastName);
 	}
 
-//	/**
-//	 * Filtre une personne dans la base de donnée à partir du nom et prenom en
-//	 * paramètres
-//	 * 
-//	 * @Param String firstName
-//	 * @Param String lastName
-//	 * @return PersonModel
-//	 * @see FireStationService.getFirestationsByStation(station)
-//	 * 
-//	 */
-
-
-	// ----------------------------------------------------------------------------------------
-	// GET BY: Methode pour obtenir une personne par prénom et nom
-	// ----------------------------------------------------------------------------------------
-	public ArrayList<PersonModel> getPersonsByStation(long station) {
+	/**
+	 * Donne une liste de personne couverte par un numéro de caserne de pompier.
+	 * 
+	 * @Param long station
+	 * @return ArrayList<PersonModel>
+	 * @see FireStationService.findByStation(station)
+	 * 
+	 */
+	public ArrayList<PersonModel> findPersonsByStation(long station) {
 
 		ArrayList<PersonModel> personsByStation = new ArrayList<PersonModel>();
-		List<FireStationModel> fireStations = fireStationRepository.findByStation(station);//findby
+		List<FireStationModel> fireStations = fireStationService.findByStation(station);
 		// requete jointure
-
 		for (FireStationModel fireStation : fireStations) {
 			for (PersonModel person : findByAddress(fireStation.getAddress())) {
 				personsByStation.add(person);
@@ -112,12 +123,18 @@ public class PersonService {
 		return personsByStation;
 	}
 
-
-	// ----------------------------------------------------------------------------------------
-	// Methode pour obtenir les parentés d'une personne en fonction du nom et de
-	// l'adresse
-	// ----------------------------------------------------------------------------------------
-	public HashSet<PersonModel> getRelationship(String address, String firstName, String lastName)
+	/**
+	 * Donne une liste de personne de la famille d'une personne ayant le même nom et
+	 * la même adresse qu'une personne
+	 * 
+	 * @Param String address
+	 * @Param String firstName
+	 * @Param String lastName
+	 * @return HashSet<PersonModel>
+	 * @see FireStationService.findByStation(station)
+	 * 
+	 */
+	public HashSet<PersonModel> findRelationship(String address, String firstName, String lastName)
 			throws ParseException {
 
 		// Liste du foyer ayant nom et adresse similaire avec la personne dont le prénom
@@ -127,7 +144,7 @@ public class PersonService {
 		PersonModel person = new PersonModel();
 		person = personRepository.findByFirstNameAndLastName(firstName, lastName);
 		// Obtenir des personnes du même nom
-		List<PersonModel> PersonsByLastName = findByLastName(lastName); //utiliser directement repositoru
+		List<PersonModel> PersonsByLastName = personRepository.findByLastName(lastName);
 		// Obtenir des personnes du même nom sans une personne (celle ayant le prénom en
 		// argument)
 		PersonsByLastName.remove(person);
@@ -149,13 +166,13 @@ public class PersonService {
 	 * 
 	 */
 	public PersonModel save(PersonModel person) {
-//		person.setId(null); 
+		person.setId(null);
 		return personRepository.save(person);
 	}
 
 	/**
-	 * Modifie les informations d'une personne dans la base de donnée.
-	 * Le prénom et le nom ne peuvent pas être modifiable
+	 * Modifie les informations d'une personne dans la base de donnée. Le prénom et
+	 * le nom ne peuvent pas être modifiable
 	 * 
 	 * @Param PersonModel person
 	 * @return PersonModel
@@ -171,13 +188,14 @@ public class PersonService {
 
 	/**
 	 * Supprime les informations d'une personne dans la base de donnée à partir d'un
-	 * id représentant son prénom et son nom (exemple : firstnamelastName => EmmanuelMacron)
+	 * id représentant son prénom et son nom (exemple : firstnamelastName =>
+	 * EmmanuelMacron)
 	 * 
 	 * @Param String id
 	 * @return PersonModel
 	 * 
 	 */
-	public PersonModel deletePersonByLastNameFirstname(String id) {
+	public PersonModel delete(String id) {
 
 		PersonModel personDelete = new PersonModel();
 		long i = 0;

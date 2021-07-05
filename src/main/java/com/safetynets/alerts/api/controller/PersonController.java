@@ -106,7 +106,7 @@ public class PersonController {
 	@RequestMapping(value = "/person", method = RequestMethod.DELETE, params = { "id" })
 	public PersonModel deletePersonByLastNameFirstname(@RequestParam String id) throws IllegalArgumentException {
 		logger.info("Appel de l'api DELETE sur '/person' avec pour parametre 'id' :" + id);
-		return personService.deletePersonByLastNameFirstname(id);
+		return personService.delete(id);
 	}
 
 }

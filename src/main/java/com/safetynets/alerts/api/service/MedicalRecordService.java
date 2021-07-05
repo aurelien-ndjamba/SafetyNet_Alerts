@@ -8,21 +8,27 @@ import org.springframework.stereotype.Service;
 import com.safetynets.alerts.api.model.MedicalRecordModel;
 import com.safetynets.alerts.api.repository.MedicalRecordRepository;
 
-import lombok.Data;
-
 /** 
  * Classe définissant les méthodes de Service "MedicalRecord"
  * 
  * @author aurelien.ndjamba
  * @version 1.0
  */
-@Data
 @Service
 public class MedicalRecordService {
 	
-//	MedicalRecordService(){}
 	@Autowired
 	private MedicalRecordRepository medicalRecordRepository;
+	
+	/**
+	 * Setter de medicalRecordRepository
+	 * 
+	 * @return void
+	 * 
+	 */
+	public void setMedicalRecordRepository(MedicalRecordRepository medicalRecordRepository) {
+		this.medicalRecordRepository = medicalRecordRepository;
+	}
 	
 	/**
 	 * Liste tous les enregistrements médicaux présents dans la base de donnée
@@ -104,7 +110,7 @@ public class MedicalRecordService {
 	 * @return MedicalRecordModel
 	 * 
 	 */
-	public MedicalRecordModel deleteMedicalRecordByLastNameFirstname(String id) { //
+	public MedicalRecordModel delete(String id) { //
 
 		MedicalRecordModel medicalRecordDelete = new MedicalRecordModel();
 		long i = 0;

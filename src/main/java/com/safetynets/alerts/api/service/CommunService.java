@@ -60,7 +60,7 @@ public class CommunService {
 
 		for (PersonModel person : persons) {
 			MedicalRecordModel medicalRecordModel = medicalRecordRepository.findByFirstNameAndLastName(person.getFirstName(), person.getLastName());
-			int age = CountService.getAge(medicalRecordModel.getBirthdate());
+			int age = countService.findAge(medicalRecordModel.getBirthdate());
 			if (age <= 18) {
 
 				ChildInfoModel childInfo = new ChildInfoModel();
@@ -69,7 +69,7 @@ public class CommunService {
 				childInfo.setLastName(person.getLastName());
 				childInfo.setAge(age);
 				childInfo.setFamilyRelationShip(
-						personService.getRelationship(address, person.getFirstName(), person.getLastName()));
+						personService.findRelationship(address, person.getFirstName(), person.getLastName()));
 
 				childInfos.add(childInfo);
 			}
@@ -134,7 +134,7 @@ public class CommunService {
 			personInfoAdvanced.setStationNumber(fireStationService.findStationByAddress(address));
 			
 			MedicalRecordModel medicalRecordModel = medicalRecordRepository.findByFirstNameAndLastName(person.getFirstName(), person.getLastName());
-			personInfoAdvanced.setAge(CountService.getAge(medicalRecordModel.getBirthdate()));
+			personInfoAdvanced.setAge(countService.findAge(medicalRecordModel.getBirthdate()));
 			personInfoAdvanced.setPhone(person.getPhone());
 
 			MedicalRecordModel medicalRecord = new MedicalRecordModel();
@@ -204,7 +204,7 @@ public class CommunService {
 		personInfoGlobal.setAddress(person.getAddress());
 		
 		MedicalRecordModel medicalRecordModel = medicalRecordRepository.findByFirstNameAndLastName(firstName, lastName);
-		personInfoGlobal.setAge(CountService.getAge(medicalRecordModel.getBirthdate()));
+		personInfoGlobal.setAge(countService.findAge(medicalRecordModel.getBirthdate()));
 		personInfoGlobal.setEmail(person.getEmail());
 
 		HashSet<String> medicationsByLastName = new HashSet<String>();

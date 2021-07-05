@@ -17,9 +17,21 @@ import com.safetynets.alerts.api.repository.FireStationRepository;
  */
 @Service
 public class FireStationService {
+	
+	
 
 	@Autowired
 	private FireStationRepository fireStationRepository;
+	
+	/**
+	 * Setter de fireStationRepository
+	 * 
+	 * @return void
+	 * 
+	 */
+	public void setFireStationRepository(FireStationRepository fireStationRepository) {
+		this.fireStationRepository = fireStationRepository;
+	}
 
 	/**
 	 * Liste toutes les casernes présentes dans la base de donnée
@@ -70,7 +82,7 @@ public class FireStationService {
 	public List<FireStationModel> findFirestationsByManyStation(List<Long> stations) {
 		List<FireStationModel> firestationsByManyStation = new ArrayList<FireStationModel>();
 		for (long station : stations) {
-			firestationsByManyStation.addAll(findByStation(station));
+			firestationsByManyStation.addAll(fireStationRepository.findByStation(station));
 		}
 		return firestationsByManyStation;
 	}

@@ -103,7 +103,7 @@ public class MedicalRecordController {
 	@RequestMapping(value = "/medicalRecord", method = RequestMethod.DELETE, params = { "id" })
 	public MedicalRecordModel deleteMedicalRecordByLastNameFirstname(@RequestParam String id) throws IllegalArgumentException {
 		logger.info("Appel de l'api DELETE sur '/medicalRecord' avec pour parametre 'id' :" + id);
-		return medicalRecordService.deleteMedicalRecordByLastNameFirstname(id);
+		return medicalRecordService.delete(id);
 	}
 	
 }

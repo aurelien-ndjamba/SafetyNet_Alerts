@@ -121,7 +121,7 @@ public class PersonControllerTest {
 		person.setLastName("Jupiter");
 
 		// WHEN
-		when(personService.deletePersonByLastNameFirstname("KevinRocco")).thenReturn(person);
+		when(personService.delete("KevinRocco")).thenReturn(person);
 
 		// THEN
 		mockMvc.perform(delete("/person?id=KevinRocco")).andExpect(status().isOk())

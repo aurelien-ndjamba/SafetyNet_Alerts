@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import com.safetynets.alerts.api.model.FireStationModel;
 import com.safetynets.alerts.api.model.MedicalRecordModel;
 import com.safetynets.alerts.api.model.PersonModel;
-import com.safetynets.alerts.api.repository.MedicalRecordRepository;
 
 /**
  * Classe définissant les méthodes de Service "Count"
@@ -28,18 +27,48 @@ public class CountService {
 	@Autowired
 	private FireStationService fireStationService;
 	@Autowired
-	private MedicalRecordRepository medicalRecordRepository;
+	private MedicalRecordService medicalRecordService;
+
+	/**
+	 * Setter de personService
+	 * 
+	 * @return void
+	 * 
+	 */
+	public void setPersonService(PersonService personService) {
+		this.personService = personService;
+	}
+
+	/**
+	 * Setter de fireStationService
+	 * 
+	 * @return void
+	 * 
+	 */
+	public void setFireStationService(FireStationService fireStationService) {
+		this.fireStationService = fireStationService;
+	}
+
+	/**
+	 * Setter de medicalRecordService
+	 * 
+	 * @return void
+	 * 
+	 */
+	public void setMedicalRecordService(MedicalRecordService medicalRecordService) {
+		this.medicalRecordService = medicalRecordService;
+	}
 
 	/**
 	 * Donne l'age d'une personne à partir de son nom et prénom en paramètres
 	 * 
 	 * @param firstName (String)
-	 * @param lastName (String)
+	 * @param lastName  (String)
 	 * @return age (int)
 	 * 
 	 */
 	@SuppressWarnings("deprecation")
-	public static int getAge(String birthdayInString) throws ParseException {
+	public int findAge(String birthdayInString) throws ParseException {
 
 		int age = 0;
 		Date birthdayInDate;
@@ -57,6 +86,7 @@ public class CountService {
 
 		return age;
 	}
+
 	/**
 	 * Donne le nombre d'adulte vivants à une adresse désservie par une caserne dont
 	 * le numéro est en paramètre
@@ -65,7 +95,7 @@ public class CountService {
 	 * @return countAdult (int)
 	 * 
 	 */
-	public int getCountAdult(long station) throws ParseException {
+	public int findCountAdult(long station) throws ParseException {
 
 		int countAdult = 0;
 
@@ -75,8 +105,9 @@ public class CountService {
 			List<PersonModel> persons = personService.findByAddress(fireStation.getAddress());
 			for (PersonModel person : persons) {
 				if (fireStation.getAddress().equals(person.getAddress())) {
-					MedicalRecordModel medicalRecordModel = medicalRecordRepository.findByFirstNameAndLastName(person.getFirstName(), person.getLastName());
-					int agePerson = getAge(medicalRecordModel.getBirthdate());
+					MedicalRecordModel medicalRecordModel = medicalRecordService
+							.findByFirstNameAndLastName(person.getFirstName(), person.getLastName());
+					int agePerson = findAge(medicalRecordModel.getBirthdate());
 					if (agePerson > 18)
 						countAdult++;
 				}
@@ -86,14 +117,14 @@ public class CountService {
 	}
 
 	/**
-	 * Donne le nombre d'enfants (<=18 ans) vivants à une adresse désservie par une caserne dont
-	 * le numéro est en paramètre
+	 * Donne le nombre d'enfants (<=18 ans) vivants à une adresse désservie par une
+	 * caserne dont le numéro est en paramètre
 	 * 
 	 * @param station (long)
 	 * @return CountChildren (int)
 	 * 
 	 */
-	public int getCountChildren(long station) throws ParseException {
+	public int findCountChildren(long station) throws ParseException {
 
 		int countChildren = 0;
 
@@ -103,8 +134,9 @@ public class CountService {
 			List<PersonModel> persons = personService.findByAddress(fireStation.getAddress());
 			for (PersonModel person : persons) {
 				if (fireStation.getAddress().equals(person.getAddress())) {
-					MedicalRecordModel medicalRecordModel = medicalRecordRepository.findByFirstNameAndLastName(person.getFirstName(), person.getLastName());
-					int agePerson = getAge(medicalRecordModel.getBirthdate());
+					MedicalRecordModel medicalRecordModel = medicalRecordService
+							.findByFirstNameAndLastName(person.getFirstName(), person.getLastName());
+					int agePerson = findAge(medicalRecordModel.getBirthdate());
 					if (agePerson <= 18)
 						countChildren++;
 				}

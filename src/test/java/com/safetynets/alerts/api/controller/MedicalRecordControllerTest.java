@@ -121,7 +121,7 @@ public class MedicalRecordControllerTest {
 		medicalRecordOutput.setLastName("Durant");
 		
 		// WHEN
-		when(medicalRecordService.deleteMedicalRecordByLastNameFirstname("KevinMars")).thenReturn(medicalRecordOutput);
+		when(medicalRecordService.delete("KevinMars")).thenReturn(medicalRecordOutput);
 		
 		// THEN
 		mockMvc.perform(delete("/medicalRecord?id=KevinMars")).andExpect(status().isOk())
