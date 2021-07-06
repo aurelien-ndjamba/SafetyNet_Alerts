@@ -20,7 +20,7 @@ import com.safetynets.alerts.api.model.ChildInfoModel;
 import com.safetynets.alerts.api.model.PersonInfoAdvancedModel;
 import com.safetynets.alerts.api.model.PersonInfoGlobalModel;
 import com.safetynets.alerts.api.model.PersonModel;
-import com.safetynets.alerts.api.model.PersonsByAddress;
+import com.safetynets.alerts.api.model.PersonsByAddressModel;
 import com.safetynets.alerts.api.service.CommunService;
 import com.safetynets.alerts.api.service.ReaderJsonService;
 
@@ -62,7 +62,7 @@ public class CommunControllerTest {
 		childInfos.add(childInfoModel);
 
 		// WHEN
-		when(communService.getChildInfos("1509 Culver St")).thenReturn(childInfos);
+		when(communService.findChildInfos("1509 Culver St")).thenReturn(childInfos);
 
 		// THEN
 		mockMvc.perform(get("/childAlert?address=1509 Culver St")).andExpect(status().isOk())
@@ -79,7 +79,7 @@ public class CommunControllerTest {
 		phoneAlert.add("841-874-6513");
 
 		// WHEN
-		when(communService.getPhoneAlert((long) 7)).thenReturn(phoneAlert);
+		when(communService.findPhoneAlert((long) 7)).thenReturn(phoneAlert);
 
 		// THEN
 		mockMvc.perform(get("/phoneAlert?firestation=7")).andExpect(status().isOk())
@@ -110,7 +110,7 @@ public class CommunControllerTest {
 		personsInfoAdvanced.add(personInfoAdvanced);
 
 		// WHEN
-		when(communService.getPersonsInfoAdvanced("PARIS")).thenReturn(personsInfoAdvanced);
+		when(communService.findPersonsInfoAdvanced("PARIS")).thenReturn(personsInfoAdvanced);
 
 		// THEN
 		mockMvc.perform(get("/fire?address=PARIS")).andExpect(status().isOk()).andExpect(jsonPath("$[0].age", is(46)));
@@ -133,11 +133,11 @@ public class CommunControllerTest {
 		List<PersonModel> personsByAddress = new ArrayList<PersonModel>();
 		personsByAddress.add(personModel);
 
-		PersonsByAddress personByAddress = new PersonsByAddress();
+		PersonsByAddressModel personByAddress = new PersonsByAddressModel();
 		personByAddress.setAddress("Elysee");
 		personByAddress.setPersonsByAddress(personsByAddress);
 
-		List<PersonsByAddress> personsByStationNumber = new ArrayList<PersonsByAddress>();
+		List<PersonsByAddressModel> personsByStationNumber = new ArrayList<PersonsByAddressModel>();
 		personsByStationNumber.add(personByAddress);
 
 		// WHEN
@@ -145,7 +145,7 @@ public class CommunControllerTest {
 		stations.add((long) 7);
 		stations.add((long) 12);
 		stations.add((long) 25);
-		when(communService.getPersonsByStations(stations)).thenReturn(personsByStationNumber);
+		when(communService.findPersonsByStations(stations)).thenReturn(personsByStationNumber);
 
 		// THEN
 		mockMvc.perform(get("/flood/stations?stations=7,12,25")).andExpect(status().isOk())
@@ -171,7 +171,7 @@ public class CommunControllerTest {
 		personInfoGlobal.setAllergies(allergies);
 
 		// WHEN
-		when(communService.getPersonInfoGlobal("Georges", "Pompidou")).thenReturn(personInfoGlobal);
+		when(communService.findPersonInfoGlobal("Georges", "Pompidou")).thenReturn(personInfoGlobal);
 
 		// THEN
 		mockMvc.perform(get("/personInfo?firstName=Georges&lastName=Pompidou")).andExpect(status().isOk())
@@ -188,7 +188,7 @@ public class CommunControllerTest {
 		communityEmail.add("nicolas.sarkozy@gmail.com");
 
 		// WHEN
-		when(communService.getCommunityEmail("Elysee")).thenReturn(communityEmail);
+		when(communService.findCommunityEmail("Elysee")).thenReturn(communityEmail);
 
 		// THEN
 		mockMvc.perform(get("/communityEmail?city=Elysee")).andExpect(status().isOk())

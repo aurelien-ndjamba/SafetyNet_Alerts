@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.safetynets.alerts.api.model.ChildInfoModel;
 import com.safetynets.alerts.api.model.FireStationModel;
-import com.safetynets.alerts.api.model.PersonsByAddress;
+import com.safetynets.alerts.api.model.PersonsByAddressModel;
 import com.safetynets.alerts.api.repository.MedicalRecordRepository;
 import com.safetynets.alerts.api.repository.PersonRepository;
 import com.safetynets.alerts.api.model.MedicalRecordModel;
@@ -21,7 +21,7 @@ import com.safetynets.alerts.api.model.PersonInfoAdvancedModel;
 /** 
  * Classe qui s'occupe des services commun de l'applicaiton
  * 
- * @author dworkin
+ * @author aurelien.ndjamba
  * @version 1.0
  */
 @Service
@@ -40,6 +40,66 @@ public class CommunService {
 	@Autowired
 	private MedicalRecordRepository medicalRecordRepository;
 	
+	/**
+	 * Setter de PersonService
+	 * 
+	 * @return void
+	 * 
+	 */
+	public void setPersonService(PersonService personService) {
+		this.personService = personService;
+	}
+	
+	/**
+	 * Setter de FireStationService
+	 * 
+	 * @return void
+	 * 
+	 */
+	public void setFireStationService(FireStationService fireStationService) {
+		this.fireStationService = fireStationService;
+	}
+	
+	/**
+	 * Setter de MedicalRecordService
+	 * 
+	 * @return void
+	 * 
+	 */
+	public void setMedicalRecordService(MedicalRecordService medicalRecordService) {
+		this.medicalRecordService = medicalRecordService;
+	}
+	
+	/**
+	 * Setter de CountService
+	 * 
+	 * @return void
+	 * 
+	 */
+	public void setCountService(CountService countService) {
+		this.countService = countService;
+	}
+	
+	/**
+	 * Setter de PersonRepository
+	 * 
+	 * @return void
+	 * 
+	 */
+	public void setPersonRepository(PersonRepository personRepository) {
+		this.personRepository = personRepository;
+	}
+	
+	/**
+	 * Setter de MedicalRecordRepository
+	 * 
+	 * @return void
+	 * 
+	 */
+	public void setMedicalRecordRepository(MedicalRecordRepository medicalRecordRepository) {
+		this.medicalRecordRepository = medicalRecordRepository;
+	}
+	
 	/** 
 	 * liste les enfants vivants à l'addresse en parametre sous la forme:
 	 * 
@@ -52,7 +112,7 @@ public class CommunService {
 	 * @return	List<ChildInfoModel>
 	 * 
 	 */
-	public List<ChildInfoModel> getChildInfos(String address) throws ParseException {
+	public List<ChildInfoModel> findChildInfos(String address) throws ParseException {
 
 		List<ChildInfoModel> childInfos = new ArrayList<ChildInfoModel>();
 		List<PersonModel> persons = new ArrayList<PersonModel>();
@@ -86,7 +146,7 @@ public class CommunService {
 	 * @return	personsInfoAdvanced(HashSet<String>)
 	 * 
 	 */
-	public HashSet<String> getPhoneAlert(Long firestation) {
+	public HashSet<String> findPhoneAlert(Long firestation) {
 
 		HashSet<String> phoneAlert = new HashSet<String>();
 		List<FireStationModel> fireStations = new ArrayList<FireStationModel>();
@@ -118,7 +178,7 @@ public class CommunService {
 	 * @return	personsInfoAdvanced
 	 * 
 	 */
-	public ArrayList<PersonInfoAdvancedModel> getPersonsInfoAdvanced(String address) throws ParseException {
+	public ArrayList<PersonInfoAdvancedModel> findPersonsInfoAdvanced(String address) throws ParseException {
 
 		ArrayList<PersonInfoAdvancedModel> personsInfoAdvanced = new ArrayList<PersonInfoAdvancedModel>();
 		List<PersonModel> persons = new ArrayList<PersonModel>();
@@ -133,13 +193,10 @@ public class CommunService {
 			personInfoAdvanced.setAddress(person.getAddress());
 			personInfoAdvanced.setStationNumber(fireStationService.findStationByAddress(address));
 			
-			MedicalRecordModel medicalRecordModel = medicalRecordRepository.findByFirstNameAndLastName(person.getFirstName(), person.getLastName());
-			personInfoAdvanced.setAge(countService.findAge(medicalRecordModel.getBirthdate()));
+			MedicalRecordModel medicalRecord = medicalRecordRepository.findByFirstNameAndLastName(person.getFirstName(), person.getLastName());
+			personInfoAdvanced.setAge(countService.findAge(medicalRecord.getBirthdate()));
 			personInfoAdvanced.setPhone(person.getPhone());
 
-			MedicalRecordModel medicalRecord = new MedicalRecordModel();
-			medicalRecord = medicalRecordService.findByFirstNameAndLastName(person.getFirstName(),
-					person.getLastName());
 			personInfoAdvanced.setMedications(medicalRecord.getMedications());
 			personInfoAdvanced.setAllergies(medicalRecord.getAllergies());
 
@@ -160,14 +217,14 @@ public class CommunService {
 	 * @return	personsInfoAdvanced
 	 * @see PersonService.personsByAddress
 	 */
-	public List<PersonsByAddress> getPersonsByStations(List<Long> stations) throws ParseException {
+	public List<PersonsByAddressModel> findPersonsByStations(List<Long> stations) throws ParseException {
 
-		List<PersonsByAddress> listPersonsByAddress = new ArrayList<PersonsByAddress>();
+		List<PersonsByAddressModel> listPersonsByAddress = new ArrayList<PersonsByAddressModel>();
 		Iterable<FireStationModel> fireStationsByManyStations = new ArrayList<FireStationModel>();
 		fireStationsByManyStations = fireStationService.findFirestationsByManyStation(stations);
 		for (FireStationModel fireStation : fireStationsByManyStations) {
 
-			PersonsByAddress personsByStationNumber = new PersonsByAddress();
+			PersonsByAddressModel personsByStationNumber = new PersonsByAddressModel();
 			personsByStationNumber.setAddress(fireStation.getAddress());
 			personsByStationNumber.setPersonsByAddress(personService.findByAddress(fireStation.getAddress()));
 
@@ -193,7 +250,7 @@ public class CommunService {
 	 * @return	personInfoGlobal(PersonInfoGlobalModel)
 	 * 
 	 */
-	public PersonInfoGlobalModel getPersonInfoGlobal(String firstName, String lastName) throws ParseException {
+	public PersonInfoGlobalModel findPersonInfoGlobal(String firstName, String lastName) throws ParseException {
 
 		PersonModel person = new PersonModel();
 		person = personRepository.findByFirstNameAndLastName(firstName, lastName);
@@ -244,7 +301,7 @@ public class CommunService {
 	 * @return	List<String>
 	 * 
 	 */
-	public List<String> getCommunityEmail(String city) {
+	public List<String> findCommunityEmail(String city) {
 		List<PersonModel> persons = new ArrayList<PersonModel>();
 		persons = personService.findByCity(city);
 		List<String> communityEmail = new ArrayList<String>();

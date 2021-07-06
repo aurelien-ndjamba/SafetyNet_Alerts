@@ -37,9 +37,9 @@ public class ReaderJsonService {
 	@Autowired
 	private PersonRepository personRepository;
 	@Autowired
-	private FireStationRepository firestationRepository;
+	private FireStationRepository fireStationRepository;
 	@Autowired
-	private MedicalRecordRepository medicalrecordRepository;
+	private MedicalRecordRepository medicalRecordRepository;
 
 	/**
 	 * Donne la liste d'objets "PersonModel" désérialisés depuis un fichier JSON.
@@ -48,7 +48,7 @@ public class ReaderJsonService {
 	 * @return List<PersonModel>
 	 * 
 	 */
-	public static List<PersonModel> getListPersons(String path)
+	public static List<PersonModel> findListPersons(String path)
 			throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		DataSourceModel dataSource = objectMapper.readValue(new File(path), DataSourceModel.class);
@@ -62,7 +62,7 @@ public class ReaderJsonService {
 	 * @return List<FireStationModel>
 	 * 
 	 */
-	public static List<FireStationModel> getListFireStations(String path)
+	public static List<FireStationModel> findListFireStations(String path)
 			throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		DataSourceModel dataSource = objectMapper.readValue(new File(path), DataSourceModel.class);
@@ -76,7 +76,7 @@ public class ReaderJsonService {
 	 * @return List<MedicalRecordModel>
 	 * 
 	 */
-	public static List<MedicalRecordModel> getListMedicalRecords(String path)
+	public static List<MedicalRecordModel> findListMedicalRecords(String path)
 			throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		DataSourceModel dataSource = objectMapper.readValue(new File(path), DataSourceModel.class);
@@ -102,11 +102,11 @@ public class ReaderJsonService {
 
 		// Sauvegarde dans la base de données des entités "FireStations"
 		List<FireStationModel> listFireStations = dataSource.getFireStations();
-		firestationRepository.saveAll(listFireStations);
+		fireStationRepository.saveAll(listFireStations);
 
 		// Sauvegarde dans la base de données des entités "MedicalRecords"
 		List<MedicalRecordModel> listMedicalrecords = dataSource.getMedicalRecords();
-		medicalrecordRepository.saveAll(listMedicalrecords);
+		medicalRecordRepository.saveAll(listMedicalrecords);
 
 	}
 

@@ -17,7 +17,7 @@
 	<description>Application for emergency service systems</description>
 	
 	<properties>
-		<java.version>1.8</java.version>
+<!-- 		<java.version>1.8</java.version> -->
 	</properties>
 	
 	<dependencies>
@@ -107,7 +107,7 @@
 			<version>3.0.0</version>
 		</dependency>
 
-		<!-- <dependency> -->
+		<!-- <dependency> INUTILE-->
 		<!-- <groupId>com.github.spotbugs</groupId> -->
 		<!-- <artifactId>spotbugs-maven-plugin</artifactId> -->
 		<!-- <version>4.2.2</version> -->
@@ -181,11 +181,11 @@
 			</plugin>
 
 			<!-- ===== Rapport sur les bugs SPOTBUG ===== -->
-			<plugin>
-				<groupId>com.github.spotbugs</groupId>
-				<artifactId>spotbugs-maven-plugin</artifactId>
-				<version>4.2.2</version>
-			</plugin>
+<!-- 			<plugin> -->
+<!-- 				<groupId>com.github.spotbugs</groupId> -->
+<!-- 				<artifactId>spotbugs-maven-plugin</artifactId> -->
+<!-- 				<version>4.2.2</version> -->
+<!-- 			</plugin> -->
 
 			<!-- ===== Code source navigable ===== -->
 			<plugin>

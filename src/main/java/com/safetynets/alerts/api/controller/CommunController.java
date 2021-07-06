@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.safetynets.alerts.api.model.ChildInfoModel;
-import com.safetynets.alerts.api.model.PersonsByAddress;
+import com.safetynets.alerts.api.model.PersonsByAddressModel;
 import com.safetynets.alerts.api.model.PersonInfoGlobalModel;
 import com.safetynets.alerts.api.model.PersonInfoAdvancedModel;
 import com.safetynets.alerts.api.service.CommunService;
@@ -47,7 +47,7 @@ public class CommunController {
 	@GetMapping("/childAlert")
 	public List<ChildInfoModel> getChildInfos(@RequestParam String address) throws ParseException {
 		logger.info("Appel de l'api GET sur '/childAlert' avec pour parametre 'address' :" + address);
-		return communService.getChildInfos(address);
+		return communService.findChildInfos(address);
 	}
 	
 	/** 
@@ -63,7 +63,7 @@ public class CommunController {
 	@GetMapping("/phoneAlert")
 	public HashSet<String> getPhoneAlert(@RequestParam Long firestation) {
 		logger.info("Appel de l'api GET sur '/phoneAlert' avec pour parametre 'firestation' :" + firestation);
-		return communService.getPhoneAlert(firestation);
+		return communService.findPhoneAlert(firestation);
 	}
 
 	/** 
@@ -88,7 +88,7 @@ public class CommunController {
 	public ArrayList<PersonInfoAdvancedModel> getPersonsInfoAdvanced(
 			@RequestParam String address) throws ParseException {
 		logger.info("Appel de l'api GET sur '/fire' avec pour parametre 'address' :" + address);
-		return communService.getPersonsInfoAdvanced(address);
+		return communService.findPersonsInfoAdvanced(address);
 	}
 
 	/** 
@@ -105,9 +105,9 @@ public class CommunController {
 	 * @see PersonService.personsByAddress
 	 */
 	@GetMapping("/flood/stations")
-	public List<PersonsByAddress> getPersonsByStations(@RequestParam List<Long> stations) throws ParseException {
+	public List<PersonsByAddressModel> getPersonsByStations(@RequestParam List<Long> stations) throws ParseException {
 		logger.info("Appel de l'api GET sur '/flood/stations' avec pour parametre 'stations' :" + stations);
-		return communService.getPersonsByStations(stations);
+		return communService.findPersonsByStations(stations);
 	}
 
 	/** 
@@ -132,7 +132,7 @@ public class CommunController {
 	public PersonInfoGlobalModel getPersonInfoGlobal(@RequestParam String firstName, @RequestParam String lastName)
 			throws ParseException {
 		logger.info("Appel de l'api GET sur '/personInfo' avec pour parametres 'firstName' : " + firstName + " et lastName :" + lastName);
-		return communService.getPersonInfoGlobal(firstName, lastName);
+		return communService.findPersonInfoGlobal(firstName, lastName);
 	}
 
 	/** 
@@ -148,7 +148,7 @@ public class CommunController {
 	@GetMapping("/communityEmail")
 	public List<String> getCommunityEmail(@RequestParam String city) {
 		logger.info("Appel de l'api GET sur '/communityEmail' avec pour parametre 'city' :" + city);
-		return communService.getCommunityEmail(city);
+		return communService.findCommunityEmail(city);
 	}
 
 }

@@ -9,7 +9,7 @@ import lombok.Data;
  * 
  */
 @Data
-public class InfoByStationNumber {
+public class InfoByStationNumberModel {
 	
 	ArrayList<PersonModel> PersonsByStation;
 	long Station;

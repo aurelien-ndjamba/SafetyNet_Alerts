@@ -9,7 +9,7 @@ import lombok.Data;
  * 
  */
 @Data
-public class PersonsByAddress {
+public class PersonsByAddressModel {
 	
 	private String address;
 	private List<PersonModel> PersonsByAddress;
