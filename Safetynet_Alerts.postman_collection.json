@@ -1,0 +1,911 @@
+{
+	"info": {
+		"_postman_id": "49704534-8af1-4fc5-8d39-791b8b7f7d3f",
+		"name": "Safetynet_Alerts",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8080/person",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/person",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"person"
+					],
+					"query": [
+						{
+							"key": "station",
+							"value": "75",
+							"disabled": true
+						},
+						{
+							"key": "station",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd\n",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/person",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"firstName\": \"Aurelien\",\r\n        \"lastName\": \"Ndjamba\",\r\n        \"address\": \"Openclassrooms\",\r\n        \"city\": \"Paris\",\r\n        \"zip\": 75000,\r\n        \"phone\": \"841-874-6512\",\r\n        \"email\": \"andjamba@email.com\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/person",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"person"
+					],
+					"query": [
+						{
+							"key": "station",
+							"value": "75",
+							"disabled": true
+						},
+						{
+							"key": "station",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd\n",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/person",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"firstName\": \"Aurelien\",\r\n        \"lastName\": \"Ndjamba\",\r\n        \"address\": \"Java Road\",\r\n        \"city\": \"London\",\r\n        \"zip\": 88000,\r\n        \"phone\": \"841-874-6512\",\r\n        \"email\": \"andjamba@email.com\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/person",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"person"
+					],
+					"query": [
+						{
+							"key": "station",
+							"value": "75",
+							"disabled": true
+						},
+						{
+							"key": "station",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd\n",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/person?id=AurelienNdjamba",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/person?id=CliveFerguson",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"person"
+					],
+					"query": [
+						{
+							"key": "station",
+							"value": "75",
+							"disabled": true
+						},
+						{
+							"key": "station",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd\n",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "CliveFerguson"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/firestation",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/person",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"person"
+					],
+					"query": [
+						{
+							"key": "station",
+							"value": "75",
+							"disabled": true
+						},
+						{
+							"key": "station",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd\n",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/firestation",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"id\": 100,\r\n        \"address\": \"Paris\",\r\n        \"station\": 75\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/firestation",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"firestation"
+					],
+					"query": [
+						{
+							"key": "station",
+							"value": "75",
+							"disabled": true
+						},
+						{
+							"key": "station",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd\n",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/firestation",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"id\": 2,\r\n        \"address\": \"29 15th St\",\r\n        \"station\": 22\r\n    }"
+				},
+				"url": {
+					"raw": "http://localhost:8080/firestation",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"firestation"
+					],
+					"query": [
+						{
+							"key": "station",
+							"value": "75",
+							"disabled": true
+						},
+						{
+							"key": "station",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd\n",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/firestation?address=Paris",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/firestation?address=Paris",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"firestation"
+					],
+					"query": [
+						{
+							"key": "station",
+							"value": "75",
+							"disabled": true
+						},
+						{
+							"key": "station",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd\n",
+							"disabled": true
+						},
+						{
+							"key": "address",
+							"value": "Paris"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/medicalRecord",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"id\": 2,\r\n        \"address\": \"29 15th St\",\r\n        \"station\": 22\r\n    }"
+				},
+				"url": {
+					"raw": "http://localhost:8080/medicalRecord",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"medicalRecord"
+					],
+					"query": [
+						{
+							"key": "station",
+							"value": "75",
+							"disabled": true
+						},
+						{
+							"key": "station",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd\n",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/medicalRecord",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"id\": 111,\r\n        \"firstName\": \"Nicolas\",\r\n        \"lastName\": \"Sarkozy\",\r\n        \"birthdate\": \"03/06/1984\",\r\n        \"medications\": [\r\n            \"covid:350mg\",\r\n            \"paludisme:100mg\"\r\n        ],\r\n        \"allergies\": [\r\n            \"pollen\"\r\n        ]\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/medicalRecord",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"medicalRecord"
+					],
+					"query": [
+						{
+							"key": "station",
+							"value": "75",
+							"disabled": true
+						},
+						{
+							"key": "station",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd\n",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/medicalRecord",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"firstName\": \"Nicolas\",\r\n        \"lastName\": \"Sarkozy\",\r\n        \"birthdate\": \"03/06/1984\",\r\n        \"medications\": [\r\n            \"covid:350mg\",\r\n            \"paludisme:100mg\"\r\n        ],\r\n        \"allergies\": [\r\n            \"pollen\", \"gluten\"\r\n        ]\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/medicalRecord",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"medicalRecord"
+					],
+					"query": [
+						{
+							"key": "station",
+							"value": "75",
+							"disabled": true
+						},
+						{
+							"key": "station",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd\n",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/medicalRecord?id=NicolasSarkozy",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/medicalRecord?id=NicolasSarkozy",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"medicalRecord"
+					],
+					"query": [
+						{
+							"key": "station",
+							"value": "75",
+							"disabled": true
+						},
+						{
+							"key": "station",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "NicolasSarkozy"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/firestation?stationNumber=2",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"id\": 2,\r\n        \"address\": \"29 15th St\",\r\n        \"station\": 22\r\n    }"
+				},
+				"url": {
+					"raw": "http://localhost:8080/firestation?stationNumber=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"firestation"
+					],
+					"query": [
+						{
+							"key": "station",
+							"value": "75",
+							"disabled": true
+						},
+						{
+							"key": "station",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd",
+							"disabled": true
+						},
+						{
+							"key": "stationNumber",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/childAlert?address=1509 Culver St",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/childAlert?address=1509 Culver St",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"childAlert"
+					],
+					"query": [
+						{
+							"key": "station",
+							"value": "75",
+							"disabled": true
+						},
+						{
+							"key": "station",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd",
+							"disabled": true
+						},
+						{
+							"key": "address",
+							"value": "1509 Culver St"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/phoneAlert?firestation=2",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"id\": 2,\r\n        \"address\": \"29 15th St\",\r\n        \"station\": 22\r\n    }"
+				},
+				"url": {
+					"raw": "http://localhost:8080/phoneAlert?firestation=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"phoneAlert"
+					],
+					"query": [
+						{
+							"key": "station",
+							"value": "75",
+							"disabled": true
+						},
+						{
+							"key": "station",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd",
+							"disabled": true
+						},
+						{
+							"key": "firestation",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/fire?address=1509 Culver St",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"id\": 2,\r\n        \"address\": \"29 15th St\",\r\n        \"station\": 22\r\n    }"
+				},
+				"url": {
+					"raw": "http://localhost:8080/fire?address=1509 Culver St",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"fire"
+					],
+					"query": [
+						{
+							"key": "station",
+							"value": "75",
+							"disabled": true
+						},
+						{
+							"key": "station",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd",
+							"disabled": true
+						},
+						{
+							"key": "address",
+							"value": "1509 Culver St"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/flood/stations?stations=1,2,3",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"id\": 2,\r\n        \"address\": \"29 15th St\",\r\n        \"station\": 22\r\n    }"
+				},
+				"url": {
+					"raw": "http://localhost:8080/flood/stations?stations=1,2,3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"flood",
+						"stations"
+					],
+					"query": [
+						{
+							"key": "station",
+							"value": "75",
+							"disabled": true
+						},
+						{
+							"key": "station",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd",
+							"disabled": true
+						},
+						{
+							"key": "stations",
+							"value": "1,2,3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/personInfo?firstName=Jacob&lastName=Boyd",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"id\": 2,\r\n        \"address\": \"29 15th St\",\r\n        \"station\": 22\r\n    }"
+				},
+				"url": {
+					"raw": "http://localhost:8080/personInfo?firstName=Jacob&lastName=Boyd",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"personInfo"
+					],
+					"query": [
+						{
+							"key": "station",
+							"value": "75",
+							"disabled": true
+						},
+						{
+							"key": "station",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd",
+							"disabled": true
+						},
+						{
+							"key": "firstName",
+							"value": "Jacob"
+						},
+						{
+							"key": "lastName",
+							"value": "Boyd"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/communityEmail?city=Culver",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"id\": 2,\r\n        \"address\": \"29 15th St\",\r\n        \"station\": 22\r\n    }"
+				},
+				"url": {
+					"raw": "http://localhost:8080/communityEmail?city=Culver",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"communityEmail"
+					],
+					"query": [
+						{
+							"key": "station",
+							"value": "75",
+							"disabled": true
+						},
+						{
+							"key": "station",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "JohnBoyd",
+							"disabled": true
+						},
+						{
+							"key": "city",
+							"value": "Culver"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"http://localhost:8080/person"
+				]
+			}
+		}
+	]
+}
