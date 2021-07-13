@@ -1,9 +1,7 @@
 package com.safetynets.alerts.api.service;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,18 +65,15 @@ public class CountService {
 	 * @return age (int)
 	 * 
 	 */
-	@SuppressWarnings("deprecation")
 	public int findAge(String birthdayInString) throws ParseException {
-
 		int age = 0;
-		Date birthdayInDate;
 		int currentYear;
 		int birthdayYear;
+		
+		birthdayInString.substring(6);
 
-		// Date de naissance sous le type Date
-		birthdayInDate = new SimpleDateFormat("MM/dd/yyyy").parse(birthdayInString);
-		// Année de naissance sous le type Date
-		birthdayYear = 1900 + birthdayInDate.getYear();
+		// Année de naissance 
+		birthdayYear = Integer.parseInt(birthdayInString.substring(6));
 		// Année courante
 		currentYear = Calendar.getInstance().get(Calendar.YEAR);
 		// Calcul de l'age

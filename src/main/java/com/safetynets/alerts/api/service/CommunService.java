@@ -121,7 +121,7 @@ public class CommunService {
 		for (PersonModel person : persons) {
 			MedicalRecordModel medicalRecordModel = medicalRecordRepository.findByFirstNameAndLastName(person.getFirstName(), person.getLastName());
 			int age = countService.findAge(medicalRecordModel.getBirthdate());
-			if (age <= 18) {
+			if (age <= 18) { //final static pour 18
 
 				ChildInfoModel childInfo = new ChildInfoModel();
 				childInfo.setId(person.getId());
