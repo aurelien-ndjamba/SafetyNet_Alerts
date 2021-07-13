@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.safetynets.alerts.api.model.PersonModel;
 import com.safetynets.alerts.api.service.PersonService;
 
-/** 
+/**
  * Classe qui s'occupe du Controller "Person" l'API
  * 
  * @author aurelien.ndjamba
@@ -26,7 +26,7 @@ import com.safetynets.alerts.api.service.PersonService;
  */
 @RestController
 public class PersonController {
-	
+
 	private Logger logger = Logger.getLogger(this.getClass());
 
 	@Autowired
@@ -80,8 +80,8 @@ public class PersonController {
 	/**
 	 * PUT http://localhost:8080/person
 	 * 
-	 * Modifie les informations d'une personne dans la base de donnée.
-	 * Le prénom et le nom ne peuvent pas être modifiable
+	 * Modifie les informations d'une personne dans la base de donnée. Le prénom et
+	 * le nom ne peuvent pas être modifiable
 	 * 
 	 * @Param PersonModel person
 	 * @return PersonModel
@@ -96,17 +96,20 @@ public class PersonController {
 	/**
 	 * DELETE http://localhost:8080/person?firstNamelastName=<firstNamelastName>
 	 * 
-	 * Supprime les informations d'une personne dans la base de donnée à partir d'un
-	 * id représentant son prénom et son nom (exemple : firstnamelastName => EmmanuelMacron)
+	 * Supprime les informations d'une personne dans la base de donnée à partir de
+	 * son prénom et son nom 
 	 * 
-	 * @Param String id
-	 * @return PersonModel
+	 * @Param String firstname
+	 * @Param String lastname
+	 * @return void
 	 * 
 	 */
-	@RequestMapping(value = "/person", method = RequestMethod.DELETE, params = { "id" })
-	public PersonModel deletePersonByLastNameFirstname(@RequestParam String id) throws IllegalArgumentException {
-		logger.info("Appel de l'api DELETE sur '/person' avec pour parametre 'id' :" + id);
-		return personService.delete(id);
+	@RequestMapping(value = "/person", method = RequestMethod.DELETE, params = { "firstName", "lastName" })
+	public void deletePersonByLastNameFirstname(@RequestParam String firstName, @RequestParam String lastName)
+			throws IllegalArgumentException {
+		logger.info("Appel de l'api DELETE sur '/person' avec pour parametre 'firstName' :" + firstName
+				+ " et lastName: " + lastName);
+		personService.delete(firstName, lastName);
 	}
 
 }

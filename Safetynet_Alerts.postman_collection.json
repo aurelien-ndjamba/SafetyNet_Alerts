@@ -152,7 +152,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/person?id=CliveFerguson",
+					"raw": "http://localhost:8080/person?firstName=Aurelien&lastName=Ndjamba",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -183,8 +183,12 @@
 							"disabled": true
 						},
 						{
-							"key": "id",
-							"value": "CliveFerguson"
+							"key": "firstName",
+							"value": "Aurelien"
+						},
+						{
+							"key": "lastName",
+							"value": "Ndjamba"
 						}
 					]
 				}
@@ -526,7 +530,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/medicalRecord?id=NicolasSarkozy",
+					"raw": "http://localhost:8080/medicalRecord?firstName=Nicolas&lastName=Sarkozy",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -552,8 +556,12 @@
 							"disabled": true
 						},
 						{
-							"key": "id",
-							"value": "NicolasSarkozy"
+							"key": "firstName",
+							"value": "Nicolas"
+						},
+						{
+							"key": "lastName",
+							"value": "Sarkozy"
 						}
 					]
 				}

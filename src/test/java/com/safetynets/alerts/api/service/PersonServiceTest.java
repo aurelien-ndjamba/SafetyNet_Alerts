@@ -195,20 +195,4 @@ public class PersonServiceTest {
 		assertThat(personService.update(person).getId()).isEqualTo(1111);
 	}
 
-	@Test
-	public void testDelete() throws ParseException {
-		// GIVEN
-		PersonModel person = new PersonModel();
-		person.setId((long)1111);
-		person.setFirstName("Andre");
-		person.setLastName("Eric");
-		// WHEN
-		when(personRepositoryMock.count()).thenReturn((long) 1);
-		when(personRepositoryMock.existsById((long) 0)).thenReturn(false);
-		when(personRepositoryMock.existsById((long) 1)).thenReturn(true);
-		when(personRepositoryMock.findById(1)).thenReturn(person);
-		personService.setPersonRepository(personRepositoryMock);
-		// THEN
-		assertThat(personService.delete("AndreEric").getId()).isEqualTo(1111);
-	}
 }

@@ -52,10 +52,5 @@ public class MedicalRecordIT {
 		medicalRecord.setBirthdate("25/12/2000");
 		assertThat(medicalRecordService.update(medicalRecord).getBirthdate()).isEqualTo("25/12/2000");
 	}
-
-	@Test
-	public void testDelete() throws ParseException {
-		assertThat(medicalRecordService.delete("EricCadigan").getId()).isEqualTo(23);
-	}
 	
 }

@@ -97,13 +97,15 @@ public class MedicalRecordController {
 	 * Supprime un enregistrement medical dans la base de donnée à partir d'un
 	 * id représentant son prénom et son nom (exemple : firstnamelastName => EmmanuelMacron)
 	 * 
-	 * @return MedicalRecordModel
+	 * @Param String firstname
+	 * @Param String lastname
+	 * @return void
 	 * 
 	 */
-	@RequestMapping(value = "/medicalRecord", method = RequestMethod.DELETE, params = { "id" })
-	public MedicalRecordModel deleteMedicalRecordByLastNameFirstname(@RequestParam String id) throws IllegalArgumentException {
-		logger.info("Appel de l'api DELETE sur '/medicalRecord' avec pour parametre 'id' :" + id);
-		return medicalRecordService.delete(id);
+	@RequestMapping(value = "/medicalRecord", method = RequestMethod.DELETE, params = { "firstName", "lastName" })
+	public void deleteMedicalRecordByLastNameFirstname(@RequestParam String firstName, @RequestParam String lastName) throws IllegalArgumentException {
+		logger.info("Appel de l'api DELETE sur '/medicalRecord' avec pour parametre 'firstName' :" + firstName + " et lastName: " + lastName);
+		medicalRecordService.delete(firstName, lastName);
 	}
 	
 }

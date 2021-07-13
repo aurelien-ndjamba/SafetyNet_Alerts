@@ -71,8 +71,8 @@ public class MedicalRecordControllerIT {
 				.content(newFirestation);
 
 		mockMvc.perform(reqPost).andExpect(status().isCreated());
-		mockMvc.perform(delete("/medicalRecord?id=EmmanuelMacron")).andExpect(status().isOk());
-		mockMvc.perform(get("//medicalRecord?id=EmmanuelMacron")).andExpect(status().is4xxClientError());
+		mockMvc.perform(delete("/medicalRecord?firstName=Emmanuel&lastName=Macron")).andExpect(status().isOk());
+		mockMvc.perform(get("/medicalRecord?firstName=Emmanuel&lastName=Macron")).andExpect(status().is4xxClientError());
 
 	}
 

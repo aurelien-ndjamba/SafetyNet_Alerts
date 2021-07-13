@@ -120,20 +120,4 @@ public class MedicalRecordTest {
 		assertThat(medicalRecordService.update(medicalRecord).getId()).isEqualTo(1111);
 	}
 
-	@Test
-	public void testDelete() throws ParseException {
-		// GIVEN
-		MedicalRecordModel medicalRecord = new MedicalRecordModel();
-		medicalRecord.setFirstName("Nicolas");
-		medicalRecord.setLastName("Sarkozy");
-		medicalRecord.setBirthdate("24/05/2016");
-		// WHEN
-		when(medicalRecordRepositoryMock.count()).thenReturn((long) 1);
-		when(medicalRecordRepositoryMock.existsById((long) 0)).thenReturn(false);
-		when(medicalRecordRepositoryMock.existsById((long) 1)).thenReturn(true);
-		when(medicalRecordRepositoryMock.findById(1)).thenReturn(medicalRecord);
-		medicalRecordService.setMedicalRecordRepository(medicalRecordRepositoryMock);
-		// THEN
-		assertThat(medicalRecordService.delete("NicolasSarkozy").getBirthdate()).isEqualTo("24/05/2016");
-	}
 }

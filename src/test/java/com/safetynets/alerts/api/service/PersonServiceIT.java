@@ -69,8 +69,4 @@ public class PersonServiceIT {
 		assertThat(personService.update(person).getPhone()).isEqualTo("0687870778");
 	}
 
-	@Test
-	public void testDeletePersonByLastNameFirstname() throws ParseException {
-		assertThat(personService.delete("EricCadigan").getId()).isEqualTo(23);
-	}
 }

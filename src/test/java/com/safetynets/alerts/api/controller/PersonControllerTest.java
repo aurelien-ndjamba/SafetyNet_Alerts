@@ -2,7 +2,6 @@ package com.safetynets.alerts.api.controller;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -110,22 +109,6 @@ public class PersonControllerTest {
 				.content(person);
 		mockMvc.perform(req).andExpect(status().isOk()).andExpect(jsonPath("$.firstName", is("Kevin")))
 		.andExpect(jsonPath("$.address", is("Dublin")));
-	}
-
-	@Test
-	public void testDelete() throws Exception {
-
-		// GIVEN
-		PersonModel person = new PersonModel();
-		person.setFirstName("thomas");
-		person.setLastName("Jupiter");
-
-		// WHEN
-		when(personService.delete("KevinRocco")).thenReturn(person);
-
-		// THEN
-		mockMvc.perform(delete("/person?id=KevinRocco")).andExpect(status().isOk())
-				.andExpect(jsonPath("$.firstName", is("thomas"))).andExpect(jsonPath("$.lastName", is("Jupiter")));
 	}
 
 }

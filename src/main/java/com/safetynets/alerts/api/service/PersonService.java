@@ -187,35 +187,16 @@ public class PersonService {
 	}
 
 	/**
-	 * Supprime les informations d'une personne dans la base de donnée à partir d'un
-	 * id représentant son prénom et son nom (exemple : firstnamelastName =>
-	 * EmmanuelMacron)
+	 * Supprime les informations d'une personne dans la base de donnée à partir de
+	 * son prénom et son nom
 	 * 
-	 * @Param String id
-	 * @return PersonModel
+	 * @Param String firstname
+	 * @Param String lastname
+	 * @return void
 	 * 
 	 */
-	public PersonModel delete(String id) {
-
-		PersonModel personDelete = new PersonModel();
-		long i = 0;
-		long j = 0;
-		long countEntities = personRepository.count();
-
-		do {
-			PersonModel person = new PersonModel();
-			if (personRepository.existsById(i)) {
-				j++;
-				person = personRepository.findById(i);
-				if (id.startsWith(person.getFirstName()) && id.endsWith(person.getLastName())) {
-					personRepository.deleteByFirstNameAndLastName(person.getFirstName(), person.getLastName());
-					personDelete = person;
-					break;
-				}
-			}
-			i++;
-		} while (j != countEntities);
-		return personDelete;
+	public void delete(String firstname, String lastname) {
+			personRepository.deleteByFirstNameAndLastName(firstname, lastname);
 	}
 
 }
